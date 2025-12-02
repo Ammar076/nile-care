@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+<head>
+    <title>Welcome - MindCare</title>
+    <style>
+        /* Small float animation for the icon */
+        @keyframes float-sm { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        .animate-float-sm { animation: float-sm 4s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        
+        <div class="text-center py-5 mb-5">
+            <div class="mb-4">
+                <div class="rounded-circle bg-gradient-brand d-inline-flex align-items-center justify-content-center shadow-lg animate-float-sm" 
+                     style="width: 100px; height: 100px;">
+                    <i class="fas fa-brain text-white fa-3x"></i>
+                </div>
+            </div>
+            <h1 class="display-4 fw-bold text-blue-900 mb-3">Welcome to MindCare</h1>
+            <p class="lead text-blue-600 mb-5 mx-auto" style="max-width: 600px;">
+                Your comprehensive digital mental health companion for university life. Learn, track, and connect in a safe space.
+            </p>
+            
+            <div class="d-flex justify-content-center gap-3">
+                <a th:href="@{/register}" class="btn btn-primary-custom px-5 py-3 fw-bold fs-5 shadow-sm">
+                    Get Started <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+                <a th:href="@{/login}" class="btn btn-light text-primary border border-2 px-5 py-3 fw-bold fs-5">
+                    Login
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0 shadow-sm text-center">
+                    <div class="icon-box bg-gradient-blue mx-auto mb-3 rounded-circle" style="width: 60px; height: 60px;">
+                        <i class="fas fa-book-open fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold text-blue-900">Learning Modules</h5>
+                    <p class="text-muted small">Access interactive guides on stress management, anxiety, and mindfulness techniques.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0 shadow-sm text-center">
+                    <div class="icon-box bg-gradient-green mx-auto mb-3 rounded-circle" style="width: 60px; height: 60px;">
+                        <i class="fas fa-user-md fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold text-blue-900">Expert Counseling</h5>
+                    <p class="text-muted small">Book private, secure video sessions with certified university counselors.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0 shadow-sm text-center">
+                    <div class="icon-box bg-gradient-purple mx-auto mb-3 rounded-circle" style="width: 60px; height: 60px;">
+                        <i class="fas fa-robot fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold text-blue-900">AI Assistant</h5>
+                    <p class="text-muted small">Chat with our 24/7 AI companion for instant support and resource finding.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

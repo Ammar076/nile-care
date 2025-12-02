@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+<head>
+    <title>Learning Library - MindCare</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        
+        <div class="mb-4">
+            <h2 class="fw-bold text-blue-900">Learning Modules</h2>
+            <p class="text-blue-600">Explore our comprehensive mental health learning resources</p>
+        </div>
+
+        <div class="d-flex gap-2 mb-4 flex-wrap">
+            <button class="btn btn-outline-primary active rounded-pill px-3">All Modules</button>
+            <button class="btn btn-light text-blue-600 rounded-pill px-3">In Progress</button>
+            <button class="btn btn-light text-blue-600 rounded-pill px-3">Bookmarked</button>
+            <button class="btn btn-light text-blue-600 rounded-pill px-3">Completed</button>
+        </div>
+
+        <div class="row g-4">
+            
+            <div th:if="${#lists.isEmpty(modules)}" class="col-12 text-center py-5">
+                <div class="mb-3 text-muted opacity-50">
+                    <i class="fas fa-books fa-4x"></i>
+                </div>
+                <h5 class="text-blue-900">No modules found</h5>
+                <p class="text-blue-600">Check back later for new content.</p>
+            </div>
+
+            <div class="col-md-6 col-lg-4" th:each="module : ${modules}">
+                <div class="card card-custom h-100 overflow-hidden border-0 shadow-sm group">
+                    
+                    <div class="position-relative" style="height: 180px;">
+                        <img th:src="${module.contentUrl != null ? module.contentUrl : '/static/images/placeholder-module.jpg'}" 
+                             class="w-100 h-100 object-fit-cover" 
+                             alt="Module Cover">
+                        
+                        <div class="position-absolute top-0 end-0 p-3">
+                            <button class="btn btn-light btn-sm rounded-circle shadow-sm" style="width: 32px; height: 32px; padding: 0;">
+                                <i class="far fa-bookmark text-blue-600"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex gap-2 mb-2">
+                            <span class="badge bg-light text-blue-900 border border-blue-100" th:text="${module.category}">Category</span>
+                            
+                            <span class="badge"
+                                  th:classappend="${module.difficultyLevel == 'Beginner' ? 'bg-green-100 text-green-600' : (module.difficultyLevel == 'Advanced' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600')}" 
+                                  th:text="${module.difficultyLevel}">
+                                Difficulty
+                            </span>
+                        </div>
+
+                        <h5 class="card-title fw-bold text-blue-900 mb-1 line-clamp-2" th:text="${module.title}">Title</h5>
+                        <p class="card-text text-blue-600 small line-clamp-2 mb-4" th:text="${module.description}">Description</p>
+
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center gap-2 small text-blue-600 mb-3">
+                                <i class="far fa-clock"></i>
+                                <span>45 min</span> </div>
+
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span class="text-blue-600">Progress</span>
+                                <span class="fw-bold text-blue-900">0%</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 6px;">
+                                <div class="progress-bar bg-gradient-brand" role="progressbar" style="width: 0%"></div>
+                            </div>
+
+                            <a href="#" class="btn btn-gradient w-100 shadow-sm">
+                                <i class="fas fa-play-circle me-2"></i> Start Module
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

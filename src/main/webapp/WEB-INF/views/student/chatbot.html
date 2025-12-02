@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+<head><title>AI Assistant</title></head>
+<body>
+    <div layout:fragment="content" class="h-100 d-flex flex-column" style="max-height: 80vh;">
+        
+        <div class="mb-3">
+            <h2 class="fw-bold" style="color: #1e3a8a;">AI Chatbot Assistant</h2>
+            <p class="text-muted">Get instant help and guidance</p>
+        </div>
+
+        <div class="card card-custom flex-grow-1 overflow-hidden d-flex flex-column">
+            <div class="card-header bg-white border-bottom p-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-3 p-2 text-white" style="background: linear-gradient(135deg, #3b82f6, #22c55e);">
+                        <i class="fas fa-robot fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold text-dark">MindCare Assistant</h6>
+                        <small class="text-success"><i class="fas fa-circle fa-xs me-1"></i> Online</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body bg-light overflow-auto p-4 d-flex flex-column gap-3" id="chatContainer">
+                <div class="d-flex gap-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 35px; height: 35px;">
+                        <i class="fas fa-robot small"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-3 shadow-sm" style="max-width: 80%;">
+                        <p class="mb-2 text-dark">Hello! I'm your MindCare AI. How can I help you today?</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill">Stress Management</button>
+                            <button class="btn btn-sm btn-outline-primary rounded-pill">Book Counseling</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 flex-row-reverse">
+                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 35px; height: 35px;">
+                        <i class="fas fa-user small"></i>
+                    </div>
+                    <div class="text-white p-3 rounded-3 shadow-sm" style="max-width: 80%; background: linear-gradient(to right, #3b82f6, #22c55e);">
+                        <p class="mb-0">I need help with anxiety.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white p-3 border-top">
+                <form class="d-flex gap-2">
+                    <input type="text" class="form-control bg-light border-0" placeholder="Type your message...">
+                    <button type="button" class="btn btn-primary-custom px-4"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>MindCare - Learning & Wellness</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #eff6ff, #f0fdf4, #eff6ff); /* blue-50 via green-50 to blue-50 */
+            min-height: 100vh;
+            overflow: hidden; /* Prevent double scrollbars */
+        }
+        .wrapper {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 260px;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .top-nav {
+            height: 64px;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            justify-content: space-between;
+        }
+        .scrollable-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        /* Nav Button Styling */
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.75rem; /* rounded-xl */
+            color: #1d4ed8; /* text-blue-700 */
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .nav-link-custom:hover {
+            background-color: #eff6ff; /* hover:bg-blue-50 */
+        }
+        .nav-link-custom.active {
+            background: linear-gradient(to right, #3b82f6, #22c55e); /* from-blue-500 to-green-500 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    
+    <aside class="sidebar p-3">
+        <div class="p-3 border-bottom border-light mb-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center text-white" 
+                     style="width: 40px; height: 40px; background: linear-gradient(to bottom right, #3b82f6, #22c55e);">
+                    <i class="fas fa-comment-medical fa-lg"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold" style="color: #1e3a8a;">MindCare</h5>
+                    <small style="color: #2563eb;">Learning & Wellness</small>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-grow-1">
+            
+            <div th:if="${session.currentUser != null and session.currentUser.roles.contains('ROLE_STUDENT')}">
+                <a th:href="@{/learning}" class="nav-link-custom" th:classappend="${currentPage == 'learning'} ? 'active'">
+                    <i class="fas fa-book-open fa-fw"></i> Learning Modules
+                </a>
+                <a th:href="@{/progress}" class="nav-link-custom" th:classappend="${currentPage == 'progress'} ? 'active'">
+                    <i class="fas fa-chart-line fa-fw"></i> Track Progress
+                </a>
+                <a th:href="@{/counseling}" class="nav-link-custom" th:classappend="${currentPage == 'counseling'} ? 'active'">
+                    <i class="far fa-calendar-alt fa-fw"></i> Counseling
+                </a>
+                <a th:href="@{/assessment}" class="nav-link-custom" th:classappend="${currentPage == 'assessment'} ? 'active'">
+                    <i class="fas fa-clipboard-list fa-fw"></i> Assessments
+                </a>
+                <a th:href="@{/chat}" class="nav-link-custom" th:classappend="${currentPage == 'chat'} ? 'active'">
+                    <i class="far fa-comments fa-fw"></i> Chatbot
+                </a>
+            </div>
+
+            <div th:if="${session.currentUser != null and session.currentUser.roles.contains('ROLE_ADMIN')}">
+                <a th:href="@{/admin/dashboard}" class="nav-link-custom" th:classappend="${currentPage == 'dashboard'} ? 'active'">
+                    <i class="fas fa-th-large fa-fw"></i> Dashboard
+                </a>
+                <a th:href="@{/admin/users}" class="nav-link-custom" th:classappend="${currentPage == 'users'} ? 'active'">
+                    <i class="fas fa-users fa-fw"></i> Manage Users
+                </a>
+                <a th:href="@{/admin/reports}" class="nav-link-custom" th:classappend="${currentPage == 'reports'} ? 'active'">
+                    <i class="fas fa-file-alt fa-fw"></i> Reports
+                </a>
+            </div>
+            
+            <div th:if="${session.currentUser == null}">
+                 <a th:href="@{/login}" class="nav-link-custom">
+                    <i class="fas fa-sign-in-alt fa-fw"></i> Login
+                </a>
+            </div>
+
+        </nav>
+    </aside>
+
+    <div class="main-content">
+        
+        <header class="top-nav">
+            <div class="d-none d-md-block" style="width: 100%; max-width: 400px;">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" class="form-control bg-light border-start-0" placeholder="Search modules, resources...">
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-4">
+                <div class="position-relative cursor-pointer">
+                    <i class="far fa-bell fa-lg text-primary"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success border border-light p-1">
+                        3
+                    </span>
+                </div>
+
+                <div class="dropdown" th:if="${session.currentUser != null}">
+                    <a href="#" class="d-flex align-items-center gap-2 text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                        <img th:src="@{/static/images/avatar-placeholder.png}" class="rounded-circle border border-2 border-primary" width="36" height="36">
+                        <div class="d-none d-sm-block text-end" style="line-height: 1.2;">
+                            <div class="fw-bold text-dark" style="font-size: 0.9rem;" th:text="${session.currentUser.fullName}">User Name</div>
+                            <small class="text-muted text-uppercase" style="font-size: 0.7rem;" th:text="${session.currentUser.roles[0].name}">ROLE</small>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><h6 class="dropdown-header">My Account</h6></li>
+                        <li><a class="dropdown-item" href="#">Profile Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" th:href="@{/logout}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <main class="scrollable-area" layout:fragment="content">
+            </main>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

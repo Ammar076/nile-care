@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+<head><title>Self Assessment</title></head>
+<body>
+    <div layout:fragment="content">
+        <div class="mb-4">
+            <h2 class="fw-bold" style="color: #1e3a8a;">Self-Assessment Tools</h2>
+            <p class="text-muted">Validated screening tools for mental wellbeing</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card card-custom p-4 h-100">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="fas fa-clipboard-list fa-lg"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">PHQ-9 Depression</h5>
+                            <p class="text-muted small mb-0">9 Questions • ~5 mins</p>
+                        </div>
+                    </div>
+                    <p class="text-muted small">Standard screening tool for depression severity.</p>
+                    <a th:href="@{/assessment/start/phq9}" class="btn btn-primary-custom w-100 mt-auto">Start Assessment</a>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card card-custom p-4 h-100">
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <i class="fas fa-heartbeat fa-lg"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">GAD-7 Anxiety</h5>
+                            <p class="text-muted small mb-0">7 Questions • ~3 mins</p>
+                        </div>
+                    </div>
+                    <p class="text-muted small">Screening for Generalized Anxiety Disorder.</p>
+                    <a href="#" class="btn btn-primary-custom w-100 mt-auto">Start Assessment</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-custom mt-5 p-4">
+            <h5 class="fw-bold text-dark mb-3">Your History</h5>
+            <div class="p-3 border rounded-3 bg-light d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="fw-bold text-dark mb-1">PHQ-9 Assessment</h6>
+                    <small class="text-muted">Nov 01, 2024</small>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-warning text-dark mb-1">Mild Severity</span>
+                    <div class="progress" style="width: 100px; height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: 30%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
