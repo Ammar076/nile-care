@@ -5,77 +5,93 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <style>
-        /* --- GLOBAL OVERRIDES --- */
-        body { font-family: 'Inter', sans-serif; }
+   <style>
+        /* --- PAGE LAYOUT --- */
+        body { font-family: 'Inter', sans-serif; overflow: hidden; } 
         .sidebar, .top-nav { display: none !important; }
         .main-content { margin-left: 0 !important; }
         
-        /* --- VISUALIZATION (LEFT SIDE) --- */
-        
-        /* 1. Main Gradient Circle */
+        /* Visual Container (Matches Tailwind relative container) */
+        .visual-container {
+            position: relative; width: 100%; height: 400px; /* h-96 matches approx 384px, bumped to 400 for spacing */
+            max-width: 450px; margin: 0 auto;
+        }
+
+        /* --- 1. CENTRAL BRAIN (Duration 4s, Y -15) --- */
         .brand-circle-lg {
-            width: 200px; height: 200px; border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%); /* Blue to Green */
+            width: 192px; height: 192px; /* w-48 h-48 */
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22d3ee 0%, #34d399 100%);
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.5);
-            position: relative; z-index: 10;
+            position: absolute; top: 50%; left: 50%; z-index: 10;
+            /* Animation applied directly here */
+            animation: float-brain 4s ease-in-out infinite;
         }
 
-        /* 2. Floating Icon Containers */
+        @keyframes float-brain {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+            50% { transform: translate(-50%, -50%) translateY(-15px); }
+        }
+
+        /* --- 2. ORBITING ICONS (Specific Motions) --- */
         .icon-float {
-            width: 56px; height: 56px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            position: absolute; z-index: 20;
-            color: white; font-size: 1.5rem;
-        }
-
-        /* 3. The New Bubble Logic */
-        .bubble {
-            position: absolute; 
+            width: 64px; height: 64px; /* w-16 h-16 */
             border-radius: 50%;
-            background: #4ade80; /* Light Green matching the brain gradient end */
-            z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
+            position: absolute; z-index: 20; color: white; font-size: 1.75rem;
         }
 
-        /* --- ANIMATIONS --- */
-        @keyframes float { 
-            0%, 100% { transform: translateY(0px); } 
-            50% { transform: translateY(-20px); } 
-        }
-        @keyframes float-delay { 
-            0%, 100% { transform: translateY(0px); } 
-            50% { transform: translateY(-15px); } 
-        }
+        /* HEART: top-20 (80px) left-12 (48px) */
+        .pos-heart { top: 80px; left: 48px; animation: float-heart 3s ease-in-out infinite 0.2s; }
         
-        /* The Bubble Pulse: Small/Invisible -> Big/Darker/Up -> Small/Invisible */
-        @keyframes bubble-pulse {
-            0% {
-                transform: translateY(0) scale(0.5);
-                opacity: 0; /* Invisible */
-            }
-            50% {
-                transform: translateY(-15px) scale(1.2); /* Move Up + Big */
-                opacity: 0.6; /* Darker/Visible */
-            }
-            100% {
-                transform: translateY(0) scale(0.5);
-                opacity: 0; /* Invisible */
-            }
+        @keyframes float-heart {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(10px, -20px) rotate(10deg); }
         }
 
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-float-delay { animation: float-delay 5s ease-in-out infinite 1s; }
-        
-        /* Different speeds for bubbles so they don't sync up */
-        .bubble-1 { animation: bubble-pulse 4s ease-in-out infinite; }
-        .bubble-2 { animation: bubble-pulse 5s ease-in-out infinite 1s; }
-        .bubble-3 { animation: bubble-pulse 6s ease-in-out infinite 2s; }
+        /* STAR: top-32 (128px) right-16 (64px) */
+        .pos-star { top: 128px; right: 64px; animation: float-star 3.5s ease-in-out infinite 0.5s; }
 
-        /* --- AUTH CARD (RIGHT SIDE) --- */
+        @keyframes float-star {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-10px, -15px) rotate(-15deg); }
+        }
+
+        /* MESSAGE: bottom-24 (96px) left-8 (32px) */
+        .pos-message { bottom: 96px; left: 32px; animation: float-message 3.2s ease-in-out infinite 0.8s; }
+
+        @keyframes float-message {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+
+        /* --- 3. MICRO BUBBLES (Randomized) --- */
+        /* Logic: y -20, scale 1.5, opacity 0.3->0.8->0.3 */
+        .bubble-micro {
+            position: absolute; border-radius: 50%;
+            background: linear-gradient(135deg, #93c5fd, #86efac); /* Blue-300 to Green-300 */
+            z-index: 5;
+        }
+
+        @keyframes float-bubble {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-20px) scale(1.5); opacity: 0.8; }
+        }
+
+        /* Hardcoded random positions to match the loop logic */
+        .b1 { width: 12px; height: 12px; top: 20%; left: 60%; animation: float-bubble 3s ease-in-out infinite 0s; }
+        .b2 { width: 16px; height: 16px; top: 60%; right: 20%; animation: float-bubble 4s ease-in-out infinite 1s; }
+        .b3 { width: 10px; height: 10px; bottom: 30%; left: 45%; animation: float-bubble 2.5s ease-in-out infinite 0.5s; }
+        .b4 { width: 14px; height: 14px; top: 30%; left: 30%; animation: float-bubble 3.5s ease-in-out infinite 1.5s; }
+        .b5 { width: 8px; height: 8px; bottom: 20%; right: 35%; animation: float-bubble 4.2s ease-in-out infinite 2s; }
+        .b6 { width: 12px; height: 12px; top: 15%; right: 40%; animation: float-bubble 3.8s ease-in-out infinite 0.2s; }
+
+
+        /* --- AUTH CARD STYLES --- */
         .card-glass {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             border: 1px solid #e2e8f0; border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
         }
@@ -93,10 +109,10 @@
             background-color: #fff; border-color: #cbd5e1; color: #3b82f6;
         }
         .btn-gradient {
-            background: linear-gradient(to right, #3b82f6, #10b981); border: none;
-            color: white !important; font-weight: 600; padding: 12px; border-radius: 12px;
-            width: 100%; transition: opacity 0.2s; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            background: linear-gradient(to right, #0ea5e9, #10b981);
+            border: none; color: white !important; font-weight: 600; padding: 12px;
+            border-radius: 12px; width: 100%; transition: opacity 0.2s; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
         }
         .btn-gradient:hover { opacity: 0.9; transform: translateY(-1px); }
         .toggle-container {
@@ -112,6 +128,20 @@
             background-color: white; color: #0f172a; font-weight: 600;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
+        .role-card {
+            display: flex; align-items: center; padding: 12px 16px;
+            border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer;
+            background-color: white; transition: all 0.2s ease; width: 100%;
+            margin-bottom: 0.75rem;
+        }
+        .role-card:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+        .role-card:has(input:checked) {
+            border-color: #3b82f6; background-color: #eff6ff; box-shadow: 0 0 0 1px #3b82f6;
+        }
+        .role-card input[type="radio"] {
+            margin: 0 12px 0 0 !important; width: 1.1em; height: 1.1em; accent-color: #3b82f6; cursor: pointer;
+        }
+        .role-card span { font-size: 0.95rem; font-weight: 500; color: #1e293b; }
     </style>
 </head>
 <body>
@@ -120,59 +150,51 @@
         <div class="container" style="max-width: 1100px;">
             <div class="row align-items-center">
                 
-                <div class="col-lg-6 d-none d-lg-block position-relative" style="height: 600px;">
-                    
-                    <div class="position-absolute top-0 start-0 pt-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="d-flex align-items-center justify-content-center rounded-3 text-white" 
-                                 style="width: 48px; height: 48px; background: linear-gradient(135deg, #3b82f6, #10b981); box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);">
-                                <i class="fas fa-comment-dots fs-4"></i>
-                            </div>
-                            <div>
-                                <h4 class="mb-0 fw-bold text-dark" style="color: #1e3a8a !important;">MindCare</h4>
-                                <small style="color: #3b82f6; font-weight: 500;">Learning & Wellness Platform</small>
-                            </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <div class="padding-start-xl pt-2 pb-4 d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center justify-content-center rounded-4 text-white" 
+                             style="width: 48px; height: 48px; background: linear-gradient(135deg, #22d3ee, #10b981); box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="mb-0 fw-semibold" style="color: #1e3a8a; font-size: 1.25rem;">NileCare</h4>
+                            <small style="color: #3b82f6; font-weight: 500;">Learning & Wellness Platform</small>
                         </div>
                     </div>
 
-                    <div class="position-absolute top-50 start-50 translate-middle animate-float">
+                    <div class="visual-container">
                         <div class="brand-circle-lg">
-                            <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
-                                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
-                            </svg>
+                            <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
                         </div>
+
+                        <div class="icon-float pos-heart" style="background: linear-gradient(135deg, #f472b6, #e11d48);">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="icon-float pos-message" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="icon-float pos-star" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        
+                        <div class="bubble-micro b1"></div>
+                        <div class="bubble-micro b2"></div>
+                        <div class="bubble-micro b3"></div>
+                        <div class="bubble-micro b4"></div>
+                        <div class="bubble-micro b5"></div>
+                        <div class="bubble-micro b6"></div>
                     </div>
 
-                    <div class="icon-float animate-float-delay" style="top: 20%; left: 15%; background: linear-gradient(135deg, #f472b6, #e11d48);">
-                        <i class="fas fa-heart"></i>
-                    </div>
-
-                    <div class="icon-float animate-float" style="bottom: 25%; left: 10%; background: linear-gradient(135deg, #a855f7, #7c3aed);">
-                        <i class="fas fa-comment-dots"></i>
-                    </div>
-
-                    <div class="icon-float animate-float-delay" style="top: 25%; right: 15%; background: linear-gradient(135deg, #fbbf24, #f59e0b);">
-                        <i class="fas fa-star"></i>
-                    </div>
-
-                    <div class="bubble bubble-1" style="width: 10px; height: 10px; top: 15%; left: 40%;"></div>
-                    <div class="bubble bubble-2" style="width: 8px; height: 8px; top: 70%; right: 30%;"></div>
-                    <div class="bubble bubble-3" style="width: 12px; height: 12px; top: 80%; left: 20%;"></div>
-                    <div class="bubble bubble-1" style="width: 9px; height: 9px; top: 30%; right: 20%;"></div>
-
-                    <div class="position-absolute bottom-0 w-100 text-center pb-5">
-                        <h3 class="fw-bold mb-3" style="color: #1e3a8a; letter-spacing: -0.5px;">Your Journey to Wellness</h3>
-                        <p style="color: #3b82f6; font-size: 0.95rem; line-height: 1.6; max-width: 400px; margin: 0 auto;">
-                            Access mental health resources, connect with counselors, and track your progress.
-                        </p>
+                    <div class="text-center mt-2">
+                        <h3 class="fw-semibold fs-5 mb-2" style="color: #1e3a8a;">Your Journey to Wellness</h3>
+                        <p style="color: #3b82f6; font-size: 0.95rem; max-width: 500px; margin: 0 auto; line-height: 1.5;">Access mental health resources, connect with counselors, and track your progress.</p>
                     </div>
                 </div>
 
                 <div class="col-lg-5 offset-lg-1">
                     <div class="card card-glass p-5">
                         <div class="mb-4">
-                            <h4 class="fw-bold text-dark mb-1" id="formTitle">Welcome</h4>
+                            <h4 class="fw-semibold text-dark mb-1" id="formTitle">Welcome</h4>
                             <p class="text-muted" style="font-size: 0.9rem;" id="formSubtitle">Sign in to your account or create a new one</p>
                         </div>
 
@@ -192,11 +214,9 @@
                                     <label class="form-label small fw-bold text-muted mb-1">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        <input type="email" name="email" class="form-control form-control-custom" placeholder="your.email@example.com" required>
+                                        <input type="email" name="email" class="form-control form-control-custom" placeholder="student@utm.my" required>
                                     </div>
-                                    <div class="mt-1">
-                                        <small class="text-muted" style="font-size: 0.75rem;">Try: <span class="text-primary cursor-pointer">student@utm.my</span></small>
-                                    </div>
+                                    <div class="mt-1"><small class="text-muted" style="font-size: 0.75rem;">Try: <span class="text-primary cursor-pointer">student@utm.my</span></small></div>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label small fw-bold text-muted mb-1">Password</label>
@@ -222,7 +242,7 @@
                                     <label class="form-label small fw-bold text-muted mb-1">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        <input type="email" name="email" class="form-control form-control-custom" placeholder="your.email@example.com" required>
+                                        <input type="email" name="email" class="form-control form-control-custom" placeholder="student@utm.my" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -232,16 +252,19 @@
                                         <input type="password" name="password" class="form-control form-control-custom" placeholder="••••••••" required>
                                     </div>
                                 </div>
-                                <div class="d-flex gap-3 mb-4">
-                                    <div class="form-check border rounded-3 p-2 px-3 bg-light w-50 d-flex align-items-center">
-                                        <input class="form-check-input mt-0 me-2" type="radio" name="role" id="r1" value="STUDENT" checked>
-                                        <label class="form-check-label small fw-bold mb-0 cursor-pointer" for="r1">Student</label>
-                                    </div>
-                                    <div class="form-check border rounded-3 p-2 px-3 bg-light w-50 d-flex align-items-center">
-                                        <input class="form-check-input mt-0 me-2" type="radio" name="role" id="r2" value="ADMIN">
-                                        <label class="form-check-label small fw-bold mb-0 cursor-pointer" for="r2">Admin</label>
-                                    </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold text-muted mb-2">Select Role</label>
+                                    <label class="role-card">
+                                        <input class="form-check-input" type="radio" name="role" value="STUDENT" checked>
+                                        <span>Student</span>
+                                    </label>
+                                    <label class="role-card">
+                                        <input class="form-check-input" type="radio" name="role" value="ADMIN">
+                                        <span>Admin</span>
+                                    </label>
                                 </div>
+
                                 <button type="submit" class="btn-gradient">Create Account</button>
                             </form>
                         </div>
