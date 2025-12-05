@@ -2,34 +2,9 @@
 <html layout:decorate="~{layout/main_layout}">
 <head>
     <title>Learning Modules</title>
-    <style>
-        /* Page Background - Specific Lighter Green */
-        .page-container { background-color: #f6fef9; min-height: 100vh; padding: 2rem; }
-
-        /* Image Zoom Effect */
-        .module-img-wrapper { height: 190px; overflow: hidden; position: relative; }
-        .module-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .card-custom:hover .module-img { transform: scale(1.08); }
-
-        /* Module Button Structure */
-        .btn-module {
-            border-radius: 8px; padding: 10px; font-weight: 600; font-size: 0.9rem;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; transition: opacity 0.2s; text-decoration: none;
-        }
-        .btn-module:hover { opacity: 0.95; }
-
-        /* Filter Buttons */
-        .btn-filter { border-radius: 50px; padding: 6px 20px; font-size: 0.9rem; font-weight: 500; border: 1px solid transparent; background: white; color: #2563eb; margin-right: 8px; }
-        .btn-filter.active { background-color: #3b82f6; color: white; font-weight: 600; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3); }
-        
-        /* Progress Bar */
-        .progress-track { height: 6px; background-color: #e2e8f0; border-radius: 10px; overflow: hidden; }
-        .progress-fill { background-color: #0f172a; height: 100%; border-radius: 10px; }
-    </style>
 </head>
 <body>
-    <div layout:fragment="content" class="h-100">
+    <div layout:fragment="content">
         <div class="page-container">
             
             <div class="mb-4">
@@ -37,21 +12,25 @@
                 <p class="text-blue-600 small">Explore our comprehensive mental health learning resources</p>
             </div>
 
-            <div class="d-flex mb-4">
-                <button class="btn-filter active">All Modules</button>
-                <button class="btn-filter">In Progress</button>
-                <button class="btn-filter">Bookmarked</button>
-                <button class="btn-filter">Completed</button>
+            <div class="d-flex mb-4" role="tablist" aria-label="Module filters">
+              <button class="btn-filter active" data-filter="all" role="tab" aria-pressed="true" tabindex="0">All Modules</button>
+              <button class="btn-filter" data-filter="in-progress" role="tab" aria-pressed="false" tabindex="0">In Progress</button>
+              <button class="btn-filter" data-filter="bookmarked" role="tab" aria-pressed="false" tabindex="0">Bookmarked</button>
+              <button class="btn-filter" data-filter="completed" role="tab" aria-pressed="false" tabindex="0">Completed</button>
             </div>
 
             <div class="row g-4">
-                <div class="col-md-6 col-lg-4" th:each="module : ${modules}">
-                    <div class="card card-custom h-100 border-0 shadow-sm overflow-hidden">
+                <div class="col-md-6 col-lg-4" th:each="module, iterStat : ${modules}">
+                    <div class="card card-module h-100 border-0 overflow-hidden">
                         
                         <div class="module-img-wrapper">
                             <img th:src="${module.contentUrl}" class="module-img" alt="Cover">
-                            <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-3 shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                                <i class="far fa-bookmark text-blue-600"></i>
+                            <button type="button" 
+                                    class="bookmark-btn position-absolute top-0 end-0 m-3 shadow-sm" 
+                                    th:attr="data-module-index=${iterStat.index}" 
+                                    aria-pressed="false" 
+                                    title="Toggle bookmark">
+                                <span class="bookmark-icon"></span>
                             </button>
                         </div>
 
@@ -63,39 +42,132 @@
                                       th:text="${module.difficultyLevel}">Level</span>
                             </div>
 
-                            <h5 class="fw-bold text-blue-900 mb-2" style="font-size: 1.05rem;" th:text="${module.title}">Title</h5>
+                            <h5 class="fw-bold text-blue-900 mb-2 module-title" th:text="${module.title}">Title</h5>
                             <p class="text-muted small mb-4 line-clamp-2" th:text="${#strings.abbreviate(module.description, 100)}">Desc</p>
 
                             <div class="mt-auto">
                                 <div class="d-flex align-items-center gap-2 small text-blue-600 mb-3">
-                                    <i class="far fa-clock"></i> <span style="font-weight: 500;">45 min</span>
+                                    <i class="far fa-clock"></i> <span class="fw-semibold">45 min</span>
                                 </div>
 
                                 <div class="d-flex justify-content-between small mb-1">
-                                    <span class="text-blue-600 fw-medium">Progress</span>
-                                    <span class="fw-bold text-blue-900" 
-                                          th:text="${module.title.contains('Fundamentals') ? '75%' : (module.title.contains('Emotional') ? '100%' : '0%')}">0%</span>
+                                <span class="text-blue-600 fw-medium">Progress</span>
+                                <span class="fw-bold text-blue-900 module-progress" 
+                                  th:text="${module.title.contains('Fundamentals') ? '75%' : (module.title.contains('Emotional') ? '100%' : '0%')}">0%</span>
                                 </div>
                                 <div class="progress-track mb-4">
                                     <div class="progress-fill" 
                                          th:style="'width: ' + (${module.title.contains('Fundamentals') ? '75%' : (module.title.contains('Emotional') ? '100%' : '0%')})"></div>
                                 </div>
 
-                                <a href="#" class="btn-module bg-gradient-custom shadow-sm">
-                                    
+                                <button type="button"
+                                        class="btn-module bg-gradient-custom shadow-sm"
+                                        data-bs-toggle="modal"
+                                        th:attr="data-bs-target='#moduleModal-' + ${iterStat.index}">
                                     <span th:if="${!module.title.contains('Fundamentals') and !module.title.contains('Emotional')}" class="d-flex align-items-center gap-2">
                                         <i class="fas fa-play-circle"></i> Start Module
                                     </span>
-                                    
                                     <span th:if="${module.title.contains('Fundamentals')}" class="d-flex align-items-center gap-2">
                                         <i class="fas fa-play-circle"></i> Continue
                                     </span>
-
                                     <span th:if="${module.title.contains('Emotional')}" class="d-flex align-items-center gap-2">
                                         <i class="fas fa-check-circle"></i> Review
                                     </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                                </a>
+                    <!-- Module Detail Modal -->
+                    <div class="modal fade module-modal"
+                         th:id="'moduleModal-' + ${iterStat.index}"
+                         tabindex="-1"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <button type="button" class="btn-modal-close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <div class="modal-body module-modal-body">
+                                    <div class="module-modal-header">
+                                        <h5 class="modal-title" th:text="${module.title}">Module Title</h5>
+                                        <div class="module-modal-subtitle" th:text="${module.category}">Category</div>
+                                    </div>
+
+                                    <img th:src="${module.contentUrl}" class="module-modal-image" alt="Module cover">
+
+                                    <div class="module-badges-row">
+                                        <span class="module-badge module-badge-clock">
+                                            <i class="far fa-clock"></i>
+                                            <span>45 min</span>
+                                        </span>
+                                        <span class="module-badge" 
+                                              th:classappend="${module.difficultyLevel == 'Beginner' ? 'module-badge-green' : (module.difficultyLevel == 'Advanced' ? 'module-badge-purple' : 'module-badge-blue')}"
+                                              th:text="${module.difficultyLevel.toLowerCase()}">Beginner</span>
+                                        <span class="module-badge module-badge-green">
+                                            <span th:text="${module.title.contains('Fundamentals') ? '75% Complete' : (module.title.contains('Emotional') ? '100% Complete' : '0% Complete')}">
+                                                75% Complete
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <div class="module-section-wrapper">
+                                        <div class="module-section-title">About This Module</div>
+                                        <p class="module-description" th:text="${module.description}">
+                                            Learn effective techniques to identify, manage, and reduce stress in your daily life.
+                                        </p>
+                                    </div>
+
+                                    <div class="module-section-wrapper">
+                                        <div class="module-section-title">Learning Resources</div>
+                                        <div class="module-resources-row">
+                                            <div class="module-resource-card">
+                                                <svg class="module-resource-icon-svg lucide lucide-video w-6 h-6 text-blue-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path>
+                                                    <rect x="2" y="6" width="14" height="12" rx="2"></rect>
+                                                </svg>
+                                                <div class="module-resource-count">5</div>
+                                                <div class="module-resource-label">Videos</div>
+                                            </div>
+                                            <div class="module-resource-card">
+                                              <svg class="module-resource-icon-svg lucide lucide-file-text w-6 h-6 text-blue-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
+                                                <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                                                <path d="M10 9H8"></path>
+                                                <path d="M16 13H8"></path>
+                                                <path d="M16 17H8"></path>
+                                              </svg>
+                                              <div class="module-resource-count">8</div>
+                                              <div class="module-resource-label">Articles</div>
+                                            </div>
+                                            <div class="module-resource-card">
+                                              <svg class="module-resource-icon-svg lucide lucide-book-open w-6 h-6 text-blue-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M12 7v14"></path>
+                                                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+                                              </svg>
+                                              <div class="module-resource-count">12</div>
+                                              <div class="module-resource-label">Exercises</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer module-modal-footer">
+                                    <button type="button" class="btn btn-primary-gradient flex-grow-1" data-bs-dismiss="modal">
+                                        <span th:if="${!module.title.contains('Fundamentals') and !module.title.contains('Emotional')}" class="d-inline-flex align-items-center gap-2">
+                                            <i class="fas fa-play-circle"></i> Start Module
+                                        </span>
+                                        <span th:if="${module.title.contains('Fundamentals')}" class="d-inline-flex align-items-center gap-2">
+                                            <i class="fas fa-play-circle"></i> Continue Learning
+                                        </span>
+                                        <span th:if="${module.title.contains('Emotional')}" class="d-inline-flex align-items-center gap-2">
+                                            <i class="fas fa-check-circle"></i> Review Module
+                                        </span>
+                                    </button>
+                                    <button type="button" class="btn btn-bookmark-modal d-flex align-items-center gap-2" th:attr="data-module-index=${iterStat.index}" aria-pressed="false">
+                                      <span class="module-bookmark-icon" aria-hidden="true"></span>
+                                      <span class="module-bookmark-text">Bookmark</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -103,5 +175,575 @@
             </div>
         </div>
     </div>
+                    <!-- toast container is created dynamically by script -->
+
+<th:block layout:fragment="scripts">
+    <script>
+    (function() {
+        const outlineSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+        
+        const filledSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6" stroke="#3b82f6" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+        
+        // Toast container for stacking notifications
+        const toastContainer = document.createElement('div');
+        toastContainer.id = 'bookmarkToastContainer';
+        document.body.appendChild(toastContainer);
+        
+        const MAX_TOASTS = 3;
+        const toasts = [];
+        
+        function showToast(message) {
+            // Create individual toast element
+            const toast = document.createElement('div');
+            toast.className = 'bookmark-toast success';
+            toast.setAttribute('role', 'status');
+            toast.setAttribute('aria-live', 'polite');
+            
+            const toastMessage = document.createElement('span');
+            toastMessage.textContent = message;
+            
+            toast.appendChild(toastMessage);
+            toastContainer.appendChild(toast);
+            
+            // Add to tracking array with metadata
+            const toastObj = { 
+                element: toast, 
+                timeout: null,
+                startTime: Date.now()
+            };
+            toasts.unshift(toastObj);  // Add to front for stacking order
+            
+            // Update all toast indices for stacking effect
+            toasts.forEach((obj, idx) => {
+                obj.element.setAttribute('data-index', String(idx));
+            });
+            
+            // If we exceed max, remove the oldest one gracefully
+            if (toasts.length > MAX_TOASTS) {
+                const oldest = toasts.pop();
+                if (oldest.timeout) clearTimeout(oldest.timeout);
+                removeToastGracefully(oldest);
+            }
+            
+            // Set auto-hide timer (4 seconds)
+            toastObj.timeout = setTimeout(() => {
+                removeToastGracefully(toastObj);
+            }, 4000);
+        }
+        
+        function removeToastGracefully(toastObj) {
+            const { element, timeout } = toastObj;
+            if (timeout) clearTimeout(timeout);
+            
+            // Add removing class for slide-out animation
+            element.classList.add('removing');
+            
+            // Remove from DOM after animation completes
+            setTimeout(() => {
+                element.remove();
+                // Remove from tracking array
+                const index = toasts.indexOf(toastObj);
+                if (index > -1) toasts.splice(index, 1);
+                
+                // Re-index remaining toasts
+                toasts.forEach((obj, idx) => {
+                    obj.element.setAttribute('data-index', String(idx));
+                });
+            }, 300); // Match animation duration
+        }
+        
+        function init() {
+            const icons = document.querySelectorAll('.bookmark-icon');
+            icons.forEach(function(icon, index) {
+              icon.innerHTML = outlineSVG;
+            });
+            const modalIcons = document.querySelectorAll('.module-bookmark-icon');
+            modalIcons.forEach(function(icon) { icon.innerHTML = outlineSVG; });
+        }
+        
+        document.addEventListener('click', function(e) {
+          const btn = e.target.closest('.bookmark-btn');
+          if (btn) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const icon = btn.querySelector('.bookmark-icon');
+                const wasBookmarked = btn.classList.contains('is-bookmarked');
+                const isBookmarked = !wasBookmarked;
+                
+                if (!isBookmarked) {
+                    btn.classList.remove('is-bookmarked');
+                    icon.innerHTML = outlineSVG;
+                    btn.setAttribute('aria-pressed', 'false');
+                    showToast('Removed from bookmarks');
+                } else {
+                    btn.classList.add('is-bookmarked');
+                    icon.innerHTML = filledSVG;
+                    btn.setAttribute('aria-pressed', 'true');
+                    showToast('Added to bookmarks');
+                }
+                
+                // Sync with modal bookmark
+                const index = btn.getAttribute('data-module-index');
+                const modal = document.querySelector('#moduleModal-' + index);
+                if (modal) {
+                    const modalBtn = modal.querySelector('.btn-bookmark-modal');
+                    if (modalBtn) {
+                        const modalIcon = modalBtn.querySelector('.module-bookmark-icon');
+                        const modalText = modalBtn.querySelector('.module-bookmark-text');
+                        
+                        if (isBookmarked) {
+                            modalBtn.classList.add('is-bookmarked');
+                            modalBtn.setAttribute('aria-pressed', 'true');
+                            if (modalIcon) modalIcon.innerHTML = filledSVG;
+                            if (modalText) modalText.textContent = 'Bookmarked';
+                        } else {
+                            modalBtn.classList.remove('is-bookmarked');
+                            modalBtn.setAttribute('aria-pressed', 'false');
+                            if (modalIcon) modalIcon.innerHTML = outlineSVG;
+                            if (modalText) modalText.textContent = 'Bookmark';
+                        }
+                    }
+                }
+            }
+            
+            const modalBtn = e.target.closest('.btn-bookmark-modal');
+            if (modalBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const icon = modalBtn.querySelector('.module-bookmark-icon');
+                const text = modalBtn.querySelector('.module-bookmark-text');
+                const wasBookmarked = modalBtn.classList.contains('is-bookmarked');
+                const isBookmarked = !wasBookmarked;
+                
+                if (!isBookmarked) {
+                    modalBtn.classList.remove('is-bookmarked');
+                    modalBtn.setAttribute('aria-pressed', 'false');
+                    icon.innerHTML = outlineSVG;
+                    if (text) text.textContent = 'Bookmark';
+                    showToast('Removed from bookmarks');
+                } else {
+                    modalBtn.classList.add('is-bookmarked');
+                    modalBtn.setAttribute('aria-pressed', 'true');
+                    icon.innerHTML = filledSVG;
+                    if (text) text.textContent = 'Bookmarked';
+                    showToast('Added to bookmarks');
+                }
+                
+                // Sync with card bookmark
+                const modal = modalBtn.closest('.modal');
+                if (modal && modal.id) {
+                    const modalIndex = modal.id.split('-').pop();
+                    const cardBtn = document.querySelector('.bookmark-btn[data-module-index="' + modalIndex + '"]');
+                    if (cardBtn) {
+                        const cardIcon = cardBtn.querySelector('.bookmark-icon');
+                        
+                        if (isBookmarked) {
+                            cardBtn.classList.add('is-bookmarked');
+                            cardBtn.setAttribute('aria-pressed', 'true');
+                            if (cardIcon) cardIcon.innerHTML = filledSVG;
+                        } else {
+                            cardBtn.classList.remove('is-bookmarked');
+                            cardBtn.setAttribute('aria-pressed', 'false');
+                            if (cardIcon) cardIcon.innerHTML = outlineSVG;
+                        }
+                    }
+                }
+            }
+        });
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+    })();
+    </script>
+    <script>
+    // Filters for modules: all, in-progress, bookmarked, completed
+    (function() {
+      function parseProgress(card) {
+        const el = card.querySelector('.module-progress');
+        if (!el) return 0;
+        const raw = el.textContent || el.innerText || '';
+        const n = parseInt(raw.replace('%','').trim(), 10);
+        return isNaN(n) ? 0 : n;
+      }
+
+      function applyFilter(filter) {
+        document.querySelectorAll('.col-md-6.col-lg-4').forEach(function(card) {
+          const progress = parseProgress(card);
+          const bookmarkBtn = card.querySelector('.bookmark-btn');
+          const isBookmarked = bookmarkBtn && bookmarkBtn.classList.contains('is-bookmarked');
+
+          let visible = true;
+          if (filter === 'in-progress') visible = (progress > 0 && progress < 100);
+          else if (filter === 'bookmarked') visible = !!isBookmarked;
+          else if (filter === 'completed') visible = (progress === 100);
+          else visible = true;
+
+          card.style.display = visible ? '' : 'none';
+        });
+      }
+
+      document.querySelectorAll('.btn-filter').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.btn-filter').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+          this.classList.add('active');
+          this.setAttribute('aria-pressed','true');
+          const f = this.getAttribute('data-filter') || 'all';
+          applyFilter(f);
+        });
+        // keyboard support (Enter / Space)
+        btn.addEventListener('keydown', function(ev) {
+          if (ev.key === 'Enter' || ev.key === ' ') {
+            ev.preventDefault();
+            this.click();
+          }
+        });
+      });
+
+      // Initialize filter based on active button
+      const activeBtn = document.querySelector('.btn-filter.active');
+      if (activeBtn) applyFilter(activeBtn.getAttribute('data-filter') || 'all');
+    })();
+    </script>
+  </th:block>
 </body>
 </html>
+
+<!-- import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { Progress } from '../ui/progress';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog';
+import { BookOpen, Clock, Bookmark, CheckCircle, PlayCircle, FileText, Video, Headphones } from 'lucide-react';
+import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { toast } from 'sonner@2.0.3';
+
+interface Module {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  duration: string;
+  progress: number;
+  isBookmarked: boolean;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  resources: { type: string; count: number }[];
+  image: string;
+}
+
+export function LearningModules() {
+  const [selectedModule, setSelectedModule] = useState<Module | null>(null);
+  const [modules, setModules] = useState<Module[]>([
+    {
+      id: '1',
+      title: 'Stress Management Fundamentals',
+      description: 'Learn effective techniques to identify, manage, and reduce stress in your daily life. This module covers breathing exercises, time management, and cognitive strategies.',
+      category: 'Stress & Anxiety',
+      duration: '45 min',
+      progress: 75,
+      isBookmarked: true,
+      difficulty: 'beginner',
+      resources: [
+        { type: 'Videos', count: 5 },
+        { type: 'Articles', count: 8 },
+        { type: 'Exercises', count: 12 },
+      ],
+      image: 'https://images.unsplash.com/photo-1557929878-b358f3bdbdd7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpdGF0aW9uJTIwY2FsbSUyMG5hdHVyZXxlbnwxfHx8fDE3NjI3MzgyOTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+    {
+      id: '2',
+      title: 'Mindfulness & Meditation',
+      description: 'Discover the power of mindfulness and meditation to improve mental clarity, reduce anxiety, and enhance overall wellbeing.',
+      category: 'Mindfulness',
+      duration: '60 min',
+      progress: 30,
+      isBookmarked: false,
+      difficulty: 'beginner',
+      resources: [
+        { type: 'Videos', count: 7 },
+        { type: 'Audio', count: 10 },
+        { type: 'Exercises', count: 15 },
+      ],
+      image: 'https://images.unsplash.com/photo-1608493830924-ec843d9c98c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZW50YWwlMjBoZWFsdGglMjB3ZWxsYmVpbmd8ZW58MXx8fHwxNzYyNzM4Mjk0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+    {
+      id: '3',
+      title: 'Sleep Hygiene & Rest',
+      description: 'Understand the importance of quality sleep and learn practical strategies to improve your sleep patterns and overcome insomnia.',
+      category: 'Sleep & Rest',
+      duration: '40 min',
+      progress: 0,
+      isBookmarked: false,
+      difficulty: 'beginner',
+      resources: [
+        { type: 'Videos', count: 4 },
+        { type: 'Articles', count: 6 },
+        { type: 'Exercises', count: 8 },
+      ],
+      image: 'https://images.unsplash.com/photo-1759922378123-a1f4f1e39bae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsZWFybmluZyUyMGVkdWNhdGlvbnxlbnwxfHx8fDE3NjI2NjExMzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+    {
+      id: '4',
+      title: 'Emotional Regulation Skills',
+      description: 'Master techniques to understand and manage your emotions effectively, building resilience and emotional intelligence.',
+      category: 'Emotional Health',
+      duration: '50 min',
+      progress: 100,
+      isBookmarked: true,
+      difficulty: 'intermediate',
+      resources: [
+        { type: 'Videos', count: 6 },
+        { type: 'Articles', count: 10 },
+        { type: 'Exercises', count: 14 },
+      ],
+      image: 'https://images.unsplash.com/photo-1592947945242-69312358628b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0aGVyYXB5JTIwY291bnNlbGluZ3xlbnwxfHx8fDE3NjI2MTUyNDN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+    {
+      id: '5',
+      title: 'Building Healthy Relationships',
+      description: 'Learn communication skills and boundary-setting techniques to foster healthy, supportive relationships.',
+      category: 'Relationships',
+      duration: '55 min',
+      progress: 45,
+      isBookmarked: false,
+      difficulty: 'intermediate',
+      resources: [
+        { type: 'Videos', count: 5 },
+        { type: 'Articles', count: 9 },
+        { type: 'Exercises', count: 11 },
+      ],
+      image: 'https://images.unsplash.com/photo-1608493830924-ec843d9c98c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZW50YWwlMjBoZWFsdGglMjB3ZWxsYmVpbmd8ZW58MXx8fHwxNzYyNzM4Mjk0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+    {
+      id: '6',
+      title: 'Coping with Depression',
+      description: 'Understand depression and learn evidence-based strategies to manage symptoms and improve mental health.',
+      category: 'Mental Health',
+      duration: '65 min',
+      progress: 0,
+      isBookmarked: false,
+      difficulty: 'advanced',
+      resources: [
+        { type: 'Videos', count: 8 },
+        { type: 'Articles', count: 12 },
+        { type: 'Exercises', count: 16 },
+      ],
+      image: 'https://images.unsplash.com/photo-1557929878-b358f3bdbdd7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpdGF0aW9uJTIwY2FsbSUyMG5hdHVyZXxlbnwxfHx8fDE3NjI3MzgyOTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+  ]);
+
+  const toggleBookmark = (moduleId: string) => {
+    setModules(modules.map(m => 
+      m.id === moduleId ? { ...m, isBookmarked: !m.isBookmarked } : m
+    ));
+    toast.success('Bookmark updated!');
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'beginner': return 'bg-green-100 text-green-700';
+      case 'intermediate': return 'bg-blue-100 text-blue-700';
+      case 'advanced': return 'bg-purple-100 text-purple-700';
+      default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-blue-900 mb-2">Learning Modules</h1>
+        <p className="text-blue-600">Explore our comprehensive mental health learning resources</p>
+      </div>
+
+      <div className="flex gap-3 flex-wrap">
+        <Button variant="outline" className="border-blue-300 text-blue-700">
+          All Modules
+        </Button>
+        <Button variant="ghost" className="text-blue-600">
+          In Progress
+        </Button>
+        <Button variant="ghost" className="text-blue-600">
+          Bookmarked
+        </Button>
+        <Button variant="ghost" className="text-blue-600">
+          Completed
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {modules.map((module) => (
+          <Card 
+            key={module.id} 
+            className="border-blue-100 shadow-md hover:shadow-xl transition-all cursor-pointer overflow-hidden group"
+            onClick={() => setSelectedModule(module)}
+          >
+            <div className="relative h-48 overflow-hidden">
+              <ImageWithFallback
+                src={module.image}
+                alt={module.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute top-3 right-3 flex gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleBookmark(module.id);
+                  }}
+                  className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-colors"
+                >
+                  <Bookmark className={`w-5 h-5 ${module.isBookmarked ? 'fill-blue-500 text-blue-500' : 'text-blue-600'}`} />
+                </button>
+                {module.progress === 100 && (
+                  <div className="p-2 rounded-full bg-green-500">
+                    <CheckCircle className="w-5 h-5 text-white" />
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <CardHeader>
+              <div className="flex gap-2 mb-2">
+                <Badge variant="secondary" className="text-xs">{module.category}</Badge>
+                <Badge variant="secondary" className={`text-xs capitalize ${getDifficultyColor(module.difficulty)}`}>
+                  {module.difficulty}
+                </Badge>
+              </div>
+              <CardTitle className="text-blue-900 line-clamp-2">{module.title}</CardTitle>
+              <CardDescription className="line-clamp-2">{module.description}</CardDescription>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-2 text-sm text-blue-600">
+                <Clock className="w-4 h-4" />
+                <span>{module.duration}</span>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-blue-600">Progress</span>
+                  <span className="text-blue-900">{module.progress}%</span>
+                </div>
+                <Progress value={module.progress} className="h-2" />
+              </div>
+
+              <Button className="w-full bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600">
+                {module.progress === 0 ? (
+                  <>
+                    <PlayCircle className="w-4 h-4 mr-2" />
+                    Start Module
+                  </>
+                ) : module.progress === 100 ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Review
+                  </>
+                ) : (
+                  <>
+                    <PlayCircle className="w-4 h-4 mr-2" />
+                    Continue
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Dialog open={!!selectedModule} onOpenChange={() => setSelectedModule(null)}>
+        <DialogContent className="max-w-2xl">
+          {selectedModule && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-blue-900">{selectedModule.title}</DialogTitle>
+                <DialogDescription>{selectedModule.category}</DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-6">
+                <ImageWithFallback
+                  src={selectedModule.image}
+                  alt={selectedModule.title}
+                  className="w-full h-64 object-cover rounded-xl"
+                />
+                
+                <div className="flex gap-3 flex-wrap">
+                  <Badge className="bg-blue-100 text-blue-700">
+                    <Clock className="w-3 h-3 mr-1" />
+                    {selectedModule.duration}
+                  </Badge>
+                  <Badge className={`capitalize ${getDifficultyColor(selectedModule.difficulty)}`}>
+                    {selectedModule.difficulty}
+                  </Badge>
+                  <Badge className="bg-green-100 text-green-700">
+                    {selectedModule.progress}% Complete
+                  </Badge>
+                </div>
+
+                <div>
+                  <h3 className="text-blue-900 mb-2">About This Module</h3>
+                  <p className="text-blue-600">{selectedModule.description}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-blue-900 mb-3">Learning Resources</h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    {selectedModule.resources.map((resource, index) => {
+                      const icons = {
+                        'Videos': Video,
+                        'Articles': FileText,
+                        'Audio': Headphones,
+                        'Exercises': BookOpen,
+                      };
+                      const Icon = icons[resource.type as keyof typeof icons] || FileText;
+                      
+                      return (
+                        <div key={index} className="p-4 rounded-xl bg-blue-50 text-center">
+                          <Icon className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                          <p className="text-sm text-blue-900">{resource.count}</p>
+                          <p className="text-xs text-blue-600">{resource.type}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button 
+                    className="flex-1 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600"
+                    onClick={() => {
+                      toast.success('Starting module...');
+                      setSelectedModule(null);
+                    }}
+                  >
+                    <PlayCircle className="w-4 h-4 mr-2" />
+                    {selectedModule.progress === 0 ? 'Start Learning' : 'Continue Learning'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleBookmark(selectedModule.id);
+                    }}
+                  >
+                    <Bookmark className={`w-4 h-4 mr-2 ${selectedModule.isBookmarked ? 'fill-blue-500' : ''}`} />
+                    {selectedModule.isBookmarked ? 'Bookmarked' : 'Bookmark'}
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+} -->
