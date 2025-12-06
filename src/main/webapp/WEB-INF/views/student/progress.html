@@ -100,7 +100,7 @@
                 <div class="col-12 col-lg-6">
                     <div class="card card-custom progress-chart-card h-100" style="border: 1px solid #dbeafe; padding: 1.5rem;">
                         <h2 class="fw-semibold text-blue-900 mb-3">Module Distribution</h2>
-                        <div class="d-flex justify-content-center align-items-center" style="height: 200px;" class="progress-chart-container">
+                        <div class="d-flex justify-content-center align-items-center progress-chart-container" style="height: 200px;">
                             <canvas id="moduleChart" role="img" aria-label="Doughnut chart showing module completion status distribution"></canvas>
                         </div>
                         <div class="row g-1 g-sm-2 g-md-3 mt-2">
@@ -151,17 +151,19 @@
 
             <!-- Actions Card -->
             <div class="card card-custom progress-actions-card" style="border: 1px solid #dbeafe; padding: 1.5rem;">
-                <div class="d-flex flex-column gap-3 gap-md-0 flex-md-row align-items-stretch align-md-items-center justify-md-content-between">
+                <div class="d-flex flex-column gap-3 gap-md-0 flex-md-row align-items-stretch align-items-md-center justify-content-md-between">
                     <div class="flex-grow-1">
                         <h3 class="fw-semibold text-blue-900 mb-1">Manage Your Progress</h3>
                         <p class="text-blue-600 small mb-0">Reset your progress or view detailed statistics</p>
                     </div>
-                    <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3 w-100 w-sm-auto flex-sm-shrink-0">
-                        <button class="btn btn-outline-primary progress-btn-reset w-100 w-sm-auto" style="border: 2px solid #3b82f6; color: #3b82f6; font-weight: 500; padding: 0.625rem 1.25rem; white-space: nowrap;" aria-label="Reset your learning progress">
-                            <i class="fas fa-rotate-left me-2"></i><span class="d-inline d-sm-inline">Reset Progress</span>
+                    <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3 flex-shrink-0">
+                        <button class="btn btn-outline-primary progress-btn-reset" style="border: 2px solid #3b82f6; color: #3b82f6; font-weight: 500; padding: 0.625rem 1.25rem; white-space: nowrap;" aria-label="Reset your learning progress">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw w-4 h-4 mr-2" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                            Reset Progress
                         </button>
-                        <button class="btn progress-btn-stats w-100 w-sm-auto" style="background: linear-gradient(135deg, #3b82f6, #22c55e); color: white; font-weight: 500; padding: 0.625rem 1.25rem; border: none; white-space: nowrap;" aria-label="View detailed statistics">
-                            <i class="fas fa-chart-line me-2"></i><span class="d-inline d-sm-inline">View Detailed Stats</span>
+                        <button class="btn progress-btn-stats" style="background: linear-gradient(135deg, #3b82f6, #22c55e); color: white; font-weight: 500; padding: 0.625rem 1.25rem; border: none; white-space: nowrap;" aria-label="View detailed statistics">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-4 h-4 mr-2" aria-hidden="true"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+                            View Detailed Stats
                         </button>
                     </div>
                 </div>
@@ -173,16 +175,17 @@
 <!-- Scripts Fragment -->
 <th:block layout:fragment="scripts">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
+    <script th:inline="javascript">
         // ============================================
         // Progress Page - Modern Frontend Implementation
         // ============================================
 
         // Configuration
+        const contextPath = /*[[@{/}]]*/ '';
         const API_ENDPOINTS = {
-            progress: '/nile-care/api/student/progress',
-            activities: '/nile-care/api/student/activities',
-            achievements: '/nile-care/api/student/achievements'
+            progress: contextPath + 'api/student/progress',
+            activities: contextPath + 'api/student/activities',
+            achievements: contextPath + 'api/student/achievements'
         };
 
         const ACTIVITY_TEMPLATE = `
@@ -455,7 +458,7 @@
             // Handle confirm reset
             document.getElementById('confirmResetBtn').addEventListener('click', async function() {
                 try {
-                    const response = await fetch('/nile-care/api/student/progress/reset', {
+                    const response = await fetch(contextPath + 'api/student/progress/reset', {
                         method: 'POST'
                     });
                     
