@@ -19,7 +19,13 @@
                     <div class="d-flex align-items-center gap-2 mb-4">
                         <div class="rounded-circle bg-gradient-custom d-flex align-items-center justify-content-center text-white"
                             style="width: 32px; height: 32px;">
-                            <i class="fas fa-question"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-circle-question-mark w-5 h-5"
+                                aria-hidden="true">
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <path d="M12 17h.01"></path>
+                            </svg>
                         </div>
                         <h5 class="fw-bold text-blue-900 mb-0">Submit New Request</h5>
                     </div>
@@ -93,7 +99,7 @@
                                 How do I view my assessment results?
                             </li>
                         </ul>
-                        <button class="help-secondary-btn mt-3 w-100">View All FAQs</button>
+                        <a th:href="@{/support/faq}" class="btn help-secondary-btn mt-3 w-100 text-decoration-none">View All FAQs</a>
                     </div>
 
                     <!-- Emergency Card -->
@@ -133,8 +139,11 @@
 </body>
 
 <th:block layout:fragment="scripts">
-    <script src="/nile-care/static/js/toast-notifications.js"></script>
-    <script>
+    <script th:src="@{/static/js/toast-notifications.js}"></script>
+    <script th:inline="javascript">
+        const contextPath = /*[[@{/}]]*/ '';
+        const loginUrl = /*[[@{/login}]]*/ '/login';
+
         document.addEventListener('DOMContentLoaded', function () {
             // Load help requests on page load
             loadHelpRequests();
@@ -163,7 +172,7 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
 
-            fetch('/nile-care/api/help-requests', {
+            fetch(contextPath + 'api/help-requests', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -177,7 +186,7 @@
                 .then(response => {
                     console.log('API response received, status:', response.status);
                     if (response.status === 401) {
-                        window.location.href = '/nile-care/login';
+                        window.location.href = loginUrl;
                         return null;
                     }
                     if (!response.ok) {
@@ -222,11 +231,11 @@
 
         function loadHelpRequests() {
             console.log('loadHelpRequests() called');
-            fetch('/nile-care/api/help-requests')
+            fetch(contextPath + 'api/help-requests')
                 .then(response => {
                     console.log('loadHelpRequests response status:', response.status);
                     if (response.status === 401) {
-                        window.location.href = '/nile-care/login';
+                        window.location.href = loginUrl;
                         return null;
                     }
                     if (!response.ok) {
@@ -271,7 +280,7 @@
                 });
 
                 const statusInfo = getStatusInfo(request.status);
-                
+
                 let responseHtml = '';
                 if (request.response) {
                     responseHtml = `
@@ -341,7 +350,7 @@
         function showAlert(message, type) {
             console.log('showAlert called with:', message, type);
             console.log('ToastNotifications available:', typeof ToastNotifications);
-            
+
             if (type === 'success') {
                 // Use toast for success messages
                 if (typeof ToastNotifications !== 'undefined' && ToastNotifications.showSuccessToast) {
