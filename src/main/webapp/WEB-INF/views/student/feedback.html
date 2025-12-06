@@ -7,12 +7,12 @@
 
 <body>
     <div layout:fragment="content">
-        <div class="feedback-container">
-            <!-- Header -->
-            <div class="feedback-header">
-                <h1>Submit Feedback</h1>
-                <p>Share your thoughts and help us improve your experience</p>
-            </div>
+
+        <!-- Header -->
+        <div class="mb-4">
+            <h2 class="fw-semibold text-blue-900 mb-1">Submit Feedback</h2>
+            <p class="text-blue-600 small">Share your thoughts and help us improve your experience</p>
+        </div>
 
             <!-- Main Grid -->
             <div class="feedback-grid">
@@ -89,40 +89,18 @@
                         <h3 class="feedback-card-title">Why Your Feedback Matters</h3>
 
                         <div class="feedback-info-card primary" style="margin-bottom: 0.75rem;">
-                            <div class="feedback-info-card-header">
-                                <svg class="feedback-info-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                                </svg>
-                                <div>
-                                    <h3>Help Us Improve</h3>
-                                    <p>Your feedback shows us what works and where to refine your experience.</p>
-                                </div>
-                            </div>
+                            <h3>Help Us Improve</h3>
+                            <p>Your feedback helps us understand what's working well and what we can improve to better support your mental health journey.</p>
                         </div>
 
                         <div class="feedback-info-card success" style="margin-bottom: 0.75rem;">
-                            <div class="feedback-info-card-header">
-                                <svg class="feedback-info-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2v20"></path>
-                                    <path d="M17 7H7c-2.8 0-5 2.2-5 5s2.2 5 5 5h10"></path>
-                                </svg>
-                                <div>
-                                    <h3>Shape Future Features</h3>
-                                    <p>Community ideas guide what we build next and how we prioritize updates.</p>
-                                </div>
-                            </div>
+                            <h3>Shape Future Features</h3>
+                            <p>Suggestions from our community directly influence new features and improvements we implement on the platform.</p>
                         </div>
 
                         <div class="feedback-info-card purple">
-                            <div class="feedback-info-card-header">
-                                <svg class="feedback-info-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 8a6 6 0 0 1-9 5.197L7 16l2.803-4.2A6 6 0 1 1 21 8Z"></path>
-                                </svg>
-                                <div>
-                                    <h3>We're Listening</h3>
-                                    <p>Every submission is reviewed by our team—we aim to respond within 3-5 days.</p>
-                                </div>
-                            </div>
+                            <h3>We're Listening</h3>
+                            <p>Every piece of feedback is reviewed by our team. We typically respond to feedback within 3-5 business days.</p>
                         </div>
                     </div>
 
@@ -148,6 +126,7 @@
 
     <!-- Feedback Page Scripts Fragment -->
     <th:block layout:fragment="scripts">
+        <script src="/nile-care/static/js/toast-notifications.js"></script>
         <script>
             // API Configuration
             const API_ENDPOINTS = {
@@ -279,6 +258,7 @@
                     })
                     .catch(error => {
                         console.error('Error loading feedback:', error);
+                        ToastNotifications.showErrorAlert('Unable to load feedback history. Please try again later.', 'danger');
 
                         // Fallback to sample data if API fails
                         const sampleFeedback = [
@@ -333,9 +313,11 @@
                     <div class="feedback-item">
                         <div class="feedback-item-header">
                             <div style="flex: 1;">
-                                <h3 class="feedback-item-title">${feedback.subject}</h3>
-                                <div class="feedback-item-meta">
+                                <div class="feedback-item-title-row">
+                                    <h3 class="feedback-item-title">${feedback.subject}</h3>
                                     <span class="feedback-item-category">${feedback.category}</span>
+                                </div>
+                                <div class="feedback-item-meta">
                                     <div class="feedback-stars" style="gap: 0.125rem;">
                                         ${Array(5).fill(0).map((_, idx) => `
                                             <svg class="feedback-star-readonly ${idx < feedback.rating ? 'active' : ''}" 
@@ -351,7 +333,7 @@
                                 ${feedback.response ? `
                                     <div class="feedback-item-response">
                                         <div class="feedback-item-response-header">
-                                            <svg class="feedback-item-status-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" style="color: #059669;">
+                                            <svg class="feedback-item-response-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path>
                                             </svg>
                                             <span class="feedback-item-response-label">Response from MindCare Team:</span>
@@ -415,7 +397,7 @@
                     const rating = selectedRating;
 
                     if (!category || !subject || !message || rating === 0) {
-                        alert('Please fill in all fields and provide a rating');
+                        ToastNotifications.showErrorAlert('Please fill in all fields and provide a rating', 'danger');
                         return;
                     }
 
@@ -424,7 +406,7 @@
                         const submitBtn = form.querySelector('button[type="submit"]');
                         const originalText = submitBtn.innerHTML;
                         submitBtn.disabled = true;
-                        submitBtn.innerHTML = 'Submitting...';
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
 
                         // Build FormData for API submission
                         const params = new URLSearchParams();
@@ -451,16 +433,16 @@
                             document.getElementById('ratingText').textContent = '';
                             resetStarDisplay();
 
-                            alert('Thank you for your feedback! Your response has been recorded.');
+                            ToastNotifications.showSuccessToast('Thank you for your feedback! Your response has been recorded.');
 
                             // Reload feedback history to show new submission
                             loadFeedbackHistory();
                         } else {
-                            alert('Error: ' + (result.error || 'Failed to submit feedback'));
+                            ToastNotifications.showErrorAlert('Error: ' + (result.error || 'Failed to submit feedback'), 'danger');
                         }
                     } catch (error) {
                         console.error('Error submitting feedback:', error);
-                        alert('Error submitting feedback: ' + error.message);
+                        ToastNotifications.showErrorAlert('Error submitting feedback: ' + error.message, 'danger');
                     } finally {
                         // Re-enable submit button
                         const submitBtn = form.querySelector('button[type="submit"]');

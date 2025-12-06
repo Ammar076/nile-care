@@ -5,10 +5,9 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <div class="page-container">
             
             <div class="mb-4">
-                <h3 class="fw-semibold text-blue-900 mb-1">Learning Modules</h3>
+                <h2 class="fw-semibold text-blue-900 mb-1">Learning Modules</h2>
                 <p class="text-blue-600 small">Explore our comprehensive mental health learning resources</p>
             </div>
 
@@ -178,89 +177,12 @@
                     <!-- toast container is created dynamically by script -->
 
 <th:block layout:fragment="scripts">
+    <script src="/nile-care/static/js/toast-notifications.js"></script>
     <script>
     (function() {
         const outlineSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
         
         const filledSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6" stroke="#3b82f6" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
-        
-        // Toast container for stacking notifications (created lazily)
-        let toastContainer = null;
-        
-        const MAX_TOASTS = 3;
-        const toasts = [];
-        
-        function showToast(message) {
-            // Create individual toast element
-            const toast = document.createElement('div');
-            toast.className = 'bookmark-toast success';
-            toast.setAttribute('role', 'status');
-            toast.setAttribute('aria-live', 'polite');
-            
-            const toastMessage = document.createElement('span');
-            toastMessage.textContent = message;
-            
-            toast.appendChild(toastMessage);
-            // create container lazily so it doesn't block UI when no notifications
-            if (!toastContainer) {
-              toastContainer = document.createElement('div');
-              toastContainer.id = 'bookmarkToastContainer';
-              document.body.appendChild(toastContainer);
-            }
-            toastContainer.appendChild(toast);
-            
-            // Add to tracking array with metadata
-            const toastObj = { 
-                element: toast, 
-                timeout: null,
-                startTime: Date.now()
-            };
-            toasts.unshift(toastObj);  // Add to front for stacking order
-            
-            // Update all toast indices for stacking effect
-            toasts.forEach((obj, idx) => {
-                obj.element.setAttribute('data-index', String(idx));
-            });
-            
-            // If we exceed max, remove the oldest one gracefully
-            if (toasts.length > MAX_TOASTS) {
-                const oldest = toasts.pop();
-                if (oldest.timeout) clearTimeout(oldest.timeout);
-                removeToastGracefully(oldest);
-            }
-            
-            // Set auto-hide timer (4 seconds)
-            toastObj.timeout = setTimeout(() => {
-                removeToastGracefully(toastObj);
-            }, 4000);
-        }
-        
-        function removeToastGracefully(toastObj) {
-            const { element, timeout } = toastObj;
-            if (timeout) clearTimeout(timeout);
-            
-            // Add removing class for slide-out animation
-            element.classList.add('removing');
-            
-          // Remove from DOM after animation completes
-          setTimeout(() => {
-            element.remove();
-            // Remove from tracking array
-            const index = toasts.indexOf(toastObj);
-            if (index > -1) toasts.splice(index, 1);
-
-            // Re-index remaining toasts
-            toasts.forEach((obj, idx) => {
-              obj.element.setAttribute('data-index', String(idx));
-            });
-
-            // If no more toasts, remove container so it doesn't block UI
-            if (toasts.length === 0 && toastContainer) {
-              toastContainer.remove();
-              toastContainer = null;
-            }
-          }, 300); // Match animation duration
-        }
         
         function init() {
             const icons = document.querySelectorAll('.bookmark-icon');
@@ -285,12 +207,12 @@
                     btn.classList.remove('is-bookmarked');
                     icon.innerHTML = outlineSVG;
                     btn.setAttribute('aria-pressed', 'false');
-                    showToast('Removed from bookmarks');
+                    ToastNotifications.showSuccessToast('Removed from bookmarks');
                 } else {
                     btn.classList.add('is-bookmarked');
                     icon.innerHTML = filledSVG;
                     btn.setAttribute('aria-pressed', 'true');
-                    showToast('Added to bookmarks');
+                    ToastNotifications.showSuccessToast('Added to bookmarks');
                 }
                 
                 // Sync with modal bookmark
@@ -332,13 +254,13 @@
                     modalBtn.setAttribute('aria-pressed', 'false');
                     icon.innerHTML = outlineSVG;
                     if (text) text.textContent = 'Bookmark';
-                    showToast('Removed from bookmarks');
+                    ToastNotifications.showSuccessToast('Removed from bookmarks');
                 } else {
                     modalBtn.classList.add('is-bookmarked');
                     modalBtn.setAttribute('aria-pressed', 'true');
                     icon.innerHTML = filledSVG;
                     if (text) text.textContent = 'Bookmarked';
-                    showToast('Added to bookmarks');
+                    ToastNotifications.showSuccessToast('Added to bookmarks');
                 }
                 
                 // Sync with card bookmark

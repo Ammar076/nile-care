@@ -259,3 +259,41 @@ const ToastNotifications = (() => {
         removeToastGracefully
     };
 })();
+
+/**
+ * Toast Debug Helper - Convenience object for testing in browser console
+ * Usage examples:
+ *   toast.success('Message')
+ *   toast.error('Error')
+ *   toast.warning('Warning')
+ *   toast.info('Info')
+ *   toast.help() - Show available commands
+ */
+window.toast = {
+    success: (msg) => {
+        ToastNotifications.showSuccessToast(msg || 'Success!');
+    },
+    error: (msg) => {
+        ToastNotifications.showErrorAlert(msg || 'Error!', 'danger');
+    },
+    warning: (msg) => {
+        ToastNotifications.showToast(msg || 'Warning!', 'warning');
+    },
+    info: (msg) => {
+        ToastNotifications.showToast(msg || 'Info!', 'info');
+    },
+    help: () => {
+        console.log('%cToast Debug Helper', 'font-weight: bold; font-size: 14px; color: #0066cc;');
+        console.log('Available commands:');
+        console.log('  toast.success(message) - Show success toast (auto-dismisses)');
+        console.log('  toast.error(message)   - Show error alert (persistent)');
+        console.log('  toast.warning(message) - Show warning toast');
+        console.log('  toast.info(message)    - Show info toast');
+        console.log('  toast.help()           - Show this help message');
+        console.log('\nExamples:');
+        console.log('  toast.success("Feature working!")');
+        console.log('  toast.error("Something went wrong")');
+    }
+};
+
+console.log('%cToast notifications ready! Type "toast.help()" for commands.', 'color: #28a745; font-weight: bold;');
