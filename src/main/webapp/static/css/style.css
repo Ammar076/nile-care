@@ -3603,3 +3603,100 @@ a { text-decoration: none; color: inherit; }
     color: #92400e;
     transform: translateY(-1px);
 }
+
+/* FAQ Page Styles */
+.faq-search-input {
+    border-radius: 50px;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    font-size: 1rem;
+    border-color: #bfdbfe;
+}
+
+.faq-search-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.category-btn {
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: #2563eb;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.category-btn:hover {
+    background: #f0f9ff;
+}
+
+.category-btn.category-active {
+    background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
+    color: white;
+}
+
+.category-btn.category-active .badge {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.faq-button {
+    background: transparent;
+    color: inherit;
+    border: none;
+    padding: 1rem;
+    font-weight: 500;
+    text-align: left;
+}
+
+.faq-button:not(.collapsed) {
+    background: rgba(59, 130, 246, 0.05);
+    color: #2563eb;
+}
+
+.faq-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* FAQ Mobile Responsiveness */
+@media (max-width: 991.98px) {
+    .faq-search-input {
+        padding: 0.65rem 1rem 0.65rem 2.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .category-btn {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.9rem;
+    }
+    
+    .faq-button {
+        padding: 0.85rem;
+        font-size: 0.95rem;
+    }
+    
+    #categoryCard {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .faq-search-input {
+        padding: 0.6rem 0.85rem 0.6rem 2.25rem;
+        font-size: 0.9rem;
+    }
+    
+    .category-btn span {
+        font-size: 0.85rem;
+    }
+    
+    .faq-button {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+}

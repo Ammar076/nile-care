@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+
+<head>
+    <title>FAQ</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- Header -->
+        <div class="mb-4">
+            <h2 class="fw-semibold text-blue-900 mb-1">Frequently Asked Questions</h2>
+            <p class="text-blue-600 small">Find answers to common questions</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-4">
+            <div class="position-relative" style="max-width: 600px;">
+                <i class="fas fa-search position-absolute" style="left: 16px; top: 50%; transform: translateY(-50%); color: #60a5fa;"></i>
+                <input type="text" id="searchInput" class="form-control ps-5 faq-search-input"
+                    placeholder="Search for help...">
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row g-4">
+            <!-- Left Sidebar - Categories -->
+            <div class="col-lg-3 order-lg-1 order-2">
+                <div class="card card-custom" id="categoryCard">
+                    <div class="card-body p-3 p-lg-4">
+                        <!-- Mobile: Collapsible Categories -->
+                        <div class="d-lg-none mb-3">
+                            <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="false">
+                                <i class="fas fa-filter me-2"></i>Filter by Category
+                            </button>
+                        </div>
+                        
+                        <h5 class="text-blue-900 fw-semibold mb-3 d-none d-lg-block">Categories</h5>
+                        
+                        <nav class="collapse d-lg-block" id="categoryCollapse">
+                            <div class="d-flex flex-column gap-2" id="categoryNav">
+                            <button class="category-btn category-active" data-category="all">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-circle-question text-blue-600"></i>
+                                        <span>All FAQs</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="all">16</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="getting-started">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-book text-blue-600"></i>
+                                        <span>Getting Started</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="getting-started">2</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="learning">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-book-open text-blue-600"></i>
+                                        <span>Learning Modules</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="learning">3</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="progress">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-arrow-trend-up text-blue-600"></i>
+                                        <span>Progress</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="progress">2</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="appointments">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-calendar text-blue-600"></i>
+                                        <span>Appointments</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="appointments">3</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="account">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-user text-blue-600"></i>
+                                        <span>Account</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="account">2</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="technical">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-sliders text-blue-600"></i>
+                                        <span>Technical</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="technical">2</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="privacy">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-shield text-blue-600"></i>
+                                        <span>Privacy</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="privacy">2</span>
+                                </div>
+                            </button>
+                            <button class="category-btn" data-category="billing">
+                                <div class="d-flex align-items-center justify-content-between w-100">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-dollar-sign text-blue-600"></i>
+                                        <span>Billing</span>
+                                    </div>
+                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="billing">0</span>
+                                </div>
+                            </button>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content - FAQs -->
+            <div class="col-lg-9 order-lg-2 order-1">
+                <!-- FAQs Card -->
+                <div class="card card-custom mb-4">
+                    <div class="card-body p-3 p-lg-4">
+                        <h5 class="text-blue-900 fw-semibold mb-1" id="categoryTitle">Frequently Asked Questions</h5>
+                        <p class="text-blue-600 small mb-4" id="categoryDesc">16 articles found</p>
+
+                        <div id="faqContainer">
+                            <!-- FAQ items will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/static/js/toast-notifications.js}"></script>
+    <script th:inline="javascript">
+        // FAQ Data
+        const faqData = {
+            'all': [
+                { id: '1', category: 'getting-started', question: 'How do I get started with the platform?', answer: 'Welcome to Nile Care! To get started, complete your profile setup, browse our learning modules, and take a self-assessment to get personalized recommendations. You can also book your first counseling appointment from the Counseling page.', relatedLinks: ['Setting up your profile', 'Taking your first assessment'] },
+                { id: '2', category: 'getting-started', question: 'What is the recommended learning path for beginners?', answer: 'We recommend starting with our foundational modules: "Understanding Mental Health Basics," followed by "Stress Management Fundamentals," and "Building Healthy Habits." These courses provide a strong foundation for your mental wellness journey.', relatedLinks: ['View beginner modules', 'Learning path guide'] },
+                { id: '3', category: 'learning', question: 'How long does it take to complete a module?', answer: 'Module lengths vary from 1-4 hours depending on complexity. Each module page displays the estimated completion time. You can learn at your own pace and save your progress at any time.', relatedLinks: ['Browse all modules', 'Understanding module structure'] },
+                { id: '4', category: 'learning', question: 'Can I download course materials for offline access?', answer: 'Yes! Most PDF resources, worksheets, and handouts can be downloaded from the Resources tab within each module. Video content requires an internet connection.', relatedLinks: ['Download instructions', 'Available resource types'] },
+                { id: '5', category: 'learning', question: 'What happens if I fail a quiz?', answer: 'Don\'t worry! You can retake quizzes as many times as needed. We encourage using failed attempts as learning opportunities. Review the lesson content and try again when you\'re ready.', relatedLinks: ['Quiz retake policy', 'Study tips'] },
+                { id: '6', category: 'progress', question: 'How is my progress calculated?', answer: 'Progress is calculated based on completed lessons, quizzes passed, and time spent in modules. Each component is weighted equally. You can view detailed analytics in your Progress Dashboard.', relatedLinks: ['Understanding progress metrics', 'View your dashboard'] },
+                { id: '7', category: 'progress', question: 'Can I share my progress with others?', answer: 'Yes! You can generate a shareable progress report from the Analytics page. You can also control your privacy settings to show or hide progress from other users.', relatedLinks: ['Privacy settings', 'Generate report'] },
+                { id: '8', category: 'appointments', question: 'How do I book a counseling appointment?', answer: 'Navigate to the Counseling page, select your preferred counselor and available time slot, then confirm your booking. You\'ll receive email and in-app reminders 24 hours and 1 hour before your appointment.', relatedLinks: ['Book appointment', 'View available counselors'] },
+                { id: '9', category: 'appointments', question: 'What is the cancellation policy?', answer: 'Appointments can be cancelled or rescheduled up to 24 hours in advance without penalty. Cancellations within 24 hours may incur a fee. Emergency situations are handled case-by-case.', relatedLinks: ['Full cancellation policy', 'Reschedule appointment'] },
+                { id: '10', category: 'appointments', question: 'Are counseling sessions confidential?', answer: 'Absolutely. All counseling sessions are completely confidential and conducted in accordance with professional ethical guidelines and privacy laws. Your information is never shared without your explicit consent.', relatedLinks: ['Privacy policy', 'Confidentiality agreement'] },
+                { id: '11', category: 'account', question: 'How do I change my password?', answer: 'Go to Profile > Account Settings > Change Password. Enter your current password and choose a new one. For security, we recommend using a strong, unique password.', relatedLinks: ['Account security tips', 'Reset password'] },
+                { id: '12', category: 'account', question: 'Can I have multiple accounts?', answer: 'Each person should maintain only one account. Multiple accounts for the same individual are against our terms of service and may result in account suspension.', relatedLinks: ['Terms of service', 'Account guidelines'] },
+                { id: '13', category: 'technical', question: 'Which browsers are supported?', answer: 'Nile Care works best on the latest versions of Chrome, Firefox, Safari, and Edge. We recommend keeping your browser updated for the best experience and security.', relatedLinks: ['Technical requirements', 'Troubleshooting guide'] },
+                { id: '14', category: 'technical', question: 'I\'m having trouble playing videos. What should I do?', answer: 'First, check your internet connection. Clear your browser cache and cookies, then try again. If problems persist, try a different browser or disable browser extensions that might interfere with video playback.', relatedLinks: ['Video troubleshooting', 'Clear cache instructions'] },
+                { id: '15', category: 'privacy', question: 'How is my personal data protected?', answer: 'We use industry-standard encryption for all data transmission and storage. Our platform is HIPAA compliant and undergoes regular security audits. You can review our complete privacy policy for detailed information.', relatedLinks: ['Privacy policy', 'Security measures'] },
+                { id: '16', category: 'privacy', question: 'Can I delete my account and data?', answer: 'Yes, you can request account deletion from Profile > Privacy > Delete Account. This action has a 30-day grace period. After 30 days, all your data will be permanently deleted.', relatedLinks: ['Data deletion policy', 'Download your data'] }
+            ]
+        };
+
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let helpfulFeedback = {};
+
+        const categoryNames = {
+            'all': 'Frequently Asked Questions',
+            'getting-started': 'Getting Started',
+            'learning': 'Learning Modules',
+            'progress': 'Progress',
+            'appointments': 'Appointments',
+            'account': 'Account',
+            'technical': 'Technical',
+            'privacy': 'Privacy',
+            'billing': 'Billing'
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFAQs();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('category-active'));
+                    this.classList.add('category-active');
+                    currentCategory = this.dataset.category;
+                    renderFAQs();
+                    
+                    // Auto-collapse on mobile after selection
+                    if (window.innerWidth < 992) {
+                        const collapse = document.getElementById('categoryCollapse');
+                        const bsCollapse = bootstrap.Collapse.getInstance(collapse);
+                        if (bsCollapse) {
+                            bsCollapse.hide();
+                        }
+                    }
+                });
+            });
+
+            // Search input
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                searchQuery = e.target.value.toLowerCase();
+                renderFAQs();
+            });
+        }
+
+        function renderFAQs() {
+            let faqs = faqData.all || [];
+
+            // Filter by category
+            if (currentCategory !== 'all') {
+                faqs = faqs.filter(faq => faq.category === currentCategory);
+            }
+
+            // Filter by search
+            if (searchQuery) {
+                faqs = faqs.filter(faq => 
+                    faq.question.toLowerCase().includes(searchQuery) ||
+                    faq.answer.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            // Update title
+            const categoryTitle = document.getElementById('categoryTitle');
+            const categoryDesc = document.getElementById('categoryDesc');
+            categoryTitle.textContent = categoryNames[currentCategory] || 'Frequently Asked Questions';
+            categoryDesc.textContent = `${faqs.length} ${faqs.length === 1 ? 'article' : 'articles'} found`;
+
+            // Render FAQs
+            const container = document.getElementById('faqContainer');
+            if (faqs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-circle-question" style="font-size: 3rem; color: #93c5fd; margin-bottom: 1rem;"></i>
+                        <p class="text-blue-600">No articles found. Try a different search or category.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = faqs.map(faq => `
+                <div class="accordion accordion-flush faq-item mb-3" id="accordion${faq.id}">
+                    <div class="accordion-item border border-blue-200 rounded-lg overflow-hidden">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed faq-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${faq.id}" aria-expanded="false">
+                                <i class="fas fa-circle-question me-3" style="color: #2563eb; flex-shrink: 0;"></i>
+                                <span class="text-blue-900">${faq.question}</span>
+                            </button>
+                        </h2>
+                        <div id="collapse${faq.id}" class="accordion-collapse collapse" data-bs-parent="#accordion${faq.id}">
+                            <div class="accordion-body" style="background: rgba(59, 130, 246, 0.05); padding: 1.5rem;">
+                                <div class="ps-4">
+                                    <p class="text-blue-700 mb-3">${faq.answer}</p>
+                                    
+                                    ${faq.relatedLinks && faq.relatedLinks.length > 0 ? `
+                                        <div class="mb-3">
+                                            <p class="small text-blue-600 mb-2">Related Articles:</p>
+                                            <div>
+                                                ${faq.relatedLinks.map(link => `
+                                                    <a href="#" class="small text-blue-600 text-decoration-none d-block mb-1">→ ${link}</a>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+
+                                    <div class="pt-3 border-top border-blue-200">
+                                        <p class="small text-blue-600 mb-2">Was this helpful?</p>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-secondary rounded-pill helpful-btn helpful-yes" data-faq="${faq.id}">
+                                                <i class="fas fa-thumbs-up me-1"></i>Yes
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary rounded-pill helpful-btn helpful-no" data-faq="${faq.id}">
+                                                <i class="fas fa-thumbs-down me-1"></i>No
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to helpful buttons
+            document.querySelectorAll('.helpful-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const faqId = this.dataset.faq;
+                    const isYes = this.classList.contains('helpful-yes');
+                    
+                    helpfulFeedback[faqId] = isYes;
+                    
+                    // Update button states
+                    this.parentElement.querySelectorAll('.helpful-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.style.background = '';
+                        b.style.borderColor = '';
+                        b.style.color = '';
+                    });
+                    
+                    this.classList.add('active');
+                    if (isYes) {
+                        this.style.background = '#dcfce7';
+                        this.style.borderColor = '#86efac';
+                        this.style.color = '#166534';
+                    } else {
+                        this.style.background = '#fee2e2';
+                        this.style.borderColor = '#fca5a5';
+                        this.style.color = '#7f1d1d';
+                    }
+                    
+                    showToast(isYes ? 'Glad we could help!' : 'We\'ll work on improving this answer', 'success');
+                });
+            });
+        }
+
+        function showToast(message, type = 'info') {
+            if (typeof ToastNotifications !== 'undefined' && ToastNotifications) {
+                if (type === 'success') {
+                    ToastNotifications.showSuccessToast(message);
+                } else if (type === 'error') {
+                    ToastNotifications.showErrorAlert(message);
+                } else {
+                    ToastNotifications.showToast(message);
+                }
+            } else {
+                console.log('[' + type.toUpperCase() + '] ' + message);
+            }
+        }
+    </script>
+</th:block>
+</html>

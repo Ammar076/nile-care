@@ -66,7 +66,13 @@ public class StudentController {
         return "student/help_request";
     }
 
-    // 8. Module Details
+    // 8. FAQ
+    @GetMapping("/support/faq")
+    public String faq() {
+        return "student/faq";
+    }
+
+    // 9. Module Details
     @GetMapping("/modules/{id}")
     public String moduleDetails(@PathVariable Long id, Model model) {
         // Fetch the specific module from DB
@@ -77,7 +83,7 @@ public class StudentController {
         return "student/module_details";
     }
     
-    // 9. Lesson View
+    // 10. Lesson View
     @GetMapping("/lesson/{id}")
     public String lessonView(@PathVariable Long id, Model model) {
         // Fetch the specific lesson from DB
