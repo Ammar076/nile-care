@@ -55,13 +55,28 @@ let selectedCounselor = null;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function () {
-    initializeDatepicker();
+    // Render counselors and appointments first (these don't depend on datepicker)
     renderCounselors();
     renderAppointments();
+    renderTimeSlots(); // Render initial "please select a date" message
+
+    // Initialize datepicker (may fail if jQuery not loaded)
+    try {
+        initializeDatepicker();
+    } catch (error) {
+        console.error('Datepicker initialization failed:', error);
+        // Show a fallback message in the calendar container
+        document.getElementById('datepicker-container').innerHTML =
+            '<p class="text-muted text-center py-4">Calendar loading... Please refresh if it doesn\'t appear.</p>';
+    }
 });
 
 // Initialize Bootstrap Datepicker
 function initializeDatepicker() {
+    if (typeof $ === 'undefined') {
+        throw new Error('jQuery is not loaded');
+    }
+
     $('#datepicker-container').datepicker({
         inline: true,
         startDate: new Date(),
