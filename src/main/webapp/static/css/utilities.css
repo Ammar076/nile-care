@@ -275,95 +275,48 @@
     border: none;
 }
 
+
+/* Utility Classes for Cards and Shadows */
+.card-custom {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card-custom:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.hover-shadow {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.transition-shadow {
+    transition: box-shadow 0.3s ease;
+}
+.btn-gradient:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
 /* --- PADDING & MARGIN UTILITIES --- */
 .padding-start-xl { 
     padding-left: 8.5rem !important; 
 }
 
 /* --- PROGRESS UTILITIES --- */
-.progress-track { 
-    height: 6px; 
-    background-color: #e2e8f0; 
-    border-radius: 10px; 
-    overflow: hidden; 
-}
-
-.progress-fill { 
-    background-color: var(--slate-800); 
-    height: 100%; 
-    border-radius: 10px; 
-}
-
-.progress-bar-custom {
-    height: 8px;
-    border-radius: 4px;
-    background-color: var(--blue-100);
-}
-
-.progress-bar {
-    height: 6px;
-    background-color: var(--blue-100);
-}
 
 .progress-bar-success {
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
 }
 
 /* Analytics progress bar utilities */
-.analytics-progress-bar-lg {
-    height: 8px;
-    background-color: var(--blue-100);
-}
-
-.analytics-progress-w0 {
-    width: 0%;
-    background-color: var(--blue-100);
-}
-
-.analytics-progress-w15 {
-    width: 15%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w30 {
-    width: 30%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w42 {
-    width: 42%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w45 {
-    width: 45%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w60 {
-    width: 60%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w70 {
-    width: 70%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w85 {
-    width: 85%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w87 {
-    width: 87%;
-    background: var(--gradient-primary);
-}
-
-.analytics-progress-w100 {
-    width: 100%;
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-}
 
 /* --- DISPLAY & LAYOUT UTILITIES --- */
 .d-flex {
@@ -382,6 +335,36 @@
     vertical-align: middle;
 }
 
+/*WHERE IS FLOATING HELP BUTTON ON THE WEBSITE??????????????*/
+/* Floating Help Button */
+.floating-help-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-500) 0%, var(--green-500) 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    transition: all 0.2s ease;
+    z-index: 100;
+}
+
+.floating-help-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
+.floating-help-btn svg {
+    width: 24px;
+    height: 24px;
+}
 /* --- HELPER CLASSES --- */
 .hover-shadow {
     transition: box-shadow 0.3s ease;
@@ -403,17 +386,7 @@
     overflow: hidden;
 }
 
-/* --- STAT VALUE UTILITIES --- */
-.analytics-stat-value {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--blue-900);
-}
 
-.analytics-stat-value.text-green-900 {
-    color: var(--green-600);
-}
 
 /* --- RESPONSIVE UTILITIES --- */
 .page-title {
@@ -431,218 +404,7 @@
     }
 }
 
-/* --- VIDEO & IMAGE PLACEHOLDERS --- */
-.video-player-placeholder {
-    aspect-ratio: 16/9;
-    background: var(--gradient-primary);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
 
-.video-player-icon {
-    width: 80px;
-    height: 80px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1rem;
-}
-
-.video-player-icon i {
-    font-size: 2rem;
-}
-
-.video-duration {
-    font-size: 0.875rem;
-    opacity: 0.8;
-}
-
-.image-placeholder {
-    background: #f0f9ff;
-    border-radius: 12px;
-    height: 256px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.image-caption {
-    text-align: center;
-    color: #2563eb;
-    font-size: 0.875rem;
-    font-style: italic;
-    margin-top: 0.5rem;
-}
-
-/* --- PROSE & CONTENT UTILITIES --- */
-.prose {
-    color: var(--blue-900);
-}
-
-.prose h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--blue-900);
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.prose h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--blue-900);
-    margin-top: 1.25rem;
-    margin-bottom: 0.75rem;
-}
-
-.prose p {
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    color: #1e40af;
-}
-
-.prose ul {
-    list-style-position: inside;
-    margin-bottom: 1rem;
-    padding-left: 1rem;
-}
-
-.prose ul li {
-    color: #1e40af;
-    margin-bottom: 0.5rem;
-}
-
-.prose blockquote {
-    border-left: 4px solid var(--blue-600);
-    background: var(--blue-50);
-    padding: 1rem;
-    border-radius: 0 12px 12px 0;
-}
-
-.prose blockquote p {
-    font-style: italic;
-    color: var(--blue-900);
-    margin: 0;
-}
-
-.prose blockquote footer {
-    color: var(--blue-600);
-    margin-top: 0.5rem;
-    font-style: normal;
-}
-
-/* Callout box utilities */
-.callout-box {
-    padding: 1rem;
-    border-left: 4px solid;
-    border-radius: 0 12px 12px 0;
-    margin-bottom: 1rem;
-}
-
-.callout-box.info {
-    background: #f0f9ff;
-    border-left-color: #2563eb;
-}
-
-.callout-box.info .callout-icon {
-    color: #2563eb;
-}
-
-.callout-box.info .callout-title {
-    color: #1e3a8a;
-}
-
-.callout-box.info .callout-text {
-    color: #1e40af;
-}
-
-.callout-box.warning {
-    background: #fef3c7;
-    border-left-color: #f59e0b;
-}
-
-.callout-box.warning .callout-icon {
-    color: #d97706;
-}
-
-.callout-box.warning .callout-title {
-    color: #92400e;
-}
-
-.callout-box.warning .callout-text {
-    color: #b45309;
-}
-
-.callout-box.tip {
-    background: #f0fdf4;
-    border-left-color: #22c55e;
-}
-
-.callout-box.tip .callout-icon {
-    color: #16a34a;
-}
-
-.callout-box.tip .callout-title {
-    color: #15803d;
-}
-
-.callout-box.tip .callout-text {
-    color: #166534;
-}
-
-.callout-icon {
-    flex-shrink: 0;
-    margin-top: 0.25rem;
-}
-
-.callout-title {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-}
-
-.callout-text {
-    font-size: 0.875rem;
-    margin-bottom: 0;
-}
-
-/* Deep dive box utilities */
-.deep-dive-box {
-    border: 1px solid #e0e7ff;
-    border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 2rem;
-    background: white;
-}
-
-.deep-dive-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    background: #f0f9ff;
-    border: 1.5px solid #dbeafe;
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    margin: -1rem -1rem 1rem -1rem;
-}
-
-.deep-dive-header:hover {
-    background: #dbeafe;
-    border-color: #2563eb;
-}
-
-.deep-dive-title {
-    font-weight: 600;
-    color: #1e3a8a;
-    font-size: 1.1rem;
-    margin: 0;
-    flex-grow: 1;
-}
 
 /* --- HELPER & UTILITY CLASSES FOR MODULE CARDS --- */
 .page-container {
@@ -689,5 +451,47 @@
     
     body {
         background: white;
+    }
+}
+
+/* Responsive Adjustments for Roles Page */
+@media (max-width: 768px) {
+    .role-header-card {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .role-header-card button {
+        width: 100%;
+    }
+
+    .nav-tabs-custom {
+        gap: 0;
+        flex-wrap: wrap;
+    }
+
+    .nav-tabs-custom .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .permission-item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table thead th,
+    .table tbody td {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .modal {
+        width: 95%;
+        max-width: none;
     }
 }

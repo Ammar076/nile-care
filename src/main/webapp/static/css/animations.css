@@ -99,19 +99,7 @@
     animation: toastSlideOut 0.3s cubic-bezier(0.34, 0, 0.66, 1) forwards;
 }
 
-/* Tab content fade animation */
-.tab-content {
-    animation: fadeIn 0.2s ease;
-}
 
-.tab-pane {
-    display: none;
-}
-
-.tab-pane.show {
-    display: block;
-    animation: fadeIn 0.2s ease;
-}
 
 /* Deep dive expandable animation */
 .deep-dive-chevron {

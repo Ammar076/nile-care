@@ -1,0 +1,17 @@
+/* ========================================
+   ASSESSMENT MODULE STYLES
+   ======================================== */
+
+.assessment-option {
+    transition: all 0.2s ease;
+}
+
+.assessment-option:hover {
+    background-color: #f0f9ff !important;
+    border-color: #93c5fd !important;
+    transform: translateY(-1px);
+}
+
+.assessment-option input[type="radio"]:checked {
+    accent-color: #3b82f6;
+}

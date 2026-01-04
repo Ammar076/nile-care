@@ -1,0 +1,590 @@
+.card-custom {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card-custom:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* ================================
+   MODULE DETAILS PAGE STYLES
+   ================================ */
+
+/* Tab Navigation */
+.module-tabs-nav {
+    border: none;
+    background: transparent;
+    border-radius: 50px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 0.75rem;
+}
+
+.module-tab-item {
+    flex-grow: 0;
+}
+
+.module-tab-link {
+    border: 1px solid #e0e7ff !important;
+    border-radius: 50px !important;
+    padding: 0.6rem 1.3rem !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #64748b !important;
+    transition: all 0.3s ease;
+    background: white !important;
+}
+
+.module-tab-link.active {
+    color: white !important;
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.module-tab-link:hover:not(.active) {
+    background: #e0f2fe !important;
+    border-color: #2563eb !important;
+}
+
+/* Hero Section */
+.module-hero-gradient {
+    height: 200px;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.module-hero-content {
+    z-index: 2;
+}
+
+.module-hero-title {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.module-hero-badge {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+}
+
+/* Overview Tab Content */
+.module-bookmark-btn {
+    border: 2px solid #3b82f6;
+    background: transparent;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.module-bookmark-btn.is-bookmarked {
+    background-color: #dbeafe;
+}
+
+/* Metadata Cards */
+.module-metadata-card {
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid;
+}
+
+.module-metadata-card.blue {
+    background: #f0f9ff;
+    border-color: #dbeafe;
+}
+
+.module-metadata-card.green {
+    background: #f0fdf4;
+    border-color: #dcfce7;
+}
+
+.module-metadata-card.purple {
+    background: #faf5ff;
+    border-color: #f3e8ff;
+}
+
+.module-metadata-icon {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.module-metadata-icon.blue {
+    color: #2563eb;
+}
+
+.module-metadata-icon.green {
+    color: #16a34a;
+}
+
+.module-metadata-icon.purple {
+    color: #a855f7;
+}
+
+.module-metadata-value {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.module-metadata-value.blue {
+    color: #1e3a8a;
+}
+
+.module-metadata-value.green {
+    color: #14532d;
+}
+
+.module-metadata-value.purple {
+    color: #6b21a8;
+}
+
+/* Progress Section */
+.module-progress-label {
+    color: #1e3a8a;
+    font-weight: 500;
+}
+
+.module-progress-percentage {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.module-progress-bar-container {
+    height: 0.75rem;
+    background: #dbeafe;
+    border-radius: 50px;
+}
+
+.module-progress-bar-fill {
+    background: #000000;
+    border-radius: 50px;
+}
+
+.module-last-access {
+    color: #2563eb;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+/* Description and Objectives */
+.module-section-title {
+    color: #1e3a8a;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.module-description-text {
+    color: #1e40af;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.module-objectives-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.module-objective-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    color: #1e40af;
+}
+
+.module-objective-check {
+    color: #22c55e;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+/* Action Button */
+.module-action-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Lesson Accordion */
+.lesson-accordion-item {
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.lesson-accordion-button {
+    padding: 0.6rem 0.8rem;
+    background: white;
+    color: #1e3a8a;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.lesson-status-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lesson-status-badge.completed {
+    background: #22c55e;
+}
+
+.lesson-status-badge.current {
+    background: #dbeafe;
+    color: #1e3a8a;
+    font-weight: 600;
+}
+
+.lesson-title {
+    color: #1e3a8a;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.lesson-meta {
+    font-size: 0.8rem;
+    color: #2563eb;
+}
+
+.lesson-accordion-body {
+    background: #f0f9ff;
+    padding: 0.7rem 0.8rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.lesson-description {
+    color: #1e40af;
+    margin-bottom: 0.75rem;
+}
+
+.lesson-start-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    display: inline-block;
+}
+
+/* Resources */
+.resource-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #f0f9ff;
+    border-radius: 12px;
+    border: 1px solid #dbeafe;
+    transition: all 0.3s ease;
+}
+
+.resource-item:hover {
+    background: #e0f2fe;
+    border-color: #7dd3fc;
+}
+
+.resource-icon-container {
+    width: 40px;
+    height: 40px;
+    background: #bfdbfe;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.resource-icon {
+    color: #1e3a8a;
+}
+
+.resource-title {
+    color: #1e3a8a;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.resource-meta {
+    font-size: 0.875rem;
+    color: #2563eb;
+}
+
+.resource-btn {
+    background: white;
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+/* Progress Tab */
+.module-overall-completion {
+    font-size: 1.5rem;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.module-progress-bar-lg {
+    height: 1rem;
+    background: #dbeafe;
+    border-radius: 50px;
+}
+
+.module-time-spent-card {
+    padding: 1rem;
+    background: #f0f9ff;
+    border-radius: 12px;
+    border: 1px solid #dbeafe;
+}
+
+.module-time-spent-label {
+    color: #2563eb;
+}
+
+.module-time-spent-value {
+    font-size: 1.5rem;
+    color: #1e3a8a;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Timeline */
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.timeline-dot {
+    width: 12px;
+    height: 12px;
+    background: #22c55e;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.timeline-title {
+    color: #1e3a8a;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.timeline-date {
+    color: #2563eb;
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}
+
+/* Badges */
+.badge-card {
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.badge-card.earned {
+    background: linear-gradient(135deg, #fbbf24, #f97316);
+}
+
+.badge-card.locked {
+    background: #e5e7eb;
+}
+
+.badge-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.badge-icon.earned {
+    color: white;
+}
+
+.badge-icon.locked {
+    color: #9ca3af;
+}
+
+.badge-name {
+    font-size: 0.875rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.badge-name.earned {
+    color: white;
+}
+
+.badge-name.locked {
+    color: #6b7280;
+}
+
+/* Sidebar Summary */
+.sidebar-summary-card {
+    border: 1px solid #dbeafe;
+    padding: 1.5rem;
+    top: 100px;
+}
+
+.sidebar-summary-title {
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-progress-label {
+    color: #1e40af;
+    font-weight: 500;
+}
+
+.sidebar-progress-value {
+    color: #1e3a8a;
+    font-weight: 600;
+}
+
+.sidebar-progress-bar {
+    height: 0.5rem;
+    background: #dbeafe;
+    border-radius: 50px;
+}
+
+.sidebar-current-lesson-card {
+    padding: 1rem;
+    background: #f0f9ff;
+    border-radius: 12px;
+    border: 1px solid #dbeafe;
+}
+
+.sidebar-current-lesson-label {
+    color: #2563eb;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-current-lesson-title {
+    color: #1e3a8a;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.sidebar-time-card {
+    padding: 1rem;
+    background: #f0fdf4;
+    border-radius: 12px;
+    border: 1px solid #dcfce7;
+}
+
+.sidebar-time-label {
+    color: #16a34a;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-time-value {
+    color: #14532d;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.sidebar-continue-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: all 0.3s ease;
+}
+
+.sidebar-continue-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    color: white;
+}
+
+.sidebar-back-btn {
+    border: 1.5px solid #e0e7ff;
+    color: #2563eb;
+    background: #f0f9ff;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.sidebar-back-btn:hover {
+    background: #dbeafe;
+    border-color: #2563eb;
+    color: #1e40af;
+    transform: translateY(-1px);
+}
+
+.sidebar-help-btn {
+    border: 1.5px solid #fde68a;
+    color: #b45309;
+    background: #fef3c7;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.sidebar-help-btn:hover {
+    background: #fde68a;
+    border-color: #f59e0b;
+    color: #92400e;
+    transform: translateY(-1px);
+}
+
+/* Tab content fade animation */
+.tab-content {
+    /* fix module details not showing */
+    display: block; /* show container; panes are still controlled by .tab-pane.show */
+    animation: fadeIn 0.2s ease;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.show {
+    display: block;
+}

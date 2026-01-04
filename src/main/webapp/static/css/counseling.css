@@ -1,0 +1,151 @@
+/* ========================================
+   COUNSELING MODULE STYLES
+   ======================================== */
+
+/* Datepicker customization */
+.datepicker {
+    border-radius: 12px !important;
+    border: 1px solid #dbeafe !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.datepicker table tr td.active,
+.datepicker table tr td.active:hover {
+    background: linear-gradient(135deg, #3b82f6, #22c55e) !important;
+    color: white !important;
+}
+
+.datepicker table tr td.today {
+    background-color: #eff6ff !important;
+    color: #1e3a8a !important;
+}
+
+.datepicker table tr td.day:hover {
+    background-color: #dbeafe !important;
+    color: #1e3a8a !important;
+}
+
+.datepicker-inline {
+    width: 100% !important;
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    z-index: 10002;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+    max-width: 500px;
+    width: auto;
+    height: auto;
+    max-height: 85vh;
+    overflow-y: auto;
+    pointer-events: none;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 10001;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+
+.modal-content {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-radius: 0.25rem;
+}
+
+.modal-close:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+    padding-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.modal-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(59, 130, 246, 0.1);
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.modal-danger {
+    border-left: 4px solid #ef4444;
+}
