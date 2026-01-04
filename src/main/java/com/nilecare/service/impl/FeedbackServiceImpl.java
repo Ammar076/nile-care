@@ -1,4 +1,4 @@
-package com.nilecare.service;
+package com.nilecare.service.impl;
 
 import com.nilecare.dto.CategoryStatsDTO;
 import com.nilecare.dto.FeedbackItemDTO;
@@ -7,6 +7,8 @@ import com.nilecare.dto.FeedbackStatsDTO;
 import com.nilecare.model.StudentFeedback;
 import com.nilecare.model.User;
 import com.nilecare.repository.StudentFeedbackRepository;
+import com.nilecare.service.FeedbackService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

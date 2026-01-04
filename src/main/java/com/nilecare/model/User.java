@@ -2,6 +2,7 @@ package com.nilecare.model;
 
 import lombok.Data;
 import javax.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,10 +29,16 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     private boolean enabled = true;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private boolean verified = false;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     // Relationship: One User has Many Roles
     @ManyToMany(fetch = FetchType.EAGER)

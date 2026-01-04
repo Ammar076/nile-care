@@ -1,21 +1,22 @@
-package com.nilecare.service;
+package com.nilecare.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
-/**
- * Extended UserDetails implementation that includes full name
- * and provides a method to get user initials for avatar display
- */
+
 public class CustomUserDetails extends User {
 
     private final String fullName;
+    private final boolean accountEnabled;
+    private final boolean verified;
 
     public CustomUserDetails(com.nilecare.model.User user, Collection<? extends GrantedAuthority> authorities) {
-        super(user.getEmail(), user.getPasswordHash(), authorities);
+        super(user.getEmail(), user.getPasswordHash(), user.isEnabled(), true, true, true, authorities);
         this.fullName = user.getFullName();
+        this.accountEnabled = user.isEnabled();
+        this.verified = user.isVerified();
     }
 
     /**
@@ -33,10 +34,8 @@ public class CustomUserDetails extends User {
         if (parts.length == 0) {
             return "";
         } else if (parts.length == 1) {
-            // Single name: return first letter
             return parts[0].substring(0, Math.min(1, parts[0].length())).toUpperCase();
         } else {
-            // Multiple names: return first letter of first and last name
             String first = parts[0].substring(0, Math.min(1, parts[0].length()));
             String last = parts[parts.length - 1].substring(0, Math.min(1, parts[parts.length - 1].length()));
             return (first + last).toUpperCase();
@@ -45,5 +44,13 @@ public class CustomUserDetails extends User {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public boolean isAccountEnabled() {
+        return accountEnabled;
+    }
+
+    public boolean isVerified() {
+        return verified;
     }
 }

@@ -14,15 +14,25 @@
             <div class="profile-header-card">
                 <div class="profile-header-content">
                     <div class="profile-avatar">
-                        <div class="avatar-initials">SJ</div>
+                        <div class="avatar-initials" th:text="${#strings.substring(user.fullName,0,1)}">U</div>
                     </div>
                     <div class="profile-header-info">
-                        <h1 class="profile-name" id="profileName">Sarah Johnson</h1>
+                        <h1 class="profile-name" th:text="${user.fullName}">User Name</h1>
                         <div class="profile-badges">
-                            <span class="badge badge-primary">Student</span>
-                            <span class="badge badge-success">Active</span>
+                            <th:block th:each="role : ${user.roles}">
+                                <th:block th:switch="${role.name.toString()}">
+                                    <span class="badge bg-primary" th:case="'ROLE_ADMIN'">Administrator</span>
+                                    <span class="badge bg-info text-dark" th:case="'ROLE_STUDENT'">Student</span>
+                                    <span class="badge bg-secondary" th:case="'ROLE_COUNSELOR'">Counselor</span>
+                                    <span class="badge bg-secondary" th:case="*" th:text="${role.name}">Unknown</span>
+                                </th:block>
+                            </th:block>
+                            <span th:class="${user.enabled ? 'badge badge-success' : 'badge bg-secondary'}" 
+                                  th:text="${user.enabled ? 'Active' : 'Inactive'}">Active</span>
+                            <span th:class="${user.verified ? 'badge bg-success' : 'badge bg-warning'}" 
+                                  th:text="${user.verified ? 'Verified' : 'Unverified'}">Unverified</span>
                         </div>
-                        <p class="profile-member-since">Member since January 2024</p>
+                        <p class="profile-member-since">Member since <span th:text="${#temporals.format(user.createdAt, 'MMMM yyyy')}">Date</span></p>
                     </div>
                 </div>
             </div>
@@ -32,8 +42,20 @@
                 <div class="tabs-list">
                     <button class="tab-trigger active" data-tab="profile">Profile Info</button>
                     <button class="tab-trigger" data-tab="settings">Account Settings</button>
-                    <button class="tab-trigger" data-tab="privacy">Privacy</button>
                 </div>
+
+                <style>
+                    .settings-grid {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 1.5rem;
+                        align-items: flex-start; /* Prevents vertical stretching */
+                    }
+                    .settings-grid .profile-card {
+                        flex: 1;
+                        min-width: 300px; /* Ensures proper stacking on mobile */
+                    }
+                </style>
 
                 <!-- Tab 1: Profile Info -->
                 <div id="profile" class="tab-content active">
@@ -66,7 +88,7 @@
                                         </svg>
                                         Email
                                     </label>
-                                    <p class="info-value">sarah.johnson@example.com</p>
+                                    <p class="info-value" th:text="${user.email}">user@example.com</p>
                                 </div>
 
                                 <div class="profile-info-item">
@@ -79,7 +101,7 @@
                                         </svg>
                                         Phone Number
                                     </label>
-                                    <p class="info-value" id="profilePhone">+1 (555) 123-4567</p>
+                                    <p class="info-value" th:text="${user.phoneNumber}" id="profilePhone">+1 (555) 123-4567</p>
                                 </div>
 
                                 <div class="profile-info-item">
@@ -92,32 +114,7 @@
                                         </svg>
                                         Full Name
                                     </label>
-                                    <p class="info-value" id="profileFullName">Sarah Johnson</p>
-                                </div>
-
-                                <div class="profile-info-item">
-                                    <label class="info-label">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                        </svg>
-                                        Role
-                                    </label>
-                                    <p class="info-value">Student</p>
-                                </div>
-
-                                <div class="profile-info-item">
-                                    <label class="info-label">User ID</label>
-                                    <p class="info-value info-mono">USR-2024-001234</p>
-                                </div>
-
-                                <div class="profile-info-item">
-                                    <label class="info-label">Account Status</label>
-                                    <p class="info-value status-active">
-                                        <span class="status-dot"></span>
-                                        Active
-                                    </p>
+                                    <p class="info-value" th:text="${user.fullName}" id="profileFullName">Sarah Johnson</p>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +124,6 @@
                 <!-- Tab 2: Account Settings -->
                 <div id="settings" class="tab-content">
                     <div class="settings-grid">
-                        <!-- Password Section -->
                         <div class="profile-card">
                             <div class="card-header">
                                 <div>
@@ -136,125 +132,43 @@
                                 </div>
                             </div>
                             <div class="card-content">
-                                <div class="form-group">
-                                    <label for="currentPassword" class="form-label">Current Password</label>
-                                    <input type="password" id="currentPassword" class="form-input" placeholder="••••••••">
-                                </div>
-                                <div class="form-group">
-                                    <label for="newPassword" class="form-label">New Password</label>
-                                    <input type="password" id="newPassword" class="form-input" placeholder="••••••••">
-                                </div>
-                                <div class="form-group">
-                                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                                    <input type="password" id="confirmPassword" class="form-input" placeholder="••••••••">
-                                </div>
-                                <button class="btn btn-primary" id="changePasswordBtn">Update Password</button>
+                                <form th:action="@{/profile/change-password}" method="post">
+                                    <div class="form-group">
+                                        <label for="currentPassword" class="form-label">Current Password</label>
+                                        <input type="password" id="currentPassword" name="currentPassword" class="form-input" placeholder="••••••••" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPassword" class="form-label">New Password</label>
+                                        <input type="password" id="newPassword" name="newPassword" class="form-input" placeholder="••••••••" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="••••••••" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Password</button>
+                                </form>
                             </div>
                         </div>
 
-                        <!-- Email Preferences -->
-                        <div class="profile-card">
+                        <!-- Danger Zone -->
+                        <div class="profile-card" style="border-left: 4px solid #dc2626;">
                             <div class="card-header">
                                 <div>
-                                    <h2 class="card-title">Email Preferences</h2>
-                                    <p class="card-description">Manage how you receive notifications</p>
+                                    <h2 class="card-title" style="color: #dc2626;">Danger Zone</h2>
+                                    <p class="card-description">Irreversible and destructive actions</p>
                                 </div>
                             </div>
                             <div class="card-content">
-                                <div class="settings-item">
-                                    <div>
-                                        <label class="form-label">Email Notifications</label>
-                                        <p class="form-hint">Receive updates via email</p>
-                                    </div>
-                                    <div class="toggle-switch-wrapper">
-                                        <input type="checkbox" id="notificationsEnabled" class="toggle-switch" checked>
-                                        <label for="notificationsEnabled" class="toggle-label"></label>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="digestFrequency" class="form-label">Digest Frequency</label>
-                                    <select id="digestFrequency" class="form-select">
-                                        <option value="daily">Daily</option>
-                                        <option value="weekly" selected>Weekly</option>
-                                        <option value="monthly">Monthly</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Active Sessions -->
-                        <div class="profile-card full-width">
-                            <div class="card-header">
-                                <div>
-                                    <h2 class="card-title">Active Sessions</h2>
-                                    <p class="card-description">Manage devices currently signed in</p>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <div class="sessions-list" id="sessionsList">
-                                    <!-- Sessions will be generated by JavaScript -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab 3: Privacy -->
-                <div id="privacy" class="tab-content">
-                    <div class="settings-grid">
-                        <!-- Data Collection -->
-                        <div class="profile-card">
-                            <div class="card-header">
-                                <div>
-                                    <h2 class="card-title">Data Collection</h2>
-                                    <p class="card-description">Control how your data is used</p>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <div class="settings-item">
-                                    <div>
-                                        <label class="form-label">Personalized Recommendations</label>
-                                        <p class="form-hint">Allow personalized content suggestions</p>
-                                    </div>
-                                    <div class="toggle-switch-wrapper">
-                                        <input type="checkbox" id="personalizedRecs" class="toggle-switch" checked>
-                                        <label for="personalizedRecs" class="toggle-label"></label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Data Management -->
-                        <div class="profile-card">
-                            <div class="card-header">
-                                <div>
-                                    <h2 class="card-title">Data Management</h2>
-                                    <p class="card-description">Download or delete your account data</p>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <button class="btn btn-secondary" id="downloadDataBtn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                <p style="margin-bottom: 1rem; color: #666;">
+                                    Deactivating your account will disable your access to NileCare. You can reactivate it later by contacting support.
+                                </p>
+                                <button type="button" class="btn btn-danger" id="deactivateAccountBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M3 6h18"></path>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
                                     </svg>
-                                    Download Account Data
-                                </button>
-                                <button class="btn btn-danger" id="deleteAccountBtn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path
-                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                        </path>
-                                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                                        <line x1="14" y1="11" x2="14" y2="17"></line>
-                                    </svg>
-                                    Delete Account
+                                    Deactivate Account
                                 </button>
                             </div>
                         </div>
@@ -268,339 +182,172 @@
                     <div class="modal-header">
                         <h2 class="modal-title">Edit Profile</h2>
                     </div>
-                    <div class="modal-body">
-                        <p class="modal-description">Update your name and phone number</p>
-                        <div class="form-group">
-                            <label for="editName" class="form-label">Full Name</label>
-                            <input type="text" id="editName" class="form-input" value="Sarah Johnson">
+                    <form th:action="@{/profile/update}" method="post" th:object="${user}">
+                        <div class="modal-body">
+                            <p class="modal-description">Update your personal information</p>
+                            <div class="form-group">
+                                <label for="editFullName" class="form-label">Full Name</label>
+                                <input type="text" id="editFullName" th:field="*{fullName}" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editEmail" class="form-label">Email</label>
+                                <input type="email" id="editEmail" th:field="*{email}" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editPhoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" id="editPhoneNumber" th:field="*{phoneNumber}" class="form-input">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="editPhone" class="form-label">Phone Number</label>
-                            <input type="tel" id="editPhone" class="form-input" value="+1 (555) 123-4567">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
-                        <button class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
-                    </div>
+                    </form>
                 </div>
             </div>
 
             <!-- Overlay for Modal -->
             <div id="modalOverlay" class="modal-overlay"></div>
 
-            <!-- Delete Account Confirmation Modal -->
-            <div id="deleteAccountModal" class="modal">
+            <!-- Deactivate Account Confirmation Modal -->
+            <div id="deactivateAccountModal" class="modal">
                 <div class="modal-content modal-danger">
                     <div class="modal-header">
-                        <h2 class="modal-title">Are you absolutely sure?</h2>
+                        <h2 class="modal-title">Deactivate Account?</h2>
                     </div>
-                    <div class="modal-body">
-                        <p class="modal-description">
-                            This action cannot be undone. This will permanently delete your account
-                            and remove your data from our servers. You will have 30 days to cancel
-                            this request.
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
-                        <button class="btn btn-danger" id="confirmDeleteBtn">Delete Account</button>
-                    </div>
+                    <form th:action="@{/profile/delete}" method="post">
+                        <div class="modal-body">
+                            <p class="modal-description">
+                                Are you sure you want to deactivate your account? Your data will be preserved, 
+                                but you will lose access to the platform immediately. To regain access, you will 
+                                need to contact an Administrator.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cancelDeactivateBtn">Cancel</button>
+                            <button type="submit" class="btn btn-danger" id="confirmDeactivateBtn">Deactivate</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
     <!-- Scripts -->
     <th:block layout:fragment="scripts">
+        <script th:src="@{/static/js/toast-notifications.js}"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 // Delay initialization to ensure DOM is fully ready
                 setTimeout(function() {
-                // State
-                const state = {
-                    name: 'Sarah Johnson',
-                    phone: '+1 (555) 123-4567',
-                    notificationsEnabled: true,
-                    digestFrequency: 'weekly',
-                    dataCollection: true,
-                    personalizedRecs: true
-                };
+                    // DOM Elements
+                    const tabs = document.querySelectorAll('.tab-trigger');
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    const editProfileBtn = document.getElementById('editProfileBtn');
+                    const editProfileModal = document.getElementById('editProfileModal');
+                    const modalOverlay = document.getElementById('modalOverlay');
+                    const saveProfileBtn = document.getElementById('saveProfileBtn');
+                    const cancelEditBtn = document.getElementById('cancelEditBtn');
+                    const deactivateAccountBtn = document.getElementById('deactivateAccountBtn');
+                    const deactivateAccountModal = document.getElementById('deactivateAccountModal');
+                    const cancelDeactivateBtn = document.getElementById('cancelDeactivateBtn');
 
-                // Session data
-                const activeSessions = [
-                    { id: 1, device: 'Desktop - Chrome', location: 'New York, USA', lastActive: '2 minutes ago', icon: 'monitor' },
-                    { id: 2, device: 'iPhone 13', location: 'New York, USA', lastActive: '1 hour ago', icon: 'smartphone' },
-                    { id: 3, device: 'iPad Pro', location: 'Boston, USA', lastActive: '2 days ago', icon: 'tablet' }
-                ];
-
-                // DOM Elements - defer getting them until needed
-                let tabs = null;
-                let tabContents = null;
-                let editProfileBtn = null;
-                let editProfileModal = null;
-                let modalOverlay = null;
-                let saveProfileBtn = null;
-                let cancelEditBtn = null;
-                let changePasswordBtn = null;
-                let downloadDataBtn = null;
-                let deleteAccountBtn = null;
-                let deleteAccountModal = null;
-                let confirmDeleteBtn = null;
-                let cancelDeleteBtn = null;
-                let sessionsList = null;
-
-                // Function to initialize DOM elements
-                function initDOM() {
-                    tabs = document.querySelectorAll('.tab-trigger');
-                    tabContents = document.querySelectorAll('.tab-content');
-                    editProfileBtn = document.getElementById('editProfileBtn');
-                    editProfileModal = document.getElementById('editProfileModal');
-                    modalOverlay = document.getElementById('modalOverlay');
-                    saveProfileBtn = document.getElementById('saveProfileBtn');
-                    cancelEditBtn = document.getElementById('cancelEditBtn');
-                    changePasswordBtn = document.getElementById('changePasswordBtn');
-                    downloadDataBtn = document.getElementById('downloadDataBtn');
-                    deleteAccountBtn = document.getElementById('deleteAccountBtn');
-                    deleteAccountModal = document.getElementById('deleteAccountModal');
-                    confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-                    cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-                    sessionsList = document.getElementById('sessionsList');
-                    
-                    console.log('DOM initialized:');
-                    console.log('editProfileBtn:', editProfileBtn);
-                    console.log('editProfileModal:', editProfileModal);
-                    console.log('deleteAccountBtn:', deleteAccountBtn);
-                    console.log('deleteAccountModal:', deleteAccountModal);
-                }
-
-                initDOM();
-
-                // Tab switching
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', function () {
-                        const tabName = this.dataset.tab;
-                        
-                        tabs.forEach(t => t.classList.remove('active'));
-                        this.classList.add('active');
-                        
-                        tabContents.forEach(content => content.classList.remove('active'));
-                        document.getElementById(tabName).classList.add('active');
+                    // Tab switching
+                    tabs.forEach(tab => {
+                        tab.addEventListener('click', function () {
+                            const tabName = this.dataset.tab;
+                            
+                            tabs.forEach(t => t.classList.remove('active'));
+                            this.classList.add('active');
+                            
+                            tabContents.forEach(content => content.classList.remove('active'));
+                            document.getElementById(tabName).classList.add('active');
+                        });
                     });
-                });
 
-                // Edit Profile Modal
-                if (editProfileBtn) {
-                    editProfileBtn.addEventListener('click', function () {
-                        const editName = document.getElementById('editName');
-                        const editPhone = document.getElementById('editPhone');
-                        if (editName && editPhone) {
-                            editName.value = state.name;
-                            editPhone.value = state.phone;
-                        }
-                        openModal(editProfileModal);
-                    });
-                }
-
-                if (saveProfileBtn) {
-                    saveProfileBtn.addEventListener('click', function () {
-                        const editName = document.getElementById('editName');
-                        const editPhone = document.getElementById('editPhone');
-                        if (!editName || !editPhone) return;
-                        
-                        const newName = editName.value;
-                        const newPhone = editPhone.value;
-
-                        if (!newName || !newPhone) {
-                            if (typeof ToastNotifications !== 'undefined') {
-                                ToastNotifications.showErrorAlert('Please fill in all fields');
-                            } else {
-                                alert('Please fill in all fields');
-                            }
-                            return;
-                        }
-
-                        state.name = newName;
-                        state.phone = newPhone;
-
-                        document.getElementById('profileName').textContent = newName;
-                        document.getElementById('profileFullName').textContent = newName;
-                        document.getElementById('profilePhone').textContent = newPhone;
-
-                        closeModal(editProfileModal);
-
-                        if (typeof ToastNotifications !== 'undefined') {
-                            ToastNotifications.showSuccessToast('Profile updated successfully');
-                        } else {
-                            alert('Profile updated successfully');
-                        }
-                    });
-                }
-
-                if (cancelEditBtn) {
-                    cancelEditBtn.addEventListener('click', function () {
-                        closeModal(editProfileModal);
-                    });
-                }
-
-                // Change Password
-                if (changePasswordBtn) {
-                    changePasswordBtn.addEventListener('click', function () {
-                        const currentPassword = document.getElementById('currentPassword');
-                        const newPassword = document.getElementById('newPassword');
-                        const confirmPassword = document.getElementById('confirmPassword');
-                        
-                        if (!currentPassword || !newPassword || !confirmPassword) return;
-
-                        const currentPass = currentPassword.value;
-                        const newPass = newPassword.value;
-                        const confirmPass = confirmPassword.value;
-
-                        if (!currentPass || !newPass || !confirmPass) {
-                            if (typeof ToastNotifications !== 'undefined') {
-                                ToastNotifications.showToast('Please fill in all password fields', 'warning');
-                            } else {
-                                alert('Please fill in all password fields');
-                            }
-                            return;
-                        }
-
-                        if (newPass !== confirmPass) {
-                            if (typeof ToastNotifications !== 'undefined') {
-                                ToastNotifications.showToast('New passwords do not match', 'warning');
-                            } else {
-                                alert('New passwords do not match');
-                            }
-                            return;
-                        }
-
-                        currentPassword.value = '';
-                        newPassword.value = '';
-                        confirmPassword.value = '';
-
-                        if (typeof ToastNotifications !== 'undefined') {
-                            ToastNotifications.showSuccessToast('Password updated successfully');
-                        } else {
-                            alert('Password updated successfully');
-                        }
-                    });
-                }
-
-                // Download Data
-                if (downloadDataBtn) {
-                    downloadDataBtn.addEventListener('click', function () {
-                        if (typeof ToastNotifications !== 'undefined') {
-                            ToastNotifications.showSuccessToast('Account data download started. You will receive an email shortly.');
-                        } else {
-                            alert('Account data download started. You will receive an email shortly.');
-                        }
-                    });
-                }
-
-                // Delete Account
-                if (deleteAccountBtn) {
-                    deleteAccountBtn.addEventListener('click', function () {
-                        openModal(deleteAccountModal);
-                    });
-                }
-
-                if (confirmDeleteBtn) {
-                    confirmDeleteBtn.addEventListener('click', function () {
-                        closeModal(deleteAccountModal);
-                        if (typeof ToastNotifications !== 'undefined') {
-                            ToastNotifications.showToast('Account deletion requested. This action will be processed in 30 days.', 'warning');
-                        } else {
-                            alert('Account deletion requested. This action will be processed in 30 days.');
-                        }
-                    });
-                }
-
-                if (cancelDeleteBtn) {
-                    cancelDeleteBtn.addEventListener('click', function () {
-                        closeModal(deleteAccountModal);
-                    });
-                }
-
-                // Logout Session
-                function logoutSession(sessionId) {
-                    if (typeof ToastNotifications !== 'undefined') {
-                        ToastNotifications.showSuccessToast('Session ended successfully');
-                    } else {
-                        alert('Session ended successfully');
+                    // Edit Profile Modal
+                    if (editProfileBtn) {
+                        editProfileBtn.addEventListener('click', function () {
+                            openModal(editProfileModal);
+                        });
                     }
-                }
 
-                // Render Sessions
-                function renderSessions() {
-                    if (!sessionsList) return;
-                    sessionsList.innerHTML = activeSessions.map(session => `
-                        <div class="session-item">
-                            <div class="session-icon">${getDeviceIcon(session.icon)}</div>
-                            <div class="session-info">
-                                <p class="session-device">${session.device}</p>
-                                <p class="session-details">${session.location} • ${session.lastActive}</p>
-                            </div>
-                            <button class="btn btn-secondary btn-sm" onclick="window.logoutSession(${session.id})">
-                                Logout
-                            </button>
-                        </div>
-                    `).join('');
-                }
-
-                window.logoutSession = logoutSession;
-
-                function getDeviceIcon(type) {
-                    const icons = {
-                        monitor: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>',
-                        smartphone: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>',
-                        tablet: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>'
-                    };
-                    return icons[type] || icons.monitor;
-                }
-
-                renderSessions();
-
-                // Modal Functions
-                function openModal(modal) {
-                    console.log('openModal called with:', modal);
-                    if (modal) {
-                        console.log('Modal element found, adding active class');
-                        modal.classList.add('active');
-                    } else {
-                        console.log('Modal element is null!');
+                    if (cancelEditBtn) {
+                        cancelEditBtn.addEventListener('click', function () {
+                            closeModal(editProfileModal);
+                        });
                     }
+
+                    // Deactivate Account Modal
+                    if (deactivateAccountBtn) {
+                        deactivateAccountBtn.addEventListener('click', function () {
+                            openModal(deactivateAccountModal);
+                        });
+                    }
+
+                    if (cancelDeactivateBtn) {
+                        cancelDeactivateBtn.addEventListener('click', function () {
+                            closeModal(deactivateAccountModal);
+                        });
+                    }
+
+                    // Modal Functions
+                    function openModal(modal) {
+                        if (modal) {
+                            modal.classList.add('active');
+                        }
+                        if (modalOverlay) {
+                            modalOverlay.classList.add('active');
+                        }
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    function closeModal(modal) {
+                        if (modal) {
+                            modal.classList.remove('active');
+                        }
+                        if (modalOverlay) {
+                            modalOverlay.classList.remove('active');
+                        }
+                        document.body.style.overflow = '';
+                    }
+
+                    // Close modals on overlay click
                     if (modalOverlay) {
-                        console.log('Overlay element found, adding active class');
-                        modalOverlay.classList.add('active');
-                    } else {
-                        console.log('Overlay element is null!');
+                        modalOverlay.addEventListener('click', function () {
+                            document.querySelectorAll('.modal.active').forEach(modal => closeModal(modal));
+                        });
                     }
-                    document.body.style.overflow = 'hidden';
-                }
 
-                function closeModal(modal) {
-                    if (modal) {
-                        modal.classList.remove('active');
-                    }
-                    if (modalOverlay) {
-                        modalOverlay.classList.remove('active');
-                    }
-                    document.body.style.overflow = '';
-                }
-
-                // Close modals on overlay click
-                if (modalOverlay) {
-                    modalOverlay.addEventListener('click', function () {
-                        document.querySelectorAll('.modal.active').forEach(modal => closeModal(modal));
+                    // Close modals on close button click
+                    document.querySelectorAll('.modal-close').forEach(btn => {
+                        btn.addEventListener('click', function () {
+                            closeModal(this.closest('.modal'));
+                        });
                     });
-                }
-
-                // Close modals on close button click
-                document.querySelectorAll('.modal-close').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        closeModal(this.closest('.modal'));
-                    });
-                });
                 }, 100); // End setTimeout
+            });
+
+            /* Check for Flash Attributes from Controller */
+            document.addEventListener('DOMContentLoaded', function () {
+                const successMsg = "[[${success}]]"; // Thymeleaf inlining
+                const warningMsg = "[[${warning}]]";
+                const errorMsg = "[[${error}]]";
+
+                if (successMsg && successMsg !== 'null' && successMsg !== '') {
+                    if (typeof ToastNotifications !== 'undefined') {
+                        ToastNotifications.showSuccessToast(successMsg);
+                    }
+                }
+                if (warningMsg && warningMsg !== 'null' && warningMsg !== '') {
+                    if (typeof ToastNotifications !== 'undefined') {
+                        ToastNotifications.showToast(warningMsg, 'warning');
+                    }
+                }
+                if (errorMsg && errorMsg !== 'null' && errorMsg !== '') {
+                    if (typeof ToastNotifications !== 'undefined') {
+                        ToastNotifications.showToast(errorMsg, 'danger');
+                    }
+                }
             });
         </script>
     </th:block>

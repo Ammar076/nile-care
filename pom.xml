@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nilecare</groupId>
     <artifactId>nile-care</artifactId>
@@ -8,7 +7,8 @@
     <packaging>war</packaging>
 
     <properties>
-        <spring.version>5.3.20</spring.version> <maven.compiler.source>11</maven.compiler.source>
+        <spring.version>5.3.20</spring.version>
+        <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>2.7.0</version> 
+            <version>2.7.0</version>
         </dependency>
 
         <dependency>
@@ -42,7 +42,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.29</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -54,7 +54,7 @@
             <artifactId>thymeleaf-spring5</artifactId>
             <version>3.0.15.RELEASE</version>
         </dependency>
-        
+
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
@@ -68,16 +68,23 @@
         </dependency>
 
         <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-java8time</artifactId>
+            <version>3.0.4.RELEASE</version>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.30</version> <scope>provided</scope>
+            <version>1.18.30</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -135,7 +142,8 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.30</version> </path>
+                            <version>1.18.30</version>
+                        </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
