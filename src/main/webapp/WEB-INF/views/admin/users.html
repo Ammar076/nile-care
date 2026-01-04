@@ -1,7 +1,8 @@
 
 
 <!DOCTYPE html>
-<html layout:decorate="~{layout/main_layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/main_layout}" lang="en">
 
 <head>
     <title>Manage Users</title>
@@ -86,6 +87,28 @@
             border: 1px solid #dbeafe;
             background-color: #eff6ff;
             color: #2563eb;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-student {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border-color: #93c5fd;
+        }
+
+        .badge-counselor {
+            background-color: #dcfce7;
+            color: #15803d;
+            border-color: #86efac;
+        }
+
+        .badge-admin {
+            background-color: #e9d5ff;
+            color: #7c3aed;
+            border-color: #c084fc;
         }
 
         .badge-active {
@@ -171,6 +194,15 @@
         .btn-action-green:hover {
             color: #15803d;
             background-color: #dcfce7;
+        }
+
+        .btn-action-orange {
+            color: #f97316;
+        }
+
+        .btn-action-orange:hover {
+            color: #ea580c;
+            background-color: #fed7aa;
         }
 
         /* Text Colors */
@@ -371,25 +403,29 @@
         <!-- User Directory Card -->
         <div class="card card-custom border-0">
             <div class="card-header bg-white border-0 pt-4 pb-3">
-                <div class="row g-3 align-items-center">
-                    <div class="col-12 col-md-8">
-                        <h5 class="text-blue-900 fw-bold mb-3">User Directory</h5>
-                        <div class="search-input-wrapper">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="form-control search-input" placeholder="Search users..."
-                                id="searchInput">
+                <form th:action="@{/admin/users}" method="get">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-12 col-md-8">
+                            <h5 class="text-blue-900 fw-bold mb-3">User Directory</h5>
+                            <div class="search-input-wrapper">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" class="form-control search-input" 
+                                       placeholder="Search by name or email..." 
+                                       name="search" 
+                                       th:value="${currentSearch}"
+                                       id="searchInput">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label small text-muted mb-2">Filter by Role</label>
+                            <select class="form-select" name="role" id="roleFilter" onchange="this.form.submit()">
+                                <option value="ALL" th:selected="${currentRole == 'ALL'}">All Roles</option>
+                                <option value="ROLE_STUDENT" th:selected="${currentRole == 'ROLE_STUDENT'}">Student</option>
+                                <option value="ROLE_ADMIN" th:selected="${currentRole == 'ROLE_ADMIN'}">Admin</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <label class="form-label small text-muted mb-2">Filter by Role</label>
-                        <select class="form-select" id="roleFilter">
-                            <option value="all">All Roles</option>
-                            <option value="STUDENT">Student</option>
-                            <option value="COUNSELOR">Counselor</option>
-                            <option value="ADMIN">Admin</option>
-                        </select>
-                    </div>
-                </div>
+                </form>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -406,134 +442,50 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- User Row 1 -->
-                            <tr>
-                                <td class="fw-semibold text-blue-900">Sarah Johnson</td>
-                                <td class="text-muted">sarah.j@example.com</td>
+                            <!-- Dynamic User Rows -->
+                            <tr th:each="user : ${users}">
+                                <td class="fw-semibold text-blue-900" th:text="${user.fullName}">User Name</td>
+                                <td class="text-muted" th:text="${user.email}">user@example.com</td>
                                 <td>
-                                    <span class="badge badge-role">Student</span>
+                                    <span th:each="role : ${user.roles}" 
+                                          th:class="${'badge badge-role'}" 
+                                          th:text="${#strings.replace(role.name.name(), 'ROLE_', '')}">Role</span>
                                 </td>
                                 <td>
-                                    <span class="badge badge-active">Active</span>
+                                    <span th:class="${user.enabled ? 'badge badge-active' : 'badge badge-inactive'}" 
+                                          th:text="${user.enabled ? 'Active' : 'Inactive'}">Active</span>
                                 </td>
                                 <td>
-                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
+                                    <span th:if="${user.verified}" class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i>Verified
+                                    </span>
+                                    <form th:if="${!user.verified}" th:action="@{/admin/users/verify}" method="post" style="display: inline;">
+                                        <input type="hidden" name="userId" th:value="${user.userId}">
+                                        <button type="submit" class="btn btn-sm btn-success" title="Verify User">
+                                            <i class="fas fa-check"></i> Verify
+                                        </button>
+                                    </form>
                                 </td>
-                                <td class="text-muted">2024-01-15</td>
+                                <td class="text-muted" th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}">2024-01-15</td>
                                 <td>
                                     <div class="d-flex gap-1 justify-content-end">
-                                        <button class="btn btn-action btn-action-blue edit-user-btn" title="Edit" data-user-name="Sarah Johnson" data-user-email="sarah.j@example.com" data-user-role="STUDENT">
+                                        <button class="btn btn-action btn-action-blue edit-role-btn" 
+                                                title="Edit Role" 
+                                                th:attr="data-user-id=${user.userId}, data-user-name=${user.fullName}, data-user-email=${user.email}, data-user-role=${user.roles[0].name.name()}">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-action btn-action-red delete-user-btn" title="Delete" data-user-name="Sarah Johnson" data-user-email="sarah.j@example.com">
-                                            <i class="fas fa-trash"></i>
+                                        <!-- Dynamic Toggle Button: Deactivate if Active, Activate if Inactive -->
+                                        <button th:if="${user.enabled}" 
+                                                class="btn btn-action btn-action-orange toggle-status-btn" 
+                                                title="Deactivate User" 
+                                                th:attr="data-user-id=${user.userId}, data-user-name=${user.fullName}, data-user-email=${user.email}, data-action='deactivate'">
+                                            <i class="fas fa-ban"></i>
                                         </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- User Row 2 -->
-                            <tr>
-                                <td class="fw-semibold text-blue-900">Michael Chen</td>
-                                <td class="text-muted">michael.c@example.com</td>
-                                <td>
-                                    <span class="badge badge-role">Student</span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-active">Active</span>
-                                </td>
-                                <td>
-                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
-                                </td>
-                                <td class="text-muted">2024-02-20</td>
-                                <td>
-                                    <div class="d-flex gap-1 justify-content-end">
-                                        <button class="btn btn-action btn-action-blue edit-user-btn" title="Edit" data-user-name="Michael Chen" data-user-email="michael.c@example.com" data-user-role="STUDENT">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-action btn-action-red delete-user-btn" title="Delete" data-user-name="Michael Chen" data-user-email="michael.c@example.com">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- User Row 3 - Unverified -->
-                            <tr>
-                                <td class="fw-semibold text-blue-900">Emily Davis</td>
-                                <td class="text-muted">emily.d@example.com</td>
-                                <td>
-                                    <span class="badge badge-role">Counselor</span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-active">Active</span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-action btn-action-blue small verify-email-btn" data-user-name="Emily Davis"
-                                        data-user-email="emily.d@example.com">
-                                        <i class="fas fa-envelope me-1"></i>
-                                        Verify
-                                    </button>
-                                </td>
-                                <td class="text-muted">2024-03-10</td>
-                                <td>
-                                    <div class="d-flex gap-1 justify-content-end">
-                                        <button class="btn btn-action btn-action-blue edit-user-btn" title="Edit" data-user-name="Emily Davis" data-user-email="emily.d@example.com" data-user-role="COUNSELOR">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-action btn-action-red delete-user-btn" title="Delete" data-user-name="Emily Davis" data-user-email="emily.d@example.com">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- User Row 4 - Inactive -->
-                            <tr>
-                                <td class="fw-semibold text-blue-900">James Wilson</td>
-                                <td class="text-muted">james.w@example.com</td>
-                                <td>
-                                    <span class="badge badge-role">Student</span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-inactive">Inactive</span>
-                                </td>
-                                <td>
-                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
-                                </td>
-                                <td class="text-muted">2024-01-05</td>
-                                <td>
-                                    <div class="d-flex gap-1 justify-content-end">
-                                        <button class="btn btn-action btn-action-blue edit-user-btn" title="Edit" data-user-name="James Wilson" data-user-email="james.w@example.com" data-user-role="STUDENT">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-action btn-action-red delete-user-btn" title="Delete" data-user-name="James Wilson" data-user-email="james.w@example.com">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- User Row 5 -->
-                                <td class="fw-semibold text-blue-900">Lisa Anderson</td>
-                                <td class="text-muted">lisa.a@example.com</td>
-                                <td>
-                                    <span class="badge badge-role">Admin</span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-active">Active</span>
-                                </td>
-                                <td>
-                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
-                                </td>
-                                <td class="text-muted">2023-12-01</td>
-                                <td>
-                                    <div class="d-flex gap-1 justify-content-end">
-                                        <button class="btn btn-action btn-action-blue edit-user-btn" title="Edit" data-user-name="Lisa Anderson" data-user-email="lisa.a@example.com" data-user-role="ADMIN">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-action btn-action-red delete-user-btn" title="Delete" data-user-name="Lisa Anderson" data-user-email="lisa.a@example.com">
-                                            <i class="fas fa-trash"></i>
+                                        <button th:unless="${user.enabled}" 
+                                                class="btn btn-action btn-action-green toggle-status-btn" 
+                                                title="Activate User" 
+                                                th:attr="data-user-id=${user.userId}, data-user-name=${user.fullName}, data-user-email=${user.email}, data-action='activate'">
+                                            <i class="fas fa-power-off"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -551,84 +503,83 @@
                     <h2 class="modal-title">Add New User</h2>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-description">Create a new user account</p>
-                    <form id="addUserForm">
+                    <p class="modal-description">Create a new user account (Default password: Welcome123)</p>
+                    <form id="addUserForm" th:action="@{/admin/users/add}" method="post">
                         <div class="form-group">
                             <label for="addUserName" class="form-label">Full Name</label>
-                            <input type="text" id="addUserName" class="form-input" placeholder="John Doe" required>
+                            <input type="text" id="addUserName" name="fullName" class="form-input" placeholder="John Doe" required>
                         </div>
                         <div class="form-group">
                             <label for="addUserEmail" class="form-label">Email</label>
-                            <input type="email" id="addUserEmail" class="form-input" placeholder="john@example.com" required>
+                            <input type="email" id="addUserEmail" name="email" class="form-input" placeholder="john@example.com" required>
                         </div>
                         <div class="form-group">
                             <label for="addUserRole" class="form-label">Role</label>
-                            <select id="addUserRole" class="form-select" required>
+                            <select id="addUserRole" name="role" class="form-select" required>
                                 <option value="">Select role</option>
                                 <option value="STUDENT">Student</option>
-                                <option value="COUNSELOR">Counselor</option>
                                 <option value="ADMIN">Admin</option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="confirmAddUserBtn">Create User</button>
+                    <button type="submit" form="addUserForm" class="btn btn-primary" id="confirmAddUserBtn">Create User</button>
                     <button class="btn btn-secondary" id="cancelAddUserBtn">Cancel</button>
                 </div>
             </div>
         </div>
 
-        <!-- Edit User Modal -->
-        <div id="editUserModal" class="modal">
+        <!-- Manage User Role Mini-Modal -->
+        <div id="editRoleModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title">Edit User</h2>
+                    <h2 class="modal-title">Manage User Role</h2>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-description">Update user information</p>
-                    <form id="editUserForm">
+                    <!-- Read-Only User Info -->
+                    <div class="mb-3">
+                        <p class="fw-bold mb-0" id="roleModalName">User Name</p>
+                        <p class="text-muted small mb-3" id="roleModalEmail">user@example.com</p>
+                    </div>
+                    <!-- Role Selection -->
+                    <form id="editRoleForm" th:action="@{/admin/users/role/update}" method="post">
+                        <input type="hidden" id="editRoleUserId" name="userId">
                         <div class="form-group">
-                            <label for="editUserName" class="form-label">Full Name</label>
-                            <input type="text" id="editUserName" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="editUserEmail" class="form-label">Email</label>
-                            <input type="email" id="editUserEmail" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="editUserRole" class="form-label">Role</label>
-                            <select id="editUserRole" class="form-select" required>
-                                <option value="STUDENT">Student</option>
-                                <option value="COUNSELOR">Counselor</option>
-                                <option value="ADMIN">Admin</option>
+                            <label for="editRoleRole" class="form-label">User Role</label>
+                            <select id="editRoleRole" name="role" class="form-select" required>
+                                <option value="ROLE_STUDENT">Student</option>
+                                <option value="ROLE_ADMIN">Admin</option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="confirmEditUserBtn">Save Changes</button>
-                    <button class="btn btn-secondary" id="cancelEditUserBtn">Cancel</button>
+                    <button type="submit" form="editRoleForm" class="btn btn-primary" id="confirmEditRoleBtn">Update Role</button>
+                    <button class="btn btn-secondary" id="cancelEditRoleBtn">Cancel</button>
                 </div>
             </div>
         </div>
 
-        <!-- Delete User Modal -->
+        <!-- Delete User Modal (Soft Delete - Toggle Status) -->
         <div id="deleteUserModal" class="modal">
             <div class="modal-content modal-danger">
                 <div class="modal-header">
-                    <h2 class="modal-title">Delete User</h2>
+                    <h2 class="modal-title" id="toggleModalTitle">Toggle User Status</h2>
                 </div>
                 <div class="modal-body">
                     <p class="modal-description">
-                        Are you sure you want to delete this user?<br>
+                        <span id="toggleModalText">Are you sure you want to toggle the status of this user?</span><br>
                         <span class="fw-semibold" id="deleteUserName"></span> (<span id="deleteUserEmail"></span>)<br>
-                        This action cannot be undone.
+                        This will activate/deactivate the account.
                     </p>
+                    <form id="deleteUserForm" th:action="@{/admin/users/delete}" method="post">
+                        <input type="hidden" id="deleteUserId" name="userId">
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" id="cancelDeleteUserBtn">Cancel</button>
-                    <button class="btn btn-danger" id="confirmDeleteUserBtn">Delete User</button>
+                    <button type="submit" form="deleteUserForm" class="btn btn-danger" id="confirmDeleteUserBtn">Toggle Status</button>
                 </div>
             </div>
         </div>
@@ -636,27 +587,62 @@
         <!-- Overlay for Modal -->
         <div id="modalOverlay" class="modal-overlay"></div>
 <th:block layout:fragment="scripts">
-        <script>
+        <script th:inline="javascript">
             document.addEventListener('DOMContentLoaded', function () {
+                // Small delay to ensure ToastNotifications is available
+                setTimeout(function() {
+                    // Handle flash messages with toast notifications
+                    var successMessage = /*[[${success}]]*/ null;
+                    var errorMessage = /*[[${error}]]*/ null;
+                    var warningMessage = /*[[${warning}]]*/ null;
+
+                    console.log('Flash attributes:', {success: successMessage, error: errorMessage, warning: warningMessage});
+
+                    // Check if ToastNotifications exists
+                    if (typeof ToastNotifications !== 'undefined') {
+                        if (successMessage && successMessage !== 'null' && successMessage.trim() !== '') {
+                            console.log('Showing success toast:', successMessage);
+                            ToastNotifications.showSuccessToast(successMessage);
+                        }
+                        if (errorMessage && errorMessage !== 'null' && errorMessage.trim() !== '') {
+                            console.log('Showing error toast:', errorMessage);
+                            ToastNotifications.showToast(errorMessage, 'error');
+                        }
+                        if (warningMessage && warningMessage !== 'null' && warningMessage.trim() !== '') {
+                            console.log('Showing warning toast:', warningMessage);
+                            ToastNotifications.showToast(warningMessage, 'warning');
+                        }
+                    } else {
+                        console.warn('ToastNotifications not available - check if toast-notifications.js is loaded');
+                    }
+                }, 200);
+
                 // Delay initialization to ensure DOM is fully ready
                 setTimeout(function() {
                     // DOM Elements
                     const addNewUserBtn = document.getElementById('addNewUserBtn');
                     const addUserModal = document.getElementById('addUserModal');
-                    const editUserModal = document.getElementById('editUserModal');
+                    const editRoleModal = document.getElementById('editRoleModal');
                     const deleteUserModal = document.getElementById('deleteUserModal');
                     const modalOverlay = document.getElementById('modalOverlay');
                     
-                    const confirmAddUserBtn = document.getElementById('confirmAddUserBtn');
                     const cancelAddUserBtn = document.getElementById('cancelAddUserBtn');
-                    const confirmEditUserBtn = document.getElementById('confirmEditUserBtn');
-                    const cancelEditUserBtn = document.getElementById('cancelEditUserBtn');
-                    const confirmDeleteUserBtn = document.getElementById('confirmDeleteUserBtn');
+                    const cancelEditRoleBtn = document.getElementById('cancelEditRoleBtn');
                     const cancelDeleteUserBtn = document.getElementById('cancelDeleteUserBtn');
                     
-                    const editUserBtns = document.querySelectorAll('.edit-user-btn');
-                    const deleteUserBtns = document.querySelectorAll('.delete-user-btn');
-                    const verifyEmailBtns = document.querySelectorAll('.verify-email-btn');
+                    const editRoleBtns = document.querySelectorAll('.edit-role-btn');
+                    const toggleStatusBtns = document.querySelectorAll('.toggle-status-btn');
+
+                    // Search form - submit on Enter key
+                    const searchInput = document.getElementById('searchInput');
+                    if (searchInput) {
+                        searchInput.addEventListener('keypress', function(e) {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                this.form.submit();
+                            }
+                        });
+                    }
 
                     // Modal Functions
                     function openModal(modal) {
@@ -694,123 +680,81 @@
                         });
                     }
 
-                    if (confirmAddUserBtn) {
-                        confirmAddUserBtn.addEventListener('click', function () {
-                            const name = document.getElementById('addUserName').value;
-                            const email = document.getElementById('addUserEmail').value;
-                            const role = document.getElementById('addUserRole').value;
-
-                            if (!name || !email || !role) {
-                                if (typeof ToastNotifications !== 'undefined') {
-                                    ToastNotifications.showToast('Please fill in all fields', 'warning');
-                                } else {
-                                    alert('Please fill in all fields');
-                                }
-                                return;
-                            }
-
-                            closeModal(addUserModal);
-                            if (typeof ToastNotifications !== 'undefined') {
-                                ToastNotifications.showSuccessToast('User added successfully');
-                            } else {
-                                alert('User added successfully');
-                            }
-                        });
-                    }
-
                     if (cancelAddUserBtn) {
                         cancelAddUserBtn.addEventListener('click', function () {
                             closeModal(addUserModal);
                         });
                     }
 
-                    // Edit User
-                    editUserBtns.forEach(btn => {
+                    // Edit User Role
+                    editRoleBtns.forEach(btn => {
                         btn.addEventListener('click', function () {
+                            const userId = this.getAttribute('data-user-id');
                             const userName = this.getAttribute('data-user-name');
                             const userEmail = this.getAttribute('data-user-email');
                             const userRole = this.getAttribute('data-user-role');
 
-                            document.getElementById('editUserName').value = userName;
-                            document.getElementById('editUserEmail').value = userEmail;
-                            document.getElementById('editUserRole').value = userRole;
+                            // Set hidden userId
+                            document.getElementById('editRoleUserId').value = userId;
+                            
+                            // Set read-only name and email as text content (not input values)
+                            document.getElementById('roleModalName').textContent = userName;
+                            document.getElementById('roleModalEmail').textContent = userEmail;
+                            
+                            // Set role dropdown value
+                            document.getElementById('editRoleRole').value = userRole;
 
-                            openModal(editUserModal);
+                            openModal(editRoleModal);
                         });
                     });
 
-                    if (confirmEditUserBtn) {
-                        confirmEditUserBtn.addEventListener('click', function () {
-                            const name = document.getElementById('editUserName').value;
-                            const email = document.getElementById('editUserEmail').value;
-                            const role = document.getElementById('editUserRole').value;
-
-                            if (!name || !email || !role) {
-                                if (typeof ToastNotifications !== 'undefined') {
-                                    ToastNotifications.showToast('Please fill in all fields', 'warning');
-                                } else {
-                                    alert('Please fill in all fields');
-                                }
-                                return;
-                            }
-
-                            closeModal(editUserModal);
-                            if (typeof ToastNotifications !== 'undefined') {
-                                ToastNotifications.showSuccessToast('User updated successfully');
-                            } else {
-                                alert('User updated successfully');
-                            }
+                    if (cancelEditRoleBtn) {
+                        cancelEditRoleBtn.addEventListener('click', function () {
+                            closeModal(editRoleModal);
                         });
                     }
 
-                    if (cancelEditUserBtn) {
-                        cancelEditUserBtn.addEventListener('click', function () {
-                            closeModal(editUserModal);
-                        });
-                    }
-
-                    // Delete User
-                    deleteUserBtns.forEach(btn => {
+                    // Toggle User Status - Dynamic based on action (activate vs deactivate)
+                    toggleStatusBtns.forEach(btn => {
                         btn.addEventListener('click', function () {
+                            const userId = this.getAttribute('data-user-id');
                             const userName = this.getAttribute('data-user-name');
                             const userEmail = this.getAttribute('data-user-email');
+                            const action = this.getAttribute('data-action');
 
+                            document.getElementById('deleteUserId').value = userId;
                             document.getElementById('deleteUserName').textContent = userName;
                             document.getElementById('deleteUserEmail').textContent = userEmail;
+
+                            // Update modal based on action (activate vs deactivate)
+                            const titleEl = document.getElementById('toggleModalTitle');
+                            const textEl = document.getElementById('toggleModalText');
+                            const confirmBtn = document.getElementById('confirmDeleteUserBtn');
+                            const modalContent = deleteUserModal.querySelector('.modal-content');
+
+                            if (action === 'activate') {
+                                titleEl.textContent = 'Activate User?';
+                                textEl.textContent = 'Are you sure you want to activate this user account?';
+                                confirmBtn.textContent = 'Activate';
+                                confirmBtn.className = 'btn btn-success';
+                                modalContent.className = 'modal-content modal-success';
+                            } else {
+                                titleEl.textContent = 'Deactivate User?';
+                                textEl.textContent = 'Are you sure you want to deactivate this user account?';
+                                confirmBtn.textContent = 'Deactivate';
+                                confirmBtn.className = 'btn btn-danger';
+                                modalContent.className = 'modal-content modal-danger';
+                            }
 
                             openModal(deleteUserModal);
                         });
                     });
-
-                    if (confirmDeleteUserBtn) {
-                        confirmDeleteUserBtn.addEventListener('click', function () {
-                            closeModal(deleteUserModal);
-                            if (typeof ToastNotifications !== 'undefined') {
-                                ToastNotifications.showSuccessToast('User deleted successfully');
-                            } else {
-                                alert('User deleted successfully');
-                            }
-                        });
-                    }
 
                     if (cancelDeleteUserBtn) {
                         cancelDeleteUserBtn.addEventListener('click', function () {
                             closeModal(deleteUserModal);
                         });
                     }
-
-                    // Verify Email
-                    verifyEmailBtns.forEach(btn => {
-                        btn.addEventListener('click', function () {
-                            const userEmail = this.getAttribute('data-user-email');
-                            
-                            if (typeof ToastNotifications !== 'undefined') {
-                                ToastNotifications.showSuccessToast('Email verified successfully for ' + userEmail);
-                            } else {
-                                alert('Email verified successfully for ' + userEmail);
-                            }
-                        });
-                    });
 
                 }, 100); // End setTimeout
             });

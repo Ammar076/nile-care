@@ -1,5 +1,6 @@
-package com.nilecare.service;
+package com.nilecare.security;
 
+import com.nilecare.exception.AccountDisabledException;
 import com.nilecare.model.User;
 import com.nilecare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +22,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Load user from database by email
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        // Convert roles to Spring Security GrantedAuthority
-        // Role enum already contains ROLE_ prefix (e.g., ROLE_STUDENT)
+        // Check if account is disabled
+        if (!user.isEnabled()) {
+            throw new AccountDisabledException("Your account has been deactivated. Please contact the administrator.");
+        }
+
         Set<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toSet());
 
-        // Return CustomUserDetails object with full name
         return new CustomUserDetails(user, authorities);
     }
 }

@@ -12,6 +12,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 @Configuration
 @EnableWebMvc
@@ -34,8 +35,9 @@ public class WebConfig implements WebMvcConfigurer {
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(templateResolver());
-        engine.addDialect(new LayoutDialect()); // Enable Layouts
-        engine.addDialect(new SpringSecurityDialect()); // Enable Spring Security tags (sec:authorize, sec:authentication)
+        engine.addDialect(new LayoutDialect());
+        engine.addDialect(new SpringSecurityDialect()); 
+        engine.addDialect(new Java8TimeDialect());
         return engine;
     }
 

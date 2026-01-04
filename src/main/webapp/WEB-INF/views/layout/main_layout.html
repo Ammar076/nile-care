@@ -170,18 +170,6 @@
                         </svg>
                         <span>Manage Users</span>
                     </a>
-                    <a th:href="@{/admin/roles}" class="nav-link-custom"
-                        th:classappend="${#httpServletRequest.requestURI.contains('roles') ? 'active' : ''}"
-                        role="menuitem">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-shield w-5 h-5" aria-hidden="true">
-                            <path
-                                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
-                            </path>
-                        </svg>
-                        <span>Set Roles</span>
-                    </a>
                     <a th:href="@{/admin/reports}" class="nav-link-custom"
                         th:classappend="${#httpServletRequest.requestURI.contains('reports') ? 'active' : ''}"
                         sec:authorize="hasRole('ADMIN')"
@@ -226,101 +214,7 @@
                     </svg>
                 </button>
 
-                <div class="search-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="search-icon" aria-hidden="true">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                    <input type="text" class="search-input" placeholder="Search modules, resources, help..."
-                        aria-label="Search platform content">
-                </div>
-
                 <div class="nav-actions">
-                    <div class="dropdown">
-                        <button class="notification-btn" data-bs-toggle="dropdown" aria-expanded="false"
-                            aria-label="Notifications" title="You have 3 new notifications">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-bell w-5 h-5 text-blue-600"
-                                aria-hidden="true">
-                                <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
-                                <path
-                                    d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
-                                </path>
-                            </svg>
-                            <span class="badge-notification" aria-label="3 notifications">3</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
-                            <li>
-                                <h6 class="dropdown-header">Notifications</h6>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item notification-item" href="#">
-                                    <div class="notification-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M12 7v14"></path>
-                                            <path
-                                                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="notification-content">
-                                        <div class="notification-title">New Learning Module</div>
-                                        <div class="notification-time">2 minutes ago</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item notification-item" href="#">
-                                    <div class="notification-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path
-                                                d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="notification-content">
-                                        <div class="notification-title">Counselor Response</div>
-                                        <div class="notification-time">1 hour ago</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item notification-item" href="#">
-                                    <div class="notification-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                            <path d="M16 7h6v6"></path>
-                                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="notification-content">
-                                        <div class="notification-title">Progress Update Available</div>
-                                        <div class="notification-time">3 hours ago</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-center notification-clear" href="#" id="clearNotificationsBtn">
-                                    Clear Notifications
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
                     <div class="dropdown">
                         <button class="user-menu-btn" data-bs-toggle="dropdown" aria-expanded="false"
                             aria-label="User menu">
@@ -357,6 +251,20 @@
                     </div>
                 </div>
             </header>
+
+            <!-- Pending Approval Banner for Unverified Users -->
+            <div sec:authorize="isAuthenticated()" th:if="${!#authentication.principal.verified}" 
+                 class="alert alert-warning alert-dismissible fade show m-0 rounded-0 border-start-0 border-end-0" role="alert">
+                <div class="container-fluid d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>
+                    <div class="flex-grow-1">
+                        <strong>Account Pending Approval:</strong>
+                        Your account is currently under review by an administrator. You will have full access once verified.
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+
             <main class="scrollable-area" layout:fragment="content"></main>
         </div>
     </div>

@@ -1,8 +1,10 @@
-package com.nilecare.service;
+package com.nilecare.service.impl;
 
 import com.nilecare.dto.*;
 import com.nilecare.model.*;
 import com.nilecare.repository.*;
+import com.nilecare.service.ProgressService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

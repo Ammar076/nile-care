@@ -166,65 +166,69 @@
                             <div class="icon-box bg-gradient-blue">
                                 <i class="fas fa-users fa-lg"></i>
                             </div>
-                            <span class="badge bg-success-subtle text-success">+12%</span>
+                            <span class="badge"
+                                  th:classappend="${growthPercentage >= 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}"
+                                  th:text="${userGrowth}">+0.0%</span>
                         </div>
                         <div>
                             <p class="text-blue-600 small mb-1">Total Users</p>
-                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">1,248</h2>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;" th:text="${userCount}">0</h2>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Active Sessions Card -->
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-custom border-0">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <div class="icon-box bg-gradient-green">
-                                <i class="fas fa-chart-line fa-lg"></i>
-                            </div>
-                            <span class="badge bg-success-subtle text-success">+5%</span>
-                        </div>
-                        <div>
-                            <p class="text-blue-600 small mb-1">Active Sessions</p>
-                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">87</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reports Generated Card -->
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-custom border-0">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <div class="icon-box bg-gradient-purple">
-                                <i class="fas fa-file-alt fa-lg"></i>
-                            </div>
-                            <span class="badge bg-success-subtle text-success">+23%</span>
-                        </div>
-                        <div>
-                            <p class="text-blue-600 small mb-1">Reports Generated</p>
-                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">342</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Counseling Appointments Card -->
+            <!-- Pending Verifications Card -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card card-custom border-0">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="icon-box bg-gradient-orange">
-                                <i class="fas fa-calendar-check fa-lg"></i>
+                                <i class="fas fa-exclamation-circle fa-lg"></i>
                             </div>
-                            <span class="badge bg-success-subtle text-success">+8%</span>
+                            <span class="badge bg-warning text-dark">Pending</span>
                         </div>
                         <div>
-                            <p class="text-blue-600 small mb-1">Counseling Appointments</p>
-                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">156</h2>
+                            <p class="text-blue-600 small mb-1">Pending Verifications</p>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;" th:text="${pendingCount}">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Students Card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-custom border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="icon-box bg-gradient-green">
+                                <i class="fas fa-graduation-cap fa-lg"></i>
+                            </div>
+                            <span class="badge bg-success-subtle text-success">Active</span>
+                        </div>
+                        <div>
+                            <p class="text-blue-600 small mb-1">Active Students</p>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;" th:text="${studentCount}">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Server Memory Card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-custom border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="icon-box bg-gradient-purple">
+                                <i class="fas fa-server fa-lg"></i>
+                            </div>
+                            <span class="badge"
+                                  th:classappend="${isHighLoad ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success'}"
+                                  th:text="${isHighLoad ? 'High Load' : 'Healthy'}">Healthy</span>
+                        </div>
+                        <div>
+                            <p class="text-blue-600 small mb-1">Server Memory</p>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.25rem;" th:text="${systemMemory}">0 MB / 0 MB</h2>
                         </div>
                     </div>
                 </div>
@@ -238,154 +242,58 @@
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <a th:href="@{/admin/users}"
-                            class="btn btn-gradient-blue w-100 py-4 d-flex flex-column align-items-center gap-2">
-                            <i class="fas fa-user-plus" style="font-size: 1.5rem;"></i>
-                            <span>Add New User</span>
-                        </a>
-                    </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-6">
                         <a th:href="@{/admin/reports}"
-                            class="btn btn-gradient-green w-100 py-4 d-flex flex-column align-items-center gap-2">
+                            class="btn btn-gradient-blue w-100 py-4 d-flex flex-column align-items-center gap-2">
                             <i class="fas fa-chart-bar" style="font-size: 1.5rem;"></i>
-                            <span>Generate Report</span>
+                            <span>View Reports</span>
                         </a>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <a th:href="@{/admin/roles}"
-                            class="btn btn-gradient-purple w-100 py-4 d-flex flex-column align-items-center gap-2">
-                            <i class="fas fa-shield-alt" style="font-size: 1.5rem;"></i>
-                            <span>Set User Roles</span>
+                    <div class="col-12 col-md-6">
+                        <a th:href="@{/admin/users}"
+                            class="btn btn-gradient-green w-100 py-4 d-flex flex-column align-items-center gap-2">
+                            <i class="fas fa-users" style="font-size: 1.5rem;"></i>
+                            <span>Manage Users</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Activity & Module Completion -->
-        <div class="row g-4">
-            <!-- Recent Activity Card -->
-            <div class="col-12 col-lg-6">
-                <div class="card card-custom border-0 h-100">
-                    <div class="card-header bg-white border-0 pt-4">
-                        <h5 class="text-blue-900 fw-bold mb-0">Recent Activity</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column gap-3">
-                            <!-- Activity Item 1 -->
-                            <div class="activity-item d-flex justify-content-between align-items-center">
-                                <div class="flex-grow-1">
-                                    <p class="text-blue-900 fw-semibold mb-0">Sarah Johnson</p>
-                                    <p class="text-blue-600 small mb-0">Completed Module 3</p>
-                                </div>
-                                <span class="text-blue-500 small">5 min ago</span>
-                            </div>
-
-                            <!-- Activity Item 2 -->
-                            <div class="activity-item d-flex justify-content-between align-items-center">
-                                <div class="flex-grow-1">
-                                    <p class="text-blue-900 fw-semibold mb-0">Michael Chen</p>
-                                    <p class="text-blue-600 small mb-0">Booked counseling session</p>
-                                </div>
-                                <span class="text-blue-500 small">12 min ago</span>
-                            </div>
-
-                            <!-- Activity Item 3 -->
-                            <div class="activity-item d-flex justify-content-between align-items-center">
-                                <div class="flex-grow-1">
-                                    <p class="text-blue-900 fw-semibold mb-0">Emily Davis</p>
-                                    <p class="text-blue-600 small mb-0">Submitted help request</p>
-                                </div>
-                                <span class="text-blue-500 small">25 min ago</span>
-                            </div>
-
-                            <!-- Activity Item 4 -->
-                            <div class="activity-item d-flex justify-content-between align-items-center">
-                                <div class="flex-grow-1">
-                                    <p class="text-blue-900 fw-semibold mb-0">James Wilson</p>
-                                    <p class="text-blue-600 small mb-0">Completed self-assessment</p>
-                                </div>
-                                <span class="text-blue-500 small">1 hour ago</span>
-                            </div>
-
-                            <!-- Activity Item 5 -->
-                            <div class="activity-item d-flex justify-content-between align-items-center">
-                                <div class="flex-grow-1">
-                                    <p class="text-blue-900 fw-semibold mb-0">Lisa Anderson</p>
-                                    <p class="text-blue-600 small mb-0">Provided feedback</p>
-                                </div>
-                                <span class="text-blue-500 small">2 hours ago</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Recent Activity Card -->
+        <div class="card card-custom border-0">
+            <div class="card-header bg-white border-0 pt-4">
+                <h5 class="text-blue-900 fw-bold mb-0">Recent Registrations</h5>
             </div>
-
-            <!-- Module Completion Stats Card -->
-            <div class="col-12 col-lg-6">
-                <div class="card card-custom border-0 h-100">
-                    <div class="card-header bg-white border-0 pt-4">
-                        <h5 class="text-blue-900 fw-bold mb-0">Module Completion Rates</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column gap-4">
-                            <!-- Module 1 -->
-                            <div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-blue-900 small">Stress Management</span>
-                                    <span class="text-blue-600 small fw-semibold">85%</span>
-                                </div>
-                                <div class="progress-custom">
-                                    <div class="progress-bar-custom" style="width: 85%;"></div>
-                                </div>
-                            </div>
-
-                            <!-- Module 2 -->
-                            <div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-blue-900 small">Anxiety Coping Skills</span>
-                                    <span class="text-blue-600 small fw-semibold">72%</span>
-                                </div>
-                                <div class="progress-custom">
-                                    <div class="progress-bar-custom" style="width: 72%;"></div>
-                                </div>
-                            </div>
-
-                            <!-- Module 3 -->
-                            <div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-blue-900 small">Mindfulness Basics</span>
-                                    <span class="text-blue-600 small fw-semibold">91%</span>
-                                </div>
-                                <div class="progress-custom">
-                                    <div class="progress-bar-custom" style="width: 91%;"></div>
-                                </div>
-                            </div>
-
-                            <!-- Module 4 -->
-                            <div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-blue-900 small">Sleep Hygiene</span>
-                                    <span class="text-blue-600 small fw-semibold">68%</span>
-                                </div>
-                                <div class="progress-custom">
-                                    <div class="progress-bar-custom" style="width: 68%;"></div>
-                                </div>
-                            </div>
-
-                            <!-- Module 5 -->
-                            <div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-blue-900 small">Emotional Regulation</span>
-                                    <span class="text-blue-600 small fw-semibold">79%</span>
-                                </div>
-                                <div class="progress-custom">
-                                    <div class="progress-bar-custom" style="width: 79%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-blue-700 fw-bold">Name</th>
+                                <th class="text-blue-700 fw-bold">Email</th>
+                                <th class="text-blue-700 fw-bold">Registration Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user : ${recentUsers}">
+                                <td class="align-middle">
+                                    <span class="text-blue-900 fw-500" th:text="${user.fullName}">User Name</span>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="text-blue-600" th:text="${user.email}">user@example.com</span>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="text-blue-600" th:text="${#temporals.format(user.createdAt, 'MMM dd, yyyy HH:mm')}">Jan 01, 2024 12:00</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(recentUsers)}">
+                                <td colspan="3" class="text-center text-blue-600 py-4">
+                                    No recent registrations
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
