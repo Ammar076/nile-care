@@ -1463,7 +1463,7 @@ body.sidebar-open .sidebar-close {
     padding: 1.5rem;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
 }
-
+/*PROGRESS.HTML*/
 .progress-chart-title {
     color: var(--blue-900);
     font-size: 1.125rem;
@@ -5114,12 +5114,9 @@ body.sidebar-open .sidebar-close {
 }
 
 .tab-content {
-    display: none;
+    /* fix module details not showing */
+    display: block; /* show container; panes are still controlled by .tab-pane.show */
     animation: fadeIn 0.2s ease;
-}
-
-.tab-content.active {
-    display: block;
 }
 
 .tab-pane {
