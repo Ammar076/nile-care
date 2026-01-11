@@ -3,6 +3,7 @@ package com.nilecare.controller;
 import com.nilecare.model.User;
 import com.nilecare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,7 @@ public class AdminController {
     private UserService userService;
 
     @GetMapping("/dashboard")
+    @PreAuthorize("hasRole('ADMIN')")
     public String dashboard(Model model, Principal principal) {
         model.addAttribute("currentPage", "dashboard");
         addCurrentUser(model, principal);
@@ -91,6 +93,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public String manageUsers(@RequestParam(required = false) String search,
                              @RequestParam(required = false) String role,
                              Model model, 
@@ -110,6 +113,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addUser(@RequestParam("fullName") String fullName,
                          @RequestParam("email") String email,
                          @RequestParam("role") String role,
@@ -151,6 +155,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public String toggleUserStatus(@RequestParam("userId") Long userId,
                                   RedirectAttributes redirectAttributes) {
         try {
@@ -177,6 +182,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/role/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateUserRole(@RequestParam("userId") Long userId,
                                 @RequestParam("role") String role,
                                 RedirectAttributes redirectAttributes) {
@@ -202,6 +208,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/verify")
+    @PreAuthorize("hasRole('ADMIN')")
     public String verifyUser(@RequestParam("userId") Long userId,
                            RedirectAttributes redirectAttributes) {
         try {
@@ -246,10 +253,19 @@ public class AdminController {
     }
 
     @GetMapping("/help-requests")
+    @PreAuthorize("hasRole('ADMIN')")
     public String helpRequests(Model model, Principal principal) {
         model.addAttribute("currentPage", "help-requests");
         addCurrentUser(model, principal);
         return "admin/help_requests";
+    }
+
+    @GetMapping("/feedback")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String feedback(Model model, Principal principal) {
+        model.addAttribute("currentPage", "feedback");
+        addCurrentUser(model, principal);
+        return "admin/feedback";
     }
 
     // Helper method to add current admin user to model

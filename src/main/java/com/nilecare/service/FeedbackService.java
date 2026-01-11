@@ -1,5 +1,6 @@
 package com.nilecare.service;
 
+import com.nilecare.dto.AdminFeedbackDTO;
 import com.nilecare.dto.FeedbackPageDTO;
 import com.nilecare.model.StudentFeedback;
 import com.nilecare.model.User;
@@ -42,4 +43,14 @@ public interface FeedbackService {
      * Get statistics for feedback
      */
     Object getFeedbackStatistics(User student);
+    
+    /**
+     * Get all feedback for admin (with student names)
+     */
+    List<AdminFeedbackDTO> getAllFeedback();
+    
+    /**
+     * Reply to feedback (admin only)
+     */
+    StudentFeedback replyToFeedback(Long feedbackId, String response);
 }

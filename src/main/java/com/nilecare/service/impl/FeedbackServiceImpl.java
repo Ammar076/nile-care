@@ -1,5 +1,6 @@
 package com.nilecare.service.impl;
 
+import com.nilecare.dto.AdminFeedbackDTO;
 import com.nilecare.dto.CategoryStatsDTO;
 import com.nilecare.dto.FeedbackItemDTO;
 import com.nilecare.dto.FeedbackPageDTO;
@@ -150,5 +151,49 @@ public class FeedbackServiceImpl implements FeedbackService {
         }
         
         return new FeedbackStatsDTO(totalFeedback, averageRating, categoryStats);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AdminFeedbackDTO> getAllFeedback() {
+        List<StudentFeedback> allFeedback = feedbackRepository.findAllByOrderByCreatedAtDesc();
+        List<AdminFeedbackDTO> dtoList = new ArrayList<>();
+        
+        for (StudentFeedback feedback : allFeedback) {
+            dtoList.add(convertToAdminDTO(feedback));
+        }
+        
+        return dtoList;
+    }
+
+    @Override
+    public StudentFeedback replyToFeedback(Long feedbackId, String response) {
+        StudentFeedback feedback = feedbackRepository.findById(feedbackId).orElse(null);
+        if (feedback != null) {
+            feedback.setResponse(response);
+            feedback.setStatus(StudentFeedback.FeedbackStatus.RESPONDED);
+            return feedbackRepository.save(feedback);
+        }
+        return null;
+    }
+
+    /**
+     * Convert StudentFeedback to AdminFeedbackDTO (includes student name)
+     */
+    private AdminFeedbackDTO convertToAdminDTO(StudentFeedback feedback) {
+        String date = feedback.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String studentName = feedback.getStudent() != null ? feedback.getStudent().getFullName() : "Unknown";
+        
+        return new AdminFeedbackDTO(
+            feedback.getFeedbackId(),
+            studentName,
+            feedback.getCategory(),
+            feedback.getRating(),
+            feedback.getSubject(),
+            feedback.getMessage(),
+            feedback.getStatus().toString().toLowerCase(),
+            date,
+            feedback.getResponse()
+        );
     }
 }
