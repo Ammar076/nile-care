@@ -30,6 +30,11 @@ public class SecurityConfig {
                 .antMatchers("/", "/login", "/register", "/auth/**", "/error/**", "/test/**").permitAll()
                 .antMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                 
+                // API endpoints - role-based access
+                .antMatchers("/api/help-requests/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/**").authenticated()
+                
                 // Role-based access
                 .antMatchers("/student/**", "/learning/**", "/progress/**", "/support/**", 
                             "/counseling/**", "/assessment/**", "/chat/**", "/feedback/**").hasRole("STUDENT")

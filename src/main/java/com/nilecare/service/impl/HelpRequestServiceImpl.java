@@ -107,6 +107,40 @@ public class HelpRequestServiceImpl implements HelpRequestService {
         return rate != null ? rate : 0.0;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<HelpRequestDTO> getAllRequests() {
+        List<HelpRequest> requests = helpRequestRepository.findAllByOrderByCreatedAtDesc();
+        return requests.stream()
+                .map(this::convertToDTOWithStudentName)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public HelpRequestDTO respondToRequest(Long requestId, String responseText) {
+        HelpRequest request = helpRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Help request not found"));
+
+        request.setResponse(responseText);
+        request.setStatus(HelpRequest.RequestStatus.RESOLVED);
+        // updatedAt will be set automatically via @PreUpdate
+
+        HelpRequest updatedRequest = helpRequestRepository.save(request);
+        return convertToDTOWithStudentName(updatedRequest);
+    }
+
+    @Override
+    public HelpRequestDTO markInProgress(Long requestId) {
+        HelpRequest request = helpRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Help request not found"));
+
+        request.setStatus(HelpRequest.RequestStatus.IN_PROGRESS);
+        // updatedAt will be set automatically via @PreUpdate
+
+        HelpRequest updatedRequest = helpRequestRepository.save(request);
+        return convertToDTOWithStudentName(updatedRequest);
+    }
+
     private HelpRequestDTO convertToDTO(HelpRequest request) {
         return new HelpRequestDTO(
                 request.getRequestId(),
@@ -118,5 +152,25 @@ public class HelpRequestServiceImpl implements HelpRequestService {
                 request.getCreatedAt() != null ? request.getCreatedAt().format(DATE_FORMATTER) : null,
                 request.getUpdatedAt() != null ? request.getUpdatedAt().format(DATE_FORMATTER) : null
         );
+    }
+
+    private HelpRequestDTO convertToDTOWithStudentName(HelpRequest request) {
+        HelpRequestDTO dto = new HelpRequestDTO(
+                request.getRequestId(),
+                request.getCategory(),
+                request.getSubject(),
+                request.getMessage(),
+                request.getStatus().toString(),
+                request.getResponse(),
+                request.getCreatedAt() != null ? request.getCreatedAt().format(DATE_FORMATTER) : null,
+                request.getUpdatedAt() != null ? request.getUpdatedAt().format(DATE_FORMATTER) : null
+        );
+        
+        // Add student's full name
+        if (request.getStudent() != null) {
+            dto.setStudentName(request.getStudent().getFullName());
+        }
+        
+        return dto;
     }
 }

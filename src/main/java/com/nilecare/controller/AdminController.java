@@ -245,6 +245,13 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/help-requests")
+    public String helpRequests(Model model, Principal principal) {
+        model.addAttribute("currentPage", "help-requests");
+        addCurrentUser(model, principal);
+        return "admin/help_requests";
+    }
+
     // Helper method to add current admin user to model
     private void addCurrentUser(Model model, Principal principal) {
         if (principal != null) {

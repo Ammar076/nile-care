@@ -10,6 +10,7 @@ public class HelpRequestDTO {
     private String response;
     private String createdAt;
     private String updatedAt;
+    private String studentName; // Student's full name
 
     public HelpRequestDTO() {}
 
@@ -23,6 +24,19 @@ public class HelpRequestDTO {
         this.response = response;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public HelpRequestDTO(Long requestId, String category, String subject, String message, 
+                          String status, String response, String createdAt, String updatedAt, String studentName) {
+        this.requestId = requestId;
+        this.category = category;
+        this.subject = subject;
+        this.message = message;
+        this.status = status;
+        this.response = response;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.studentName = studentName;
     }
 
     // Getters and Setters
@@ -88,5 +102,13 @@ public class HelpRequestDTO {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 }

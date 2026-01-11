@@ -259,4 +259,147 @@ public class HelpRequestAPIController {
                     .body(Map.of("success", false, "message", e.getMessage()));
         }
     }
+
+    // ===== ADMIN ENDPOINTS =====
+
+    /**
+     * Get all help requests (Admin only)
+     */
+    @GetMapping("/admin/all")
+    public ResponseEntity<?> getAllHelpRequests(Principal principal) {
+        try {
+            logger.info("Admin fetching all help requests");
+            
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User admin = userService.findByEmail(email);
+            
+            if (admin == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
+            }
+
+            // Check if user is admin
+            if (!admin.getRoles().stream().anyMatch(role -> role.getName().name().equals("ROLE_ADMIN"))) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("success", false, "message", "Access denied. Admin role required."));
+            }
+
+            List<HelpRequestDTO> requests = helpRequestService.getAllRequests();
+            logger.info("Retrieved {} help requests for admin", requests.size());
+            
+            return ResponseEntity.ok(Map.of("success", true, "data", requests));
+        } catch (Exception e) {
+            logger.error("Error fetching all help requests for admin", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", e.getMessage()));
+        }
+    }
+
+    /**
+     * Reply to a help request (Admin only)
+     */
+    @PostMapping("/admin/{id}/reply")
+    public ResponseEntity<?> replyToHelpRequest(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> payload,
+            Principal principal) {
+        try {
+            logger.info("Admin replying to help request ID: {}", id);
+            
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User admin = userService.findByEmail(email);
+            
+            if (admin == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
+            }
+
+            // Check if user is admin
+            if (!admin.getRoles().stream().anyMatch(role -> role.getName().name().equals("ROLE_ADMIN"))) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("success", false, "message", "Access denied. Admin role required."));
+            }
+
+            String response = payload.get("response");
+            if (response == null || response.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("success", false, "message", "Response text is required"));
+            }
+
+            HelpRequestDTO updatedRequest = helpRequestService.respondToRequest(id, response);
+            logger.info("Help request {} replied successfully", id);
+            
+            return ResponseEntity.ok(Map.of(
+                "success", true, 
+                "message", "Response sent successfully",
+                "data", updatedRequest
+            ));
+        } catch (RuntimeException e) {
+            logger.error("Error replying to help request {}", id, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("success", false, "message", e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Unexpected error replying to help request {}", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "An error occurred while processing your request"));
+        }
+    }
+
+    /**
+     * Mark a help request as in progress (Admin only)
+     */
+    @PutMapping("/admin/{id}/in-progress")
+    public ResponseEntity<?> markInProgress(
+            @PathVariable Long id,
+            Principal principal) {
+        try {
+            logger.info("Admin marking help request {} as in progress", id);
+            
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User admin = userService.findByEmail(email);
+            
+            if (admin == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
+            }
+
+            // Check if user is admin
+            if (!admin.getRoles().stream().anyMatch(role -> role.getName().name().equals("ROLE_ADMIN"))) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("success", false, "message", "Access denied. Admin role required."));
+            }
+
+            HelpRequestDTO updatedRequest = helpRequestService.markInProgress(id);
+            logger.info("Help request {} marked as in progress", id);
+            
+            return ResponseEntity.ok(Map.of(
+                "success", true, 
+                "message", "Ticket marked as in progress",
+                "data", updatedRequest
+            ));
+        } catch (RuntimeException e) {
+            logger.error("Error marking help request {} as in progress", id, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("success", false, "message", e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Unexpected error marking help request {} as in progress", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "An error occurred while processing your request"));
+        }
+    }
 }
