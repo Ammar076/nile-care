@@ -70,4 +70,9 @@ public interface StudentFeedbackRepository extends JpaRepository<StudentFeedback
     List<StudentFeedback> findFeedbackInDateRange(@Param("student") User student, 
                                                   @Param("startDate") LocalDateTime startDate, 
                                                   @Param("endDate") LocalDateTime endDate);
+
+    /**
+     * Get all feedback ordered by creation date (newest first) - for admin
+     */
+    List<StudentFeedback> findAllByOrderByCreatedAtDesc();
 }
