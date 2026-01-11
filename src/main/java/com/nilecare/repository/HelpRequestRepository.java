@@ -16,6 +16,9 @@ public interface HelpRequestRepository extends JpaRepository<HelpRequest, Long> 
     
     List<HelpRequest> findByStudentAndStatusOrderByCreatedAtDesc(User student, HelpRequest.RequestStatus status);
     
+    // For admin: get all help requests ordered by newest first
+    List<HelpRequest> findAllByOrderByCreatedAtDesc();
+    
     @Query("SELECT COUNT(hr) FROM HelpRequest hr WHERE hr.student = :student AND hr.status = :status")
     long countByStudentAndStatus(@Param("student") User student, @Param("status") HelpRequest.RequestStatus status);
     

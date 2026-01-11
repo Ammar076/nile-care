@@ -43,4 +43,19 @@ public interface HelpRequestService {
      * Get resolution rate for a student
      */
     double getResolutionRate(Long userId);
+    
+    /**
+     * Get all help requests (admin only)
+     */
+    List<HelpRequestDTO> getAllRequests();
+    
+    /**
+     * Respond to a help request and mark as resolved (admin only)
+     */
+    HelpRequestDTO respondToRequest(Long requestId, String responseText);
+    
+    /**
+     * Mark a help request as in progress (admin only)
+     */
+    HelpRequestDTO markInProgress(Long requestId);
 }

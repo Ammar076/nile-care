@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+
+<head>
+    <title>Help Requests Management</title>
+    <style>
+        /* Card Component Styling */
+        .card-custom {
+            background-color: white;
+            border: 1px solid #dbeafe;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.2s;
+        }
+
+        .card-custom:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Icon Circle */
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .icon-circle-blue {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .icon-circle-yellow {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .icon-circle-green {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        /* Filter Buttons */
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: white;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* Status Badges */
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-in-progress {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-resolved {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 1rem;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            color: white;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Message Box */
+        .message-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-box label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .message-box .message-content {
+            color: #6b7280;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filter-btn {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <!-- Header -->
+        <div class="mb-4">
+            <h2 class="fw-semibold text-blue-900 mb-1">Help Requests Management</h2>
+            <p class="text-blue-600 small">Manage and respond to student help requests</p>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4">
+            <!-- Total Tickets Card -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center p-4">
+                        <div class="rounded-3 p-3 d-flex align-items-center justify-content-center text-white shadow-sm"
+                             style="width: 56px; height: 56px; background: linear-gradient(135deg, #2563eb, #1d4ed8); flex-shrink: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM2 8a6 6 0 1 1 10.89 3.476l4.817 4.817a1 1 0 0 1-1.414 1.414l-4.816-4.816A6 6 0 0 1 2 8z"/>
+                            </svg>
+                        </div>
+                        <div class="ms-3">
+                            <p class="text-muted small mb-0 fw-bold text-uppercase">Total Tickets</p>
+                            <h3 class="fw-bold mb-0 text-dark" id="totalCount">0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Card -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center p-4">
+                        <div class="rounded-3 p-3 d-flex align-items-center justify-content-center text-white shadow-sm"
+                             style="width: 56px; height: 56px; background: linear-gradient(135deg, #d97706, #b45309); flex-shrink: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                        </div>
+                        <div class="ms-3">
+                            <p class="text-muted small mb-0 fw-bold text-uppercase">Pending</p>
+                            <h3 class="fw-bold mb-0 text-dark" id="pendingCount">0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Progress Card -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center p-4">
+                        <div class="rounded-3 p-3 d-flex align-items-center justify-content-center text-white shadow-sm"
+                             style="width: 56px; height: 56px; background: linear-gradient(135deg, #2563eb, #1d4ed8); flex-shrink: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                            </svg>
+                        </div>
+                        <div class="ms-3">
+                            <p class="text-muted small mb-0 fw-bold text-uppercase">In Progress</p>
+                            <h3 class="fw-bold mb-0 text-dark" id="inProgressCount">0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resolved Card -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center p-4">
+                        <div class="rounded-3 p-3 d-flex align-items-center justify-content-center text-white shadow-sm"
+                             style="width: 56px; height: 56px; background: linear-gradient(135deg, #16a34a, #15803d); flex-shrink: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                        </div>
+                        <div class="ms-3">
+                            <p class="text-muted small mb-0 fw-bold text-uppercase">Resolved</p>
+                            <h3 class="fw-bold mb-0 text-dark" id="resolvedCount">0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card card-custom mb-4" style="padding: 1rem;">
+            <div class="d-flex flex-wrap gap-2">
+                <button class="filter-btn active" data-filter="all">All Tickets</button>
+                <button class="filter-btn" data-filter="PENDING">Pending</button>
+                <button class="filter-btn" data-filter="IN_PROGRESS">In Progress</button>
+                <button class="filter-btn" data-filter="RESOLVED">Resolved</button>
+            </div>
+        </div>
+
+        <!-- Tickets List -->
+        <div id="ticketsList">
+            <!-- Tickets will be loaded here dynamically -->
+        </div>
+
+        <!-- Reply Modal -->
+        <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="replyModalLabel">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="margin-right: 0.5rem; vertical-align: middle;">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                            </svg>
+                            Reply to Help Request
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Student Info -->
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <strong>Student:</strong>
+                                <span id="modalStudentName"></span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <strong>Category:</strong>
+                                <span class="badge bg-light text-muted border" id="modalCategory"></span>
+                            </div>
+                        </div>
+
+                        <!-- Original Message -->
+                        <div class="message-box">
+                            <label>Original Message:</label>
+                            <div class="message-content" id="modalMessage"></div>
+                        </div>
+
+                        <!-- Response Textarea -->
+                        <div class="mb-3">
+                            <label for="responseText" class="form-label" style="font-weight: 600;">Your Response:</label>
+                            <textarea class="form-control" id="responseText" rows="5" 
+                                      placeholder="Type your response here..." 
+                                      style="border: 2px solid #e5e7eb; border-radius: 0.5rem;"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm border-0" 
+                                id="sendResponseBtn"
+                                style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                            </svg>
+                            <span class="fw-medium">Send Response</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script th:inline="javascript">
+            // Import toast notifications library
+            if (typeof ToastNotifications === 'undefined') {
+                console.warn('ToastNotifications library not loaded. Ensure toast-notifications.js is included.');
+            }
+
+            let allTickets = [];
+            let currentFilter = 'all';
+            let currentRequestId = null;
+
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                loadHelpRequests();
+                setupFilterButtons();
+                setupReplyModal();
+            });
+
+            // Load all help requests
+            function loadHelpRequests() {
+                showLoading();
+                
+                fetch('/api/help-requests/admin/all', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    hideLoading();
+                    
+                    if (result.success) {
+                        allTickets = result.data;
+                        updateStats();
+                        renderTickets();
+                    } else {
+                        showError('Failed to load help requests: ' + (result.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error loading help requests:', error);
+                    showError('Failed to load help requests. Please try again.');
+                });
+            }
+
+            // Update statistics
+            function updateStats() {
+                const total = allTickets.length;
+                const pending = allTickets.filter(t => t.status === 'PENDING').length;
+                const inProgress = allTickets.filter(t => t.status === 'IN_PROGRESS').length;
+                const resolved = allTickets.filter(t => t.status === 'RESOLVED').length;
+
+                document.getElementById('totalCount').textContent = total;
+                document.getElementById('pendingCount').textContent = pending;
+                document.getElementById('inProgressCount').textContent = inProgress;
+                document.getElementById('resolvedCount').textContent = resolved;
+            }
+
+            // Render tickets based on current filter
+            function renderTickets() {
+                const container = document.getElementById('ticketsList');
+                
+                let filteredTickets = allTickets;
+                if (currentFilter !== 'all') {
+                    filteredTickets = allTickets.filter(ticket => ticket.status === currentFilter);
+                }
+
+                if (filteredTickets.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3.797a1.5 1.5 0 0 1 1.06.44l.415.414A.5.5 0 0 0 8.126 2h5.372a1.5 1.5 0 0 1 1.5 1.5v11a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5v-12z"/>
+                            </svg>
+                            <h5 style="color: #6b7280;">No tickets found</h5>
+                            <p style="color: #9ca3af;">There are no help requests matching your filter.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = filteredTickets.map(ticket => {
+                    const statusBadgeClass = `badge-${ticket.status.toLowerCase().replace('_', '-')}`;
+                    const date = formatDate(ticket.createdAt);
+                    const studentName = escapeHtml(ticket.studentName || 'Unknown Student');
+                    const subject = escapeHtml(ticket.subject);
+                    const category = escapeHtml(ticket.category);
+                    const message = truncateText(ticket.message, 150);
+                    
+                    let responseHtml = '';
+                    if (ticket.response) {
+                        responseHtml = `
+                            <div class="mt-3 pt-3" style="border-top: 1px solid #e5e7eb;">
+                                <strong style="color: #374151; font-size: 0.875rem;">Admin Response:</strong>
+                                <p class="mb-0 mt-1" style="color: #6b7280; font-size: 0.875rem;">${escapeHtml(ticket.response)}</p>
+                            </div>
+                        `;
+                    }
+
+                    let actionButtons = '';
+                    if (ticket.status === 'PENDING') {
+                        actionButtons = `
+                            <button class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm border-0" 
+                                    onclick="openReplyModal(${ticket.requestId})"
+                                    style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                                </svg>
+                                <span class="fw-medium">Reply</span>
+                            </button>
+                            <button class="btn btn-light text-primary d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm border"
+                                    onclick="markInProgress(${ticket.requestId})"
+                                    style="border-color: #eff6ff !important;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                                    <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                                </svg>
+                                <span class="fw-medium">Start</span>
+                            </button>
+                        `;
+                    } else if (ticket.status === 'IN_PROGRESS') {
+                        actionButtons = `
+                            <button class="btn btn-primary d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill shadow-sm border-0"
+                                    onclick="openReplyModal(${ticket.requestId})"
+                                    style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                                </svg>
+                                <span class="fw-medium">Reply</span>
+                            </button>
+                        `;
+                    }
+
+                    return `
+                        <div class="card card-custom p-4 mb-3">
+                            <div class="d-flex justify-content-between">
+                                <div style="flex: 1;">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <h5 class="fw-bold text-blue-900 mb-0">${subject}</h5>
+                                        <span class="badge bg-light text-muted border">${category}</span>
+                                    </div>
+                                    <p class="text-primary small mb-1">
+                                        <strong>Student:</strong> ${studentName}
+                                    </p>
+                                    <p class="text-muted small">${message}</p>
+                                    ${responseHtml}
+                                </div>
+                                <div class="text-end" style="min-width: 140px;">
+                                    <span class="badge ${statusBadgeClass}">${formatStatus(ticket.status)}</span>
+                                    <div class="small text-muted mt-1">${date}</div>
+                                    <div class="mt-2">
+                                        ${actionButtons}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Setup filter buttons
+            function setupFilterButtons() {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        currentFilter = this.getAttribute('data-filter');
+                        renderTickets();
+                    });
+                });
+            }
+
+            // Open reply modal
+            function openReplyModal(requestId) {
+                const ticket = allTickets.find(t => t.requestId === requestId);
+                if (!ticket) return;
+
+                currentRequestId = requestId;
+                document.getElementById('modalStudentName').textContent = ticket.studentName || 'Unknown Student';
+                document.getElementById('modalCategory').textContent = ticket.category;
+                document.getElementById('modalMessage').textContent = ticket.message;
+                document.getElementById('responseText').value = '';
+
+                const modal = new bootstrap.Modal(document.getElementById('replyModal'));
+                modal.show();
+            }
+
+            // Setup reply modal
+            function setupReplyModal() {
+                document.getElementById('sendResponseBtn').addEventListener('click', function() {
+                    const responseText = document.getElementById('responseText').value.trim();
+                    
+                    if (!responseText) {
+                        ToastNotifications.showErrorAlert('Please enter a response message.', 'warning');
+                        return;
+                    }
+
+                    sendResponse(currentRequestId, responseText);
+                });
+            }
+
+            // Send response to API
+            function sendResponse(requestId, responseText) {
+                showLoading();
+
+                fetch(`/api/help-requests/admin/${requestId}/reply`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ response: responseText })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    hideLoading();
+                    
+                    if (result.success) {
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
+                        modal.hide();
+                        
+                        // Show success message
+                        ToastNotifications.showSuccessToast('Response sent successfully!');
+                        
+                        // Reload tickets
+                        loadHelpRequests();
+                    } else {
+                        ToastNotifications.showErrorAlert('Failed to send response: ' + (result.message || 'Unknown error'), 'danger');
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error sending response:', error);
+                    ToastNotifications.showErrorAlert('Failed to send response. Please try again.', 'danger');
+                });
+            }
+
+            // Mark ticket as in progress
+            function markInProgress(requestId) {
+                showLoading();
+
+                fetch(`/api/help-requests/admin/${requestId}/in-progress`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    hideLoading();
+                    
+                    if (result.success) {
+                        ToastNotifications.showSuccessToast('Ticket marked as in progress!');
+                        loadHelpRequests();
+                    } else {
+                        ToastNotifications.showErrorAlert('Failed to update ticket: ' + (result.message || 'Unknown error'), 'danger');
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error marking ticket as in progress:', error);
+                    ToastNotifications.showErrorAlert('Failed to update ticket. Please try again.', 'danger');
+                });
+            }
+
+            // Utility functions
+            function formatStatus(status) {
+                return status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            }
+
+            function formatDate(dateString) {
+                if (!dateString) return 'N/A';
+                const date = new Date(dateString.replace(' ', 'T'));
+                const now = new Date();
+                const diff = now - date;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                
+                if (hours < 1) return 'Just now';
+                if (hours < 24) return hours + 'h ago';
+                if (hours < 48) return 'Yesterday';
+                
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+
+            function truncateText(text, length) {
+                if (!text) return '';
+                return text.length > length ? escapeHtml(text.substring(0, length)) + '...' : escapeHtml(text);
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function showLoading() {
+                document.getElementById('loadingOverlay').style.display = 'flex';
+            }
+
+            function hideLoading() {
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+
+            function showError(message) {
+                if (typeof ToastNotifications !== 'undefined') {
+                    ToastNotifications.showErrorAlert(message, 'danger');
+                } else {
+                    alert(message);
+                }
+            }
+        </script>
+    </th:block>
+</body>
+
+</html>
