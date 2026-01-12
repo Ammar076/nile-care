@@ -88,8 +88,26 @@ public class CounselingService {
             String timeStr = slot.getStartTime().toLocalTime().format(TIME_FORMATTER); // "10:00 AM"
 
             // Map Status (CONFIRMED -> upcoming)
-            String statusStr = (appt.getStatus() == Appointment.Status.CONFIRMED) ? "upcoming"
-                    : (appt.getStatus() == Appointment.Status.CANCELLED) ? "cancelled" : "completed";
+            String statusStr;
+            switch (appt.getStatus()) {
+                case CONFIRMED:
+                    statusStr = "upcoming";
+                    break;
+                case CANCELLED:
+                    statusStr = "cancelled";
+                    break;
+                case CANCEL_REQUESTED:
+                    statusStr = "cancel_requested";
+                    break;
+                case COMPLETED:
+                default:
+                    statusStr = "completed";
+                    break;
+            }
+
+            // ISO format for time window calculations in frontend
+            String startTimeISO = slot.getStartTime().toString(); // "2025-01-15T10:00:00"
+            String endTimeISO = slot.getEndTime().toString();     // "2025-01-15T11:00:00"
 
             return new AppointmentResponseDTO(
                     appt.getAppointmentId(),
@@ -97,7 +115,40 @@ public class CounselingService {
                     slot.getCounselor().getFullName(), // User has getFullName() not getName()
                     dateStr,
                     timeStr,
-                    statusStr);
+                    statusStr,
+                    appt.getMeetingLink(),  // Meeting link (may be null if not set yet)
+                    startTimeISO,
+                    endTimeISO);
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 3. CANCELLATION REQUEST LOGIC
+     * Sets appointment status to CANCEL_REQUESTED for counselor approval
+     */
+    @Transactional
+    public void requestCancellation(Long appointmentId, Long studentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        // Verify the student owns this appointment
+        if (!appointment.getStudent().getUserId().equals(studentId)) {
+            throw new RuntimeException("You are not authorized to cancel this appointment");
+        }
+
+        // Check if appointment can be cancelled
+        if (appointment.getStatus() == Appointment.Status.CANCELLED) {
+            throw new RuntimeException("Appointment is already cancelled");
+        }
+        if (appointment.getStatus() == Appointment.Status.CANCEL_REQUESTED) {
+            throw new RuntimeException("Cancellation already requested");
+        }
+        if (appointment.getStatus() == Appointment.Status.COMPLETED) {
+            throw new RuntimeException("Cannot cancel a completed appointment");
+        }
+
+        // Update status to CANCEL_REQUESTED
+        appointment.setStatus(Appointment.Status.CANCEL_REQUESTED);
+        appointmentRepository.save(appointment);
     }
 }

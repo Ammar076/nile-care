@@ -28,7 +28,10 @@ public class Appointment {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    @Column(name = "meeting_link", length = 500)
+    private String meetingLink;
+
     public enum Status {
-        CONFIRMED, CANCELLED, COMPLETED
+        CONFIRMED, CANCELLED, COMPLETED, CANCEL_REQUESTED
     }
 }
