@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
-      lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -19,7 +17,7 @@
     <link rel="stylesheet" th:href="@{/static/css/layout.css}">
     <link rel="stylesheet" th:href="@{/static/css/animations.css}">
     <link rel="stylesheet" th:href="@{/static/css/utilities.css}">
-    <link rel="stylesheet" th:href="@{/static/css/alert.css}"> 
+    <link rel="stylesheet" th:href="@{/static/css/alert.css}">
 
 
 </head>
@@ -199,13 +197,28 @@
                         </svg>
                         <span>Manage Users</span>
                     </a>
+                    <a th:href="@{/admin/modules}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('modules') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-book-open w-5 h-5" aria-hidden="true">
+                            <path d="M12 7v14"></path>
+                            <path
+                                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z">
+                            </path>
+                        </svg>
+                        <span>Manage Modules</span>
+                    </a>
                     <a th:href="@{/admin/help-requests}" class="nav-link-custom"
                         th:classappend="${#httpServletRequest.requestURI.contains('help-requests') ? 'active' : ''}"
                         role="menuitem">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="lucide lucide-headphones w-5 h-5" aria-hidden="true">
-                            <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path>
+                            <path
+                                d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3">
+                            </path>
                         </svg>
                         <span>Help Requests</span>
                     </a>
@@ -223,8 +236,7 @@
                     </a>
                     <a th:href="@{/admin/reports}" class="nav-link-custom"
                         th:classappend="${#httpServletRequest.requestURI.contains('reports') ? 'active' : ''}"
-                        sec:authorize="hasRole('ADMIN')"
-                        role="menuitem">
+                        sec:authorize="hasRole('ADMIN')" role="menuitem">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="lucide lucide-file-text w-5 h-5" aria-hidden="true">
@@ -243,7 +255,8 @@
 
             <div class="sidebar-footer" sec:authorize="isAuthenticated()">
                 <form th:action="@{/logout}" method="post" style="margin: 0;">
-                    <button type="submit" class="sidebar-logout" role="menuitem" style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
+                    <button type="submit" class="sidebar-logout" role="menuitem"
+                        style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
                         <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                         <span>Logout</span>
                     </button>
@@ -254,7 +267,7 @@
         <div class="main-content">
             <header class="top-nav" role="banner">
                 <!-- Mobile Hamburger Menu -->
-                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu" 
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu"
                     aria-expanded="false" aria-controls="sidebar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -294,7 +307,8 @@
                             </li>
                             <li>
                                 <form th:action="@{/logout}" method="post" style="margin: 0;">
-                                    <button type="submit" class="dropdown-item dropdown-item-danger" style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
+                                    <button type="submit" class="dropdown-item dropdown-item-danger"
+                                        style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
                                         <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i> Logout
                                     </button>
                                 </form>
@@ -305,13 +319,15 @@
             </header>
 
             <!-- Pending Approval Banner for Unverified Users -->
-            <div sec:authorize="isAuthenticated()" th:if="${!#authentication.principal.verified}" 
-                 class="alert alert-warning alert-dismissible fade show m-0 rounded-0 border-start-0 border-end-0" role="alert">
+            <div sec:authorize="isAuthenticated()" th:if="${!#authentication.principal.verified}"
+                class="alert alert-warning alert-dismissible fade show m-0 rounded-0 border-start-0 border-end-0"
+                role="alert">
                 <div class="container-fluid d-flex align-items-center">
                     <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>
                     <div class="flex-grow-1">
                         <strong>Account Pending Approval:</strong>
-                        Your account is currently under review by an administrator. You will have full access once verified.
+                        Your account is currently under review by an administrator. You will have full access once
+                        verified.
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -337,7 +353,7 @@
                 sidebarToggle.addEventListener('click', function (e) {
                     e.stopPropagation();
                     const isOpen = sidebar.classList.contains('show');
-                    
+
                     if (isOpen) {
                         sidebar.classList.remove('show');
                         document.body.classList.remove('sidebar-open');
@@ -381,7 +397,7 @@
                 clearNotificationsBtn.addEventListener('click', function (e) {
                     e.preventDefault();
                     console.log('Clear notifications clicked');
-                    
+
                     // Show success toast
                     if (typeof ToastNotifications !== 'undefined' && ToastNotifications.showSuccessToast) {
                         console.log('Showing toast notification');
@@ -391,7 +407,7 @@
                         // Fallback: use alert if toast not available
                         alert('Notifications cleared successfully!');
                     }
-                    
+
                     // Remove the notification badge
                     const badgeNotification = document.querySelector('.badge-notification');
                     if (badgeNotification) {
