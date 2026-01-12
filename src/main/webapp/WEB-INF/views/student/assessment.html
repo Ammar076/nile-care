@@ -73,7 +73,40 @@
             <div class="card card-custom p-4">
                 <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Your Assessment History</h5>
                 <div id="assessment-history">
-                    <!-- History items will be rendered here -->
+                    <div th:if="${assessmentHistory == null or assessmentHistory.isEmpty()}"
+                        class="text-center text-muted py-4">
+                        No assessments completed yet
+                    </div>
+                    <div th:each="result : ${assessmentHistory}" class="p-3 rounded-3 border mb-3"
+                        style="background-color: #f8fafc;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="fw-bold mb-0" style="color: #1e3a8a;" th:text="${result.assessment.title}">
+                                Assessment Title</h6>
+                            <small class="text-muted"
+                                th:text="${#temporals.format(result.submissionDate, 'yyyy-MM-dd')}">2024-11-01</small>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small style="color: #2563eb;"
+                                        th:text="'Score: ' + ${result.score} + '/' + ${result.maxScore}">Score:
+                                        8/15</small>
+                                    <span class="badge"
+                                        th:classappend="${result.status == 'minimal' ? 'bg-success text-white' : (result.status == 'mild' ? 'bg-info text-white' : (result.status == 'moderate' ? 'bg-warning text-dark' : 'bg-danger text-white'))}">
+                                        <i class="fas"
+                                            th:classappend="${result.status == 'minimal' ? 'fa-arrow-down' : (result.status == 'mild' ? 'fa-minus' : 'fa-arrow-up')}"></i>
+                                        <span th:text="${#strings.capitalize(result.status)}">Mild</span>
+                                    </span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar" role="progressbar"
+                                        th:style="'width: ' + ${(result.score * 100.0) / result.maxScore} + '%; background: linear-gradient(to right, #3b82f6, #22c55e);'"
+                                        th:aria-valuenow="${(result.score * 100.0) / result.maxScore}" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,171 +1,196 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
+
 <head>
     <title>Learning Modules</title>
     <link rel="stylesheet" th:href="@{/static/css/library.css}">
 </head>
+
 <body>
     <div layout:fragment="content">
-            
-            <div class="mb-4">
-                <h2 class="fw-semibold text-blue-900 mb-1">Learning Modules</h2>
-                <p class="text-blue-600 small">Explore our comprehensive mental health learning resources</p>
-            </div>
 
-            <div class="d-flex mb-4" role="tablist" aria-label="Module filters">
-              <button class="btn-filter active" data-filter="all" role="tab" aria-pressed="true" tabindex="0">All Modules</button>
-              <button class="btn-filter" data-filter="in-progress" role="tab" aria-pressed="false" tabindex="0">In Progress</button>
-              <button class="btn-filter" data-filter="bookmarked" role="tab" aria-pressed="false" tabindex="0">Bookmarked</button>
-              <button class="btn-filter" data-filter="completed" role="tab" aria-pressed="false" tabindex="0">Completed</button>
-            </div>
+        <div class="mb-4">
+            <h2 class="fw-semibold text-blue-900 mb-1">Learning Modules</h2>
+            <p class="text-blue-600 small">Explore our comprehensive mental health learning resources</p>
+        </div>
 
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-4" th:each="module, iterStat : ${modules}">
-                    <div class="card card-module h-100 border-0 overflow-hidden">
-                        
-                        <div class="module-img-wrapper">
-                            <img th:src="${module.contentUrl}" class="module-img" alt="Cover">
-                            <button type="button" 
-                                    class="bookmark-btn position-absolute top-0 end-0 m-3 shadow-sm" 
-                                    th:attr="data-module-index=${iterStat.index}" 
-                                    aria-pressed="false" 
-                                    title="Toggle bookmark">
-                                <span class="bookmark-icon"></span>
-                            </button>
-                        </div>
+        <div class="d-flex mb-4" role="tablist" aria-label="Module filters">
+            <button class="btn-filter active" data-filter="all" role="tab" aria-pressed="true" tabindex="0">All
+                Modules</button>
+            <button class="btn-filter" data-filter="in-progress" role="tab" aria-pressed="false" tabindex="0">In
+                Progress</button>
+            <button class="btn-filter" data-filter="bookmarked" role="tab" aria-pressed="false"
+                tabindex="0">Bookmarked</button>
+            <button class="btn-filter" data-filter="completed" role="tab" aria-pressed="false"
+                tabindex="0">Completed</button>
+        </div>
 
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                            <div class="d-flex align-items-center mb-3">
-                                <span class="tag-pill tag-gray" th:text="${module.category}">Category</span>
-                                <span class="tag-pill"
-                                      th:classappend="${module.difficultyLevel == 'Beginner' ? 'tag-green' : (module.difficultyLevel == 'Advanced' ? 'tag-purple' : 'tag-blue')}"
-                                      th:text="${module.difficultyLevel}">Level</span>
-                            </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" th:each="module, iterStat : ${modules}">
+                <div class="card card-module h-100 border-0 overflow-hidden">
 
-                            <h5 class="fw-bold text-blue-900 mb-2 module-title" th:text="${module.title}">Title</h5>
-                            <p class="text-muted small mb-4 line-clamp-2" th:text="${#strings.abbreviate(module.description, 100)}">Desc</p>
-
-                            <div class="mt-auto">
-                                <div class="d-flex align-items-center gap-2 small text-blue-600 mb-3">
-                                    <i class="far fa-clock"></i> <span class="fw-semibold">45 min</span>
-                                </div>
-
-                                <div class="d-flex justify-content-between small mb-1">
-                                <span class="text-blue-600 fw-medium">Progress</span>
-                                <span class="fw-bold text-blue-900 module-progress" 
-                                  th:text="${module.title.contains('Fundamentals') ? '75%' : (module.title.contains('Emotional') ? '100%' : '0%')}">0%</span>
-                                </div>
-                                <div class="progress-track mb-4">
-                                    <div class="progress-fill" 
-                                         th:style="'width: ' + (${module.title.contains('Fundamentals') ? '75%' : (module.title.contains('Emotional') ? '100%' : '0%')})"></div>
-                                </div>
-
-                                <a th:href="@{/modules/{id}(id=${module.id})}"
-                                   class="btn-module bg-gradient-custom shadow-sm text-decoration-none">
-                                    <span th:if="${!module.title.contains('Fundamentals') and !module.title.contains('Emotional')}" class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-play-circle"></i> Start Module
-                                    </span>
-                                    <span th:if="${module.title.contains('Fundamentals')}" class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-play-circle"></i> Continue
-                                    </span>
-                                    <span th:if="${module.title.contains('Emotional')}" class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-check-circle"></i> Review
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
+                    <div class="module-img-wrapper">
+                        <img th:src="${module.contentUrl}" class="module-img" alt="Cover">
+                        <button type="button" class="bookmark-btn position-absolute top-0 end-0 m-3 shadow-sm"
+                            th:attr="data-module-index=${iterStat.index}" aria-pressed="false" title="Toggle bookmark">
+                            <span class="bookmark-icon"></span>
+                        </button>
                     </div>
 
-                    <!-- Module Detail Modal -->
-                    <div class="modal fade module-modal"
-                         th:id="'moduleModal-' + ${iterStat.index}"
-                         tabindex="-1"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <button type="button" class="btn-modal-close" data-bs-dismiss="modal" aria-label="Close">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                <div class="modal-body module-modal-body">
-                                    <div class="module-modal-header">
-                                        <h5 class="modal-title" th:text="${module.title}">Module Title</h5>
-                                        <div class="module-modal-subtitle" th:text="${module.category}">Category</div>
-                                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="tag-pill tag-gray" th:text="${module.category}">Category</span>
+                            <span class="tag-pill"
+                                th:classappend="${module.difficultyLevel == 'Beginner' ? 'tag-green' : (module.difficultyLevel == 'Advanced' ? 'tag-purple' : 'tag-blue')}"
+                                th:text="${module.difficultyLevel}">Level</span>
+                        </div>
 
-                                    <img th:src="${module.contentUrl}" class="module-modal-image" alt="Module cover">
+                        <h5 class="fw-bold text-blue-900 mb-2 module-title" th:text="${module.title}">Title</h5>
+                        <p class="text-muted small mb-4 line-clamp-2"
+                            th:text="${#strings.abbreviate(module.description, 100)}">Desc</p>
 
-                                    <div class="module-badges-row">
-                                        <span class="module-badge module-badge-clock">
-                                            <i class="far fa-clock"></i>
-                                            <span>45 min</span>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center gap-2 small text-blue-600 mb-3">
+                                <i class="far fa-clock"></i> <span class="fw-semibold">45 min</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span class="text-blue-600 fw-medium">Progress</span>
+                                <span class="fw-bold text-blue-900 module-progress"
+                                    th:text="${module.progressPercentage + '%'}">0%</span>
+                            </div>
+                            <div class="progress-track mb-4">
+                                <div class="progress-fill" th:style="'width: ' + ${module.progressPercentage} + '%'">
+                                </div>
+                            </div>
+
+                            <a th:href="@{/modules/{id}(id=${module.id})}"
+                                class="btn-module bg-gradient-custom shadow-sm text-decoration-none">
+                                <span th:if="${module.progressPercentage == 0}" class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-play-circle"></i> Start Module
+                                </span>
+                                <span th:if="${module.progressPercentage > 0 and module.progressPercentage < 100}"
+                                    class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-play-circle"></i> Continue
+                                </span>
+                                <span th:if="${module.progressPercentage == 100}"
+                                    class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-check-circle"></i> Review
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module Detail Modal -->
+                <div class="modal fade module-modal" th:id="'moduleModal-' + ${iterStat.index}" tabindex="-1"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <button type="button" class="btn-modal-close" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="modal-body module-modal-body">
+                                <div class="module-modal-header">
+                                    <h5 class="modal-title" th:text="${module.title}">Module Title</h5>
+                                    <div class="module-modal-subtitle" th:text="${module.category}">Category</div>
+                                </div>
+
+                                <img th:src="${module.contentUrl}" class="module-modal-image" alt="Module cover">
+
+                                <div class="module-badges-row">
+                                    <span class="module-badge module-badge-clock">
+                                        <i class="far fa-clock"></i>
+                                        <span>45 min</span>
+                                    </span>
+                                    <span class="module-badge"
+                                        th:classappend="${module.difficultyLevel == 'Beginner' ? 'module-badge-green' : (module.difficultyLevel == 'Advanced' ? 'module-badge-purple' : 'module-badge-blue')}"
+                                        th:text="${module.difficultyLevel.toLowerCase()}">Beginner</span>
+                                    <span class="module-badge module-badge-green">
+                                        <span th:text="${module.progressPercentage + '% Complete'}">
+                                            0% Complete
                                         </span>
-                                        <span class="module-badge" 
-                                              th:classappend="${module.difficultyLevel == 'Beginner' ? 'module-badge-green' : (module.difficultyLevel == 'Advanced' ? 'module-badge-purple' : 'module-badge-blue')}"
-                                              th:text="${module.difficultyLevel.toLowerCase()}">Beginner</span>
-                                        <span class="module-badge module-badge-green">
-                                            <span th:text="${module.title.contains('Fundamentals') ? '75% Complete' : (module.title.contains('Emotional') ? '100% Complete' : '0% Complete')}">
-                                                75% Complete
-                                            </span>
-                                        </span>
-                                    </div>
+                                    </span>
+                                </div>
 
-                                    <div class="module-section-wrapper">
-                                        <div class="module-section-title">About This Module</div>
-                                        <p class="module-description" th:text="${module.description}">
-                                            Learn effective techniques to identify, manage, and reduce stress in your daily life.
-                                        </p>
-                                    </div>
+                                <div class="module-section-wrapper">
+                                    <div class="module-section-title">About This Module</div>
+                                    <p class="module-description" th:text="${module.description}">
+                                        Learn effective techniques to identify, manage, and reduce stress in your daily
+                                        life.
+                                    </p>
+                                </div>
 
-                                    <div class="module-section-wrapper">
-                                        <div class="module-section-title">Learning Resources</div>
-                                        <div class="module-resources-row">
-                                            <div class="module-resource-card">
-                                                <svg class="module-resource-icon-svg lucide lucide-video w-6 h-6 text-blue-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                    <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path>
-                                                    <rect x="2" y="6" width="14" height="12" rx="2"></rect>
-                                                </svg>
-                                                <div class="module-resource-count">5</div>
-                                                <div class="module-resource-label">Videos</div>
-                                            </div>
-                                            <div class="module-resource-card">
-                                              <svg class="module-resource-icon-svg lucide lucide-file-text w-6 h-6 text-blue-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
+                                <div class="module-section-wrapper">
+                                    <div class="module-section-title">Learning Resources</div>
+                                    <div class="module-resources-row">
+                                        <div class="module-resource-card">
+                                            <svg class="module-resource-icon-svg lucide lucide-video w-6 h-6 text-blue-600 mx-auto mb-2"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path
+                                                    d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5">
+                                                </path>
+                                                <rect x="2" y="6" width="14" height="12" rx="2"></rect>
+                                            </svg>
+                                            <div class="module-resource-count">5</div>
+                                            <div class="module-resource-label">Videos</div>
+                                        </div>
+                                        <div class="module-resource-card">
+                                            <svg class="module-resource-icon-svg lucide lucide-file-text w-6 h-6 text-blue-600 mx-auto mb-2"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path
+                                                    d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                                                </path>
                                                 <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
                                                 <path d="M10 9H8"></path>
                                                 <path d="M16 13H8"></path>
                                                 <path d="M16 17H8"></path>
-                                              </svg>
-                                              <div class="module-resource-count">8</div>
-                                              <div class="module-resource-label">Articles</div>
-                                            </div>
-                                            <div class="module-resource-card">
-                                              <svg class="module-resource-icon-svg lucide lucide-book-open w-6 h-6 text-blue-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            </svg>
+                                            <div class="module-resource-count">8</div>
+                                            <div class="module-resource-label">Articles</div>
+                                        </div>
+                                        <div class="module-resource-card">
+                                            <svg class="module-resource-icon-svg lucide lucide-book-open w-6 h-6 text-blue-600 mx-auto mb-2"
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 7v14"></path>
-                                                <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
-                                              </svg>
-                                              <div class="module-resource-count">12</div>
-                                              <div class="module-resource-label">Exercises</div>
-                                            </div>
+                                                <path
+                                                    d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z">
+                                                </path>
+                                            </svg>
+                                            <div class="module-resource-count">12</div>
+                                            <div class="module-resource-label">Exercises</div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer module-modal-footer">
-                                    <a th:href="@{/modules/{id}(id=${module.id})}" class="btn btn-primary-gradient flex-grow-1 text-decoration-none" data-bs-dismiss="modal">
-                                        <span th:if="${!module.title.contains('Fundamentals') and !module.title.contains('Emotional')}" class="d-inline-flex align-items-center gap-2">
-                                            <i class="fas fa-play-circle"></i> Start Module
-                                        </span>
-                                        <span th:if="${module.title.contains('Fundamentals')}" class="d-inline-flex align-items-center gap-2">
-                                            <i class="fas fa-play-circle"></i> Continue Learning
-                                        </span>
-                                        <span th:if="${module.title.contains('Emotional')}" class="d-inline-flex align-items-center gap-2">
-                                            <i class="fas fa-check-circle"></i> Review Module
-                                        </span>
-                                    </a>
-                                    <button type="button" class="btn btn-bookmark-modal d-flex align-items-center gap-2" th:attr="data-module-index=${iterStat.index}" aria-pressed="false">
-                                      <span class="module-bookmark-icon" aria-hidden="true"></span>
-                                      <span class="module-bookmark-text">Bookmark</span>
-                                    </button>
-                                </div>
+                            </div>
+                            <div class="modal-footer module-modal-footer">
+                                <a th:href="@{/modules/{id}(id=${module.id})}"
+                                    class="btn btn-primary-gradient flex-grow-1 text-decoration-none"
+                                    data-bs-dismiss="modal">
+                                    <span th:if="${module.progressPercentage == 0}"
+                                        class="d-inline-flex align-items-center gap-2">
+                                        <i class="fas fa-play-circle"></i> Start Module
+                                    </span>
+                                    <span th:if="${module.progressPercentage > 0 and module.progressPercentage < 100}"
+                                        class="d-inline-flex align-items-center gap-2">
+                                        <i class="fas fa-play-circle"></i> Continue Learning
+                                    </span>
+                                    <span th:if="${module.progressPercentage == 100}"
+                                        class="d-inline-flex align-items-center gap-2">
+                                        <i class="fas fa-check-circle"></i> Review Module
+                                    </span>
+                                </a>
+                                <button type="button" class="btn btn-bookmark-modal d-flex align-items-center gap-2"
+                                    th:attr="data-module-index=${iterStat.index}" aria-pressed="false">
+                                    <span class="module-bookmark-icon" aria-hidden="true"></span>
+                                    <span class="module-bookmark-text">Bookmark</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -173,173 +198,175 @@
             </div>
         </div>
     </div>
-                    <!-- toast container is created dynamically by script -->
+    </div>
+    <!-- toast container is created dynamically by script -->
 
-<th:block layout:fragment="scripts">
-    <script src="/nile-care/static/js/toast-notifications.js"></script>
-    <script>
-    (function() {
-        const outlineSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
-        
-        const filledSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6" stroke="#3b82f6" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
-        
-        function init() {
-            const icons = document.querySelectorAll('.bookmark-icon');
-            icons.forEach(function(icon, index) {
-              icon.innerHTML = outlineSVG;
-            });
-            const modalIcons = document.querySelectorAll('.module-bookmark-icon');
-            modalIcons.forEach(function(icon) { icon.innerHTML = outlineSVG; });
-        }
-        
-        document.addEventListener('click', function(e) {
-          const btn = e.target.closest('.bookmark-btn');
-          if (btn) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const icon = btn.querySelector('.bookmark-icon');
-                const wasBookmarked = btn.classList.contains('is-bookmarked');
-                const isBookmarked = !wasBookmarked;
-                
-                if (!isBookmarked) {
-                    btn.classList.remove('is-bookmarked');
-                    icon.innerHTML = outlineSVG;
-                    btn.setAttribute('aria-pressed', 'false');
-                    ToastNotifications.showSuccessToast('Removed from bookmarks');
-                } else {
-                    btn.classList.add('is-bookmarked');
-                    icon.innerHTML = filledSVG;
-                    btn.setAttribute('aria-pressed', 'true');
-                    ToastNotifications.showSuccessToast('Added to bookmarks');
+    <th:block layout:fragment="scripts">
+        <script src="/nile-care/static/js/toast-notifications.js"></script>
+        <script>
+            (function () {
+                const outlineSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+
+                const filledSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6" stroke="#3b82f6" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+
+                function init() {
+                    const icons = document.querySelectorAll('.bookmark-icon');
+                    icons.forEach(function (icon, index) {
+                        icon.innerHTML = outlineSVG;
+                    });
+                    const modalIcons = document.querySelectorAll('.module-bookmark-icon');
+                    modalIcons.forEach(function (icon) { icon.innerHTML = outlineSVG; });
                 }
-                
-                // Sync with modal bookmark
-                const index = btn.getAttribute('data-module-index');
-                const modal = document.querySelector('#moduleModal-' + index);
-                if (modal) {
-                    const modalBtn = modal.querySelector('.btn-bookmark-modal');
-                    if (modalBtn) {
-                        const modalIcon = modalBtn.querySelector('.module-bookmark-icon');
-                        const modalText = modalBtn.querySelector('.module-bookmark-text');
-                        
-                        if (isBookmarked) {
-                            modalBtn.classList.add('is-bookmarked');
-                            modalBtn.setAttribute('aria-pressed', 'true');
-                            if (modalIcon) modalIcon.innerHTML = filledSVG;
-                            if (modalText) modalText.textContent = 'Bookmarked';
+
+                document.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.bookmark-btn');
+                    if (btn) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const icon = btn.querySelector('.bookmark-icon');
+                        const wasBookmarked = btn.classList.contains('is-bookmarked');
+                        const isBookmarked = !wasBookmarked;
+
+                        if (!isBookmarked) {
+                            btn.classList.remove('is-bookmarked');
+                            icon.innerHTML = outlineSVG;
+                            btn.setAttribute('aria-pressed', 'false');
+                            ToastNotifications.showSuccessToast('Removed from bookmarks');
                         } else {
+                            btn.classList.add('is-bookmarked');
+                            icon.innerHTML = filledSVG;
+                            btn.setAttribute('aria-pressed', 'true');
+                            ToastNotifications.showSuccessToast('Added to bookmarks');
+                        }
+
+                        // Sync with modal bookmark
+                        const index = btn.getAttribute('data-module-index');
+                        const modal = document.querySelector('#moduleModal-' + index);
+                        if (modal) {
+                            const modalBtn = modal.querySelector('.btn-bookmark-modal');
+                            if (modalBtn) {
+                                const modalIcon = modalBtn.querySelector('.module-bookmark-icon');
+                                const modalText = modalBtn.querySelector('.module-bookmark-text');
+
+                                if (isBookmarked) {
+                                    modalBtn.classList.add('is-bookmarked');
+                                    modalBtn.setAttribute('aria-pressed', 'true');
+                                    if (modalIcon) modalIcon.innerHTML = filledSVG;
+                                    if (modalText) modalText.textContent = 'Bookmarked';
+                                } else {
+                                    modalBtn.classList.remove('is-bookmarked');
+                                    modalBtn.setAttribute('aria-pressed', 'false');
+                                    if (modalIcon) modalIcon.innerHTML = outlineSVG;
+                                    if (modalText) modalText.textContent = 'Bookmark';
+                                }
+                            }
+                        }
+                    }
+
+                    const modalBtn = e.target.closest('.btn-bookmark-modal');
+                    if (modalBtn) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const icon = modalBtn.querySelector('.module-bookmark-icon');
+                        const text = modalBtn.querySelector('.module-bookmark-text');
+                        const wasBookmarked = modalBtn.classList.contains('is-bookmarked');
+                        const isBookmarked = !wasBookmarked;
+
+                        if (!isBookmarked) {
                             modalBtn.classList.remove('is-bookmarked');
                             modalBtn.setAttribute('aria-pressed', 'false');
-                            if (modalIcon) modalIcon.innerHTML = outlineSVG;
-                            if (modalText) modalText.textContent = 'Bookmark';
-                        }
-                    }
-                }
-            }
-            
-            const modalBtn = e.target.closest('.btn-bookmark-modal');
-            if (modalBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const icon = modalBtn.querySelector('.module-bookmark-icon');
-                const text = modalBtn.querySelector('.module-bookmark-text');
-                const wasBookmarked = modalBtn.classList.contains('is-bookmarked');
-                const isBookmarked = !wasBookmarked;
-                
-                if (!isBookmarked) {
-                    modalBtn.classList.remove('is-bookmarked');
-                    modalBtn.setAttribute('aria-pressed', 'false');
-                    icon.innerHTML = outlineSVG;
-                    if (text) text.textContent = 'Bookmark';
-                    ToastNotifications.showSuccessToast('Removed from bookmarks');
-                } else {
-                    modalBtn.classList.add('is-bookmarked');
-                    modalBtn.setAttribute('aria-pressed', 'true');
-                    icon.innerHTML = filledSVG;
-                    if (text) text.textContent = 'Bookmarked';
-                    ToastNotifications.showSuccessToast('Added to bookmarks');
-                }
-                
-                // Sync with card bookmark
-                const modal = modalBtn.closest('.modal');
-                if (modal && modal.id) {
-                    const modalIndex = modal.id.split('-').pop();
-                    const cardBtn = document.querySelector('.bookmark-btn[data-module-index="' + modalIndex + '"]');
-                    if (cardBtn) {
-                        const cardIcon = cardBtn.querySelector('.bookmark-icon');
-                        
-                        if (isBookmarked) {
-                            cardBtn.classList.add('is-bookmarked');
-                            cardBtn.setAttribute('aria-pressed', 'true');
-                            if (cardIcon) cardIcon.innerHTML = filledSVG;
+                            icon.innerHTML = outlineSVG;
+                            if (text) text.textContent = 'Bookmark';
+                            ToastNotifications.showSuccessToast('Removed from bookmarks');
                         } else {
-                            cardBtn.classList.remove('is-bookmarked');
-                            cardBtn.setAttribute('aria-pressed', 'false');
-                            if (cardIcon) cardIcon.innerHTML = outlineSVG;
+                            modalBtn.classList.add('is-bookmarked');
+                            modalBtn.setAttribute('aria-pressed', 'true');
+                            icon.innerHTML = filledSVG;
+                            if (text) text.textContent = 'Bookmarked';
+                            ToastNotifications.showSuccessToast('Added to bookmarks');
+                        }
+
+                        // Sync with card bookmark
+                        const modal = modalBtn.closest('.modal');
+                        if (modal && modal.id) {
+                            const modalIndex = modal.id.split('-').pop();
+                            const cardBtn = document.querySelector('.bookmark-btn[data-module-index="' + modalIndex + '"]');
+                            if (cardBtn) {
+                                const cardIcon = cardBtn.querySelector('.bookmark-icon');
+
+                                if (isBookmarked) {
+                                    cardBtn.classList.add('is-bookmarked');
+                                    cardBtn.setAttribute('aria-pressed', 'true');
+                                    if (cardIcon) cardIcon.innerHTML = filledSVG;
+                                } else {
+                                    cardBtn.classList.remove('is-bookmarked');
+                                    cardBtn.setAttribute('aria-pressed', 'false');
+                                    if (cardIcon) cardIcon.innerHTML = outlineSVG;
+                                }
+                            }
                         }
                     }
+                });
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', init);
+                } else {
+                    init();
                 }
-            }
-        });
-        
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', init);
-        } else {
-          init();
-        }
-    })();
-    </script>
-    <script>
-    // Filters for modules: all, in-progress, bookmarked, completed
-    (function() {
-      function parseProgress(card) {
-        const el = card.querySelector('.module-progress');
-        if (!el) return 0;
-        const raw = el.textContent || el.innerText || '';
-        const n = parseInt(raw.replace('%','').trim(), 10);
-        return isNaN(n) ? 0 : n;
-      }
+            })();
+        </script>
+        <script>
+            // Filters for modules: all, in-progress, bookmarked, completed
+            (function () {
+                function parseProgress(card) {
+                    const el = card.querySelector('.module-progress');
+                    if (!el) return 0;
+                    const raw = el.textContent || el.innerText || '';
+                    const n = parseInt(raw.replace('%', '').trim(), 10);
+                    return isNaN(n) ? 0 : n;
+                }
 
-      function applyFilter(filter) {
-        document.querySelectorAll('.col-md-6.col-lg-4').forEach(function(card) {
-          const progress = parseProgress(card);
-          const bookmarkBtn = card.querySelector('.bookmark-btn');
-          const isBookmarked = bookmarkBtn && bookmarkBtn.classList.contains('is-bookmarked');
+                function applyFilter(filter) {
+                    document.querySelectorAll('.col-md-6.col-lg-4').forEach(function (card) {
+                        const progress = parseProgress(card);
+                        const bookmarkBtn = card.querySelector('.bookmark-btn');
+                        const isBookmarked = bookmarkBtn && bookmarkBtn.classList.contains('is-bookmarked');
 
-          let visible = true;
-          if (filter === 'in-progress') visible = (progress > 0 && progress < 100);
-          else if (filter === 'bookmarked') visible = !!isBookmarked;
-          else if (filter === 'completed') visible = (progress === 100);
-          else visible = true;
+                        let visible = true;
+                        if (filter === 'in-progress') visible = (progress > 0 && progress < 100);
+                        else if (filter === 'bookmarked') visible = !!isBookmarked;
+                        else if (filter === 'completed') visible = (progress === 100);
+                        else visible = true;
 
-          card.style.display = visible ? '' : 'none';
-        });
-      }
+                        card.style.display = visible ? '' : 'none';
+                    });
+                }
 
-      document.querySelectorAll('.btn-filter').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.btn-filter').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-          this.classList.add('active');
-          this.setAttribute('aria-pressed','true');
-          const f = this.getAttribute('data-filter') || 'all';
-          applyFilter(f);
-        });
-        // keyboard support (Enter / Space)
-        btn.addEventListener('keydown', function(ev) {
-          if (ev.key === 'Enter' || ev.key === ' ') {
-            ev.preventDefault();
-            this.click();
-          }
-        });
-      });
+                document.querySelectorAll('.btn-filter').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        document.querySelectorAll('.btn-filter').forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+                        this.classList.add('active');
+                        this.setAttribute('aria-pressed', 'true');
+                        const f = this.getAttribute('data-filter') || 'all';
+                        applyFilter(f);
+                    });
+                    // keyboard support (Enter / Space)
+                    btn.addEventListener('keydown', function (ev) {
+                        if (ev.key === 'Enter' || ev.key === ' ') {
+                            ev.preventDefault();
+                            this.click();
+                        }
+                    });
+                });
 
-      // Initialize filter based on active button
-      const activeBtn = document.querySelector('.btn-filter.active');
-      if (activeBtn) applyFilter(activeBtn.getAttribute('data-filter') || 'all');
-    })();
-    </script>
-  </th:block>
+                // Initialize filter based on active button
+                const activeBtn = document.querySelector('.btn-filter.active');
+                if (activeBtn) applyFilter(activeBtn.getAttribute('data-filter') || 'all');
+            })();
+        </script>
+    </th:block>
 </body>
+
 </html>

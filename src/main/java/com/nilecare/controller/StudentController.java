@@ -3,8 +3,9 @@ package com.nilecare.controller;
 import com.nilecare.model.User;
 import com.nilecare.model.Lesson;
 import com.nilecare.model.LearningModule;
-import com.nilecare.repository.LearningModuleRepository;
+import com.nilecare.service.LearningModuleService;
 import com.nilecare.repository.LessonRepository;
+import com.nilecare.repository.AssessmentSubmissionRepository;
 import com.nilecare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,19 +20,27 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    private LearningModuleRepository learningModuleRepository;
-    
+    private LearningModuleService learningModuleService;
+
     @Autowired
     private LessonRepository lessonRepository;
-    
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AssessmentSubmissionRepository assessmentSubmissionRepository;
 
     // 1. Learning Library
     @GetMapping("/learning")
     public String library(Model model, Principal principal) {
-        model.addAttribute("modules", learningModuleRepository.findAll());
         addCurrentUser(model, principal);
+        User user = (User) model.getAttribute("currentUser");
+        if (user != null) {
+            model.addAttribute("modules", learningModuleService.getAllModulesWithProgress(user.getUserId()));
+        } else {
+            model.addAttribute("modules", learningModuleService.getAllModules());
+        }
         return "student/library";
     }
 
@@ -50,22 +59,22 @@ public class StudentController {
 
     // 4. Assessment
     @GetMapping("/assessment")
-    public String assessment() {
+    public String assessment(Model model, Principal principal) {
+        addCurrentUser(model, principal);
+        User user = (User) model.getAttribute("currentUser");
+        if (user != null) {
+            model.addAttribute("assessmentHistory",
+                    assessmentSubmissionRepository.findByUserOrderBySubmissionDateDesc(user));
+        }
         return "student/assessment";
     }
-
-    // 5. Chatbot
-    //@GetMapping("/chat")
-    //public String chatbot() {
-     //   return "student/chatbot";
-    //}
 
     // 6. Feedback
     @GetMapping("/feedback")
     public String feedback() {
         return "student/feedback";
     }
-    
+
     // 7. Help Request
     @GetMapping("/support/request")
     public String helpRequest() {
@@ -87,17 +96,28 @@ public class StudentController {
 
     // 10. Module Details
     @GetMapping("/modules/{id}")
-    public String moduleDetails(@PathVariable Long id, Model model) {
-        // 1. Fetch the Module
-        LearningModule module = learningModuleRepository.findById(id).orElse(null);
-        
-        if (module != null) {
-            model.addAttribute("module", module);
-            
-            // [FIXED] Updated to use the new Repository method name (removed underscore)
+    public String moduleDetails(@PathVariable Long id, Model model, Principal principal) {
+        addCurrentUser(model, principal);
+        User user = (User) model.getAttribute("currentUser");
+
+        // 1. Fetch the Module with Progress
+        com.nilecare.dto.LearningModuleDTO moduleDTO;
+        if (user != null) {
+            moduleDTO = learningModuleService.getModuleWithProgress(id, user.getUserId());
+        } else {
+            LearningModule module = learningModuleService.getModuleById(id);
+            moduleDTO = module != null ? new com.nilecare.dto.LearningModuleDTO(
+                    module.getModuleId(), module.getTitle(), module.getDescription(),
+                    module.getContentUrl(), module.getCategory(), module.getDifficultyLevel(), 0) : null;
+        }
+
+        if (moduleDTO != null) {
+            model.addAttribute("module", moduleDTO);
+
+            // 2. Fetch Lessons
             List<Lesson> lessons = lessonRepository.findByModuleIdOrderByLessonOrder(id);
             model.addAttribute("lessons", lessons);
-            
+
             // 3. Start Module Button Helper
             if (!lessons.isEmpty()) {
                 model.addAttribute("firstLessonId", lessons.get(0).getLessonId());
@@ -105,23 +125,23 @@ public class StudentController {
         }
         return "student/module_details";
     }
-    
+
     // 11. Lesson View
     @GetMapping("/lesson/{id}")
     public String lessonView(@PathVariable Long id, Model model) {
         Lesson lesson = lessonRepository.findByLessonId(id);
-        
+
         if (lesson != null) {
             model.addAttribute("lesson", lesson);
-            
+
             Long moduleId = lesson.getModuleId();
-            
+
             // [FIXED] Updated to use the new Repository method name (removed underscore)
             model.addAttribute("moduleLessons", lessonRepository.findByModuleIdOrderByLessonOrder(moduleId));
         }
         return "student/lesson_view";
     }
-    
+
     // Helper method to add current user to model
     private void addCurrentUser(Model model, Principal principal) {
         if (principal != null) {

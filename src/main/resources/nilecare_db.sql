@@ -399,3 +399,81 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2026-01-12 14:04:21
+
+/*Learning_module table*/ 
+INSERT INTO learning_modules (module_id, title, description, content_url, category, difficulty_level, created_at, updated_at) VALUES
+(1, 'Understanding Mental Health Fundamentals', 'Learn the basics of mental health, common disorders, and the importance of mental wellness in everyday life.', '/static/images/module-mental-health.jpg', 'Mental Wellness', 'Beginner', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(2, 'Emotional Intelligence and Self-Awareness', 'Develop your emotional intelligence through self-reflection exercises and practical techniques to understand your emotions better.', '/static/images/module-emotional-intelligence.jpg', 'Self-Awareness', 'Intermediate', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(3, 'Understanding and Managing Stress', 'Comprehensive strategies for identifying stress triggers, understanding physiological effects, and developing effective coping mechanisms.', '/static/images/module-stress-managment.jpg', 'Mental Wellness', 'Intermediate', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(4, 'Anxiety Management Techniques', 'Learn evidence-based techniques to manage anxiety, including breathing exercises, cognitive behavioral therapy principles, and mindfulness practices.', '/static/images/module-anxiety.jpg', 'Anxiety', 'Beginner', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(5, 'Building Healthy Relationships', 'Explore communication skills, boundaries, conflict resolution, and the foundations of healthy interpersonal relationships.', '/static/images/module-relationships.jpg', 'Relationships', 'Intermediate', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(6, 'Sleep Hygiene and Better Rest', 'Master the science of sleep, create better sleep habits, and learn techniques to improve sleep quality and overall wellness.', '/static/images/module-sleep.jpg', 'Wellness', 'Beginner', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(7, 'Mindfulness and Meditation Basics', 'Introduction to mindfulness practices, meditation techniques, and how to incorporate these into your daily routine for mental clarity.', '/static/images/module-mindfulness.jpg', 'Mindfulness', 'Beginner', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(8, 'Cognitive Behavioral Therapy Principles', 'Understand the core principles of CBT and learn how to identify and challenge negative thinking patterns.', '/static/images/module-cbt.jpg', 'Mental Wellness', 'Advanced', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(9, 'Resilience and Coping with Change', 'Develop resilience skills to navigate life changes, setbacks, and challenges with greater confidence and emotional strength.', '/static/images/module-resilience.jpg', 'Personal Growth', 'Intermediate', '2025-12-08 00:32:10', '2025-12-08 03:47:46'),
+(10, 'Depression: Recognition and Support', 'Learn to recognize signs of depression, understand the condition better, and discover available support resources and treatment options.', '/static/images/module-depression.jpg', 'Mental Health', 'Beginner', '2025-12-08 00:32:10', '2025-12-08 03:47:46');
+
+/*Lessons table:*/
+INSERT INTO lessons (lesson_id, module_id, title, description, content, video_url, lesson_order, duration_minutes, created_at, updated_at, lessonId) VALUES
+(1, 3, 'Introduction to Stress', 'Understanding what stress is and its impact on mental health.', NULL, 'https://www.youtube.com/embed/mFrMxGyBeSU', 1, 20, '2025-12-08 00:32:20', '2026-01-06 05:14:14', 0),
+(2, 3, 'Identifying Stressors', 'Learn to identify personal stress triggers and patterns.', NULL, 'https://www.youtube.com/embed/t39pAFp-QqY', 2, 25, '2025-12-08 00:32:20', '2026-01-06 05:14:14', 0),
+(3, 3, 'Coping Strategies', 'Effective coping mechanisms for managing stress.', NULL, 'https://www.youtube.com/embed/0fL-pn80s-c', 3, 25, '2025-12-08 00:32:20', '2026-01-06 05:14:14', 0),
+(4, 3, 'Practical Exercises', 'Hands-on exercises to practice stress management techniques.', NULL, 'https://www.youtube.com/embed/inpok4MKVLM', 4, 30, '2025-12-08 00:32:20', '2026-01-06 01:37:20', 0),
+(5, 3, 'Knowledge Check', 'Course Summary & Knowledge Check', '<h3>Congratulations on reaching the end of this module!</h3><p>We have covered the definition of stress, how to identify your personal triggers, and various coping strategies to manage them.</p><p>Below, you will find a knowledge check to test your understanding. Good luck!</p>', NULL, 5, 15, '2025-12-08 00:32:20', '2026-01-06 05:14:20', 0),
+(6, 2, 'Introduction to Emotional Intelligence', 'Discover the importance of EQ and how it differs from IQ.', '<p>Emotional Intelligence (EQ) is the ability to understand, use, and manage your own emotions in positive ways to relieve stress, communicate effectively, empathize with others, overcome challenges and defuse conflict.</p>', 'https://www.youtube.com/embed/LgUCyWhJf6s', 1, 15, '2026-01-06 05:26:36', '2026-01-06 05:26:36', 0),
+(7, 2, 'The Power of Self-Awareness', 'Learn how to recognize your emotions as they happen and understand your personal triggers.', '<p>Self-awareness is the foundation of EQ. It involves recognizing your own emotions and how they affect your thoughts and behavior. You know your strengths and weaknesses, and have self-confidence.</p>', 'https://www.youtube.com/embed/R9qVa4LoJx8', 2, 20, '2026-01-06 05:26:36', '2026-01-06 05:26:36', 0),
+(8, 2, 'Mastering Self-Regulation', 'Techniques to manage impulsive feelings and behaviors.', '<p>Self-regulation doesn''t mean blocking emotions. It means waiting for the right time and place to express them. It involves controlling impulsive feelings, taking initiative, and adapting to changing circumstances.</p>', 'https://www.youtube.com/embed/wxX8RdpN5M8', 3, 25, '2026-01-06 05:26:36', '2026-01-06 05:26:36', 0),
+(9, 2, 'Empathy & Social Skills', 'Developing the ability to understand the emotions and needs of other people.', '<p>Social awareness enables you to recognize and interpret the nonverbal cues others use to communicate. These cues let you know how others are really feeling and what is truly important to them.</p>', 'https://www.youtube.com/embed/UzPMMSKfKZQ', 4, 20, '2026-01-06 05:26:36', '2026-01-06 05:26:36', 0),
+(10, 2, 'EQ Knowledge Check', 'Review key concepts and test your understanding of Emotional Intelligence.', '<h3>Module Complete!</h3><p>You have learned the basics of recognizing and managing your own emotions, as well as understanding the emotions of others.</p><p>Take a moment to reflect on a recent situation where you could have applied better EQ.</p>', NULL, 5, 10, '2026-01-06 05:26:36', '2026-01-06 05:26:36', 0),
+(11, 1, 'Introduction to Mental Health', 'An introduction to what mental health really is and why it matters.', NULL, 'https://www.youtube.com/embed/G0zJGDokyWQ', 1, 15, '2026-01-06 05:59:34', '2026-01-06 05:59:34', 0),
+(12, 1, 'Breaking the Stigma', 'Understanding the stigma surrounding mental health and how to overcome it.', NULL, 'https://www.youtube.com/embed/IaSpas9hWNQ', 2, 15, '2026-01-06 05:59:34', '2026-01-06 05:59:34', 0),
+(13, 1, 'Mental Health vs. Mental Illness', 'Distinguishing between mental wellness and specific mental health conditions.', NULL, 'https://www.youtube.com/embed/7JAhnEINmRM', 3, 15, '2026-01-06 05:59:34', '2026-01-06 05:59:34', 0),
+(14, 1, 'Module 1 Wrap-Up', 'Summary of mental health fundamentals.', '<h3>You have completed Module 1!</h3><p>You now have a solid foundation in understanding mental health concepts.</p>', NULL, 4, 10, '2026-01-06 05:59:34', '2026-01-06 05:59:34', 0),
+(15, 4, 'Immediate Relief: Breathing Techniques', 'Learn the Box Breathing and 4-7-8 techniques to physically calm your nervous system.', NULL, 'https://www.youtube.com/embed/odADwWzHR24', 1, 10, '2026-01-06 06:00:56', '2026-01-06 06:00:56', 0),
+(16, 4, 'The 5-4-3-2-1 Grounding Method', 'A powerful sensory exercise to stop panic attacks and racing thoughts in their tracks.', NULL, 'https://www.youtube.com/embed/pjRMg6KALiw', 2, 10, '2026-01-06 06:00:56', '2026-01-06 06:00:56', 0),
+(17, 4, 'CBT Exercises for Anxiety', 'How to use Cognitive Behavioral Therapy tools to challenge anxious thoughts.', NULL, 'https://www.youtube.com/embed/RFuYcIy6Vxc', 3, 15, '2026-01-06 06:00:56', '2026-01-06 06:00:56', 0),
+(18, 4, 'Anxiety Toolkit Summary', 'Reviewing your new toolkit for managing anxiety.', '<h3>You have completed Module 4!</h3><p>Remember: <strong>Breathe</strong> to calm the body, <strong>Ground</strong> to calm the senses, and <strong>Challenge</strong> to calm the mind.</p>', NULL, 4, 5, '2026-01-06 06:00:56', '2026-01-06 06:00:56', 0),
+(19, 5, 'Effective Communication Skills', 'Improving how we speak and listen to build stronger connections.', NULL, 'https://www.youtube.com/embed/Xk8NlNXoEug', 1, 12, '2026-01-06 06:02:35', '2026-01-06 06:02:35', 0),
+(20, 5, 'Boundaries 101', 'A guide to setting healthy boundaries while maintaining respect and love.', NULL, 'https://www.youtube.com/embed/9roFI1cOHxk', 2, 15, '2026-01-06 06:02:35', '2026-01-06 06:02:35', 0),
+(21, 5, 'Conflict Resolution 101', '5 quick tips for resolving conflict successfully in any relationship.', NULL, 'https://www.youtube.com/embed/zHXYWMnm7Yg', 3, 10, '2026-01-06 06:02:35', '2026-01-06 06:02:35', 0),
+(22, 5, 'Relationships Summary', 'Recap of the keys to healthy interpersonal dynamics.', '<h3>You have completed Module 5!</h3><p>Healthy relationships require three things: <strong>Clear Communication</strong>, <strong>Firm Boundaries</strong>, and <strong>Fair Conflict</strong>.</p>', NULL, 4, 5, '2026-01-06 06:02:35', '2026-01-06 06:02:35', 0),
+(23, 7, 'What is Mindfulness?', 'Demystifying mindfulness: It is not about clearing your mind, but observing it.', NULL, 'https://www.youtube.com/embed/w6T02g5hnT4', 1, 10, '2026-01-06 06:05:18', '2026-01-06 06:05:18', 0),
+(24, 7, 'Guided Meditation for Beginners', 'A short, 10-minute guided session to practice the "Body Scan" technique.', NULL, 'https://www.youtube.com/embed/O-6f5wQXSu8', 2, 15, '2026-01-06 06:05:18', '2026-01-06 06:05:18', 0),
+(25, 7, 'Mindfulness in Daily Life', 'How to be mindful while eating, walking, or doing chores (no cushion required).', NULL, 'https://www.youtube.com/embed/QtMq1tX0zj0', 3, 12, '2026-01-06 06:05:18', '2026-01-06 06:05:18', 0),
+(26, 7, 'Mindfulness Summary', 'Reflecting on the power of the present moment.', '<h3>You have completed Module 7!</h3><p>Mindfulness is a muscle. The more you practice bringing your attention back to the present, the stronger it gets.</p>', NULL, 4, 5, '2026-01-06 06:05:18', '2026-01-06 06:05:18', 0),
+(27, 8, 'The Cognitive Triangle', 'Understanding how Thoughts, Feelings, and Behaviors interact to create our reality.', NULL, 'https://www.youtube.com/embed/qIGQE4QlC68', 1, 15, '2026-01-06 06:05:29', '2026-01-06 06:05:29', 0),
+(28, 8, 'Identifying Cognitive Distortions', 'Learn to spot common "Thinking Errors" like Catastrophizing and All-or-Nothing thinking.', NULL, 'https://www.youtube.com/embed/ot1F7d5_aEA', 2, 20, '2026-01-06 06:05:29', '2026-01-06 06:05:29', 0),
+(29, 8, 'Reframing & The ABC Model', 'Practical techniques to challenge negative thoughts and rewrite your internal narrative.', NULL, 'https://www.youtube.com/embed/NoO9j6O6Hlg', 3, 20, '2026-01-06 06:05:29', '2026-01-06 06:05:29', 0),
+(30, 8, 'CBT Toolkit Summary', 'Reviewing the tools for cognitive restructuring.', '<h3>You have completed Module 8!</h3><p>You now have the tools to be a "scientist of your own mind"-observing thoughts rather than automatically believing them.</p>', NULL, 4, 10, '2026-01-06 06:05:29', '2026-01-06 06:05:29', 0); 
+
+/* Assessments Table */
+CREATE TABLE IF NOT EXISTS `assessments` (
+  `assessment_id` bigint NOT NULL AUTO_INCREMENT,
+  `description` text,
+  `due_date` datetime(6) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `total_points` int DEFAULT NULL,
+  `type` varchar(255) NOT NULL,
+  `module_id` bigint NOT NULL,
+  PRIMARY KEY (`assessment_id`),
+  KEY `module_id` (`module_id`),
+  CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `learning_modules` (`module_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/* Assessment Submissions Table */
+CREATE TABLE IF NOT EXISTS `assessment_submissions` (
+  `submission_id` bigint NOT NULL AUTO_INCREMENT,
+  `content` text,
+  `score` int DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `submission_date` datetime(6) DEFAULT NULL,
+  `assessment_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  `max_score` int DEFAULT NULL,
+  PRIMARY KEY (`submission_id`),
+  KEY `assessment_id` (`assessment_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `assessment_submissions_ibfk_1` FOREIGN KEY (`assessment_id`) REFERENCES `assessments` (`assessment_id`) ON DELETE CASCADE,
+  CONSTRAINT `assessment_submissions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ 

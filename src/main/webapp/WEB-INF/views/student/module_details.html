@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
+
 <head>
     <title>Module Details - NileCare</title>
     <meta name="description" content="View module details, lessons, resources, and track your learning progress.">
     <link rel="stylesheet" th:href="@{/static/css/moduleDetails.css}">
 </head>
+
 <body>
     <div layout:fragment="content">
         <div class="mb-4">
-            <h2 class="fw-semibold text-blue-900 mb-1" th:text="${module != null ? module.title : 'Module Title'}">Module Title</h2>
-            <p class="text-blue-600 small" th:text="${module != null ? module.description : 'Module Description'}">Module Description</p>
+            <h2 class="fw-semibold text-blue-900 mb-1" th:text="${module != null ? module.title : 'Module Title'}">
+                Module Title</h2>
+            <p class="text-blue-600 small" th:text="${module != null ? module.description : 'Module Description'}">
+                Module Description</p>
         </div>
 
-        <div class="card card-custom mb-4" style="border: none; padding: 0; overflow: hidden; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);">
+        <div class="card card-custom mb-4"
+            style="border: none; padding: 0; overflow: hidden; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);">
             <div class="module-hero-gradient">
                 <div class="text-center text-white module-hero-content">
-                    <h1 class="mb-3 module-hero-title" th:text="${module != null ? module.title : 'Understanding and Managing Stress'}">Understanding and Managing Stress</h1>
+                    <h1 class="mb-3 module-hero-title"
+                        th:text="${module != null ? module.title : 'Understanding and Managing Stress'}">Understanding
+                        and Managing Stress</h1>
                     <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
-                        <span class="badge module-hero-badge">Intermediate</span>
-                        <span class="badge module-hero-badge">Mental Wellness</span>
+                        <span class="badge module-hero-badge" th:text="${module.difficultyLevel}">Intermediate</span>
+                        <span class="badge module-hero-badge" th:text="${module.category}">Mental Wellness</span>
                     </div>
                 </div>
             </div>
@@ -28,16 +35,24 @@
             <div class="col-12 col-lg-9">
                 <ul class="nav nav-pills mb-4 module-tabs-nav" role="tablist">
                     <li class="nav-item module-tab-item" role="presentation">
-                        <button class="nav-link module-tab-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Overview</button>
+                        <button class="nav-link module-tab-link active" id="overview-tab" data-bs-toggle="tab"
+                            data-bs-target="#overview" type="button" role="tab" aria-controls="overview"
+                            aria-selected="true">Overview</button>
                     </li>
                     <li class="nav-item module-tab-item" role="presentation">
-                        <button class="nav-link module-tab-link" id="content-tab" data-bs-toggle="tab" data-bs-target="#content" type="button" role="tab" aria-controls="content" aria-selected="false">Content</button>
+                        <button class="nav-link module-tab-link" id="content-tab" data-bs-toggle="tab"
+                            data-bs-target="#content" type="button" role="tab" aria-controls="content"
+                            aria-selected="false">Content</button>
                     </li>
                     <li class="nav-item module-tab-item" role="presentation">
-                        <button class="nav-link module-tab-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources" type="button" role="tab" aria-controls="resources" aria-selected="false">Resources</button>
+                        <button class="nav-link module-tab-link" id="resources-tab" data-bs-toggle="tab"
+                            data-bs-target="#resources" type="button" role="tab" aria-controls="resources"
+                            aria-selected="false">Resources</button>
                     </li>
                     <li class="nav-item module-tab-item" role="presentation">
-                        <button class="nav-link module-tab-link" id="progress-tab" data-bs-toggle="tab" data-bs-target="#progress" type="button" role="tab" aria-controls="progress" aria-selected="false">Progress</button>
+                        <button class="nav-link module-tab-link" id="progress-tab" data-bs-toggle="tab"
+                            data-bs-target="#progress" type="button" role="tab" aria-controls="progress"
+                            aria-selected="false">Progress</button>
                     </li>
                 </ul>
 
@@ -47,10 +62,13 @@
                             <div class="d-flex justify-content-between align-items-start mb-4">
                                 <div>
                                     <h3 class="fw-semibold text-blue-900 mb-1">Module Overview</h3>
-                                    <p class="text-blue-600 small mb-0" th:text="${module != null ? module.description : 'Learn essential stress management techniques'}">Learn essential stress management techniques</p>
+                                    <p class="text-blue-600 small mb-0"
+                                        th:text="${module != null ? module.description : 'Learn essential stress management techniques'}">
+                                        Learn essential stress management techniques</p>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn module-bookmark-btn" aria-label="Bookmark module" title="Toggle bookmark" aria-pressed="false">
+                                    <button type="button" class="btn module-bookmark-btn" aria-label="Bookmark module"
+                                        title="Toggle bookmark" aria-pressed="false">
                                         <span class="module-bookmark-icon" aria-hidden="true"></span>
                                     </button>
                                 </div>
@@ -59,7 +77,8 @@
                             <div class="row g-3 mb-4">
                                 <div class="col-12 col-sm-6 col-md-4">
                                     <div class="module-metadata-card blue">
-                                        <div class="d-flex align-items-center gap-2 module-metadata-icon blue mb-2 small">
+                                        <div
+                                            class="d-flex align-items-center gap-2 module-metadata-icon blue mb-2 small">
                                             <i class="fas fa-clock"></i>
                                             <span>Duration</span>
                                         </div>
@@ -68,20 +87,24 @@
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-4">
                                     <div class="module-metadata-card green">
-                                        <div class="d-flex align-items-center gap-2 module-metadata-icon green mb-2 small">
+                                        <div
+                                            class="d-flex align-items-center gap-2 module-metadata-icon green mb-2 small">
                                             <i class="fas fa-trophy"></i>
                                             <span>Difficulty</span>
                                         </div>
-                                        <p class="module-metadata-value green">Intermediate</p>
+                                        <p class="module-metadata-value green" th:text="${module.difficultyLevel}">
+                                            Intermediate</p>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-4">
                                     <div class="module-metadata-card purple">
-                                        <div class="d-flex align-items-center gap-2 module-metadata-icon purple mb-2 small">
+                                        <div
+                                            class="d-flex align-items-center gap-2 module-metadata-icon purple mb-2 small">
                                             <i class="fas fa-book"></i>
                                             <span>Category</span>
                                         </div>
-                                        <p class="module-metadata-value purple">Mental Wellness</p>
+                                        <p class="module-metadata-value purple" th:text="${module.category}">Mental
+                                            Wellness</p>
                                     </div>
                                 </div>
                             </div>
@@ -89,18 +112,26 @@
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="module-progress-label">Your Progress</span>
-                                    <span class="module-progress-percentage">0% Complete</span>
+                                    <span class="module-progress-percentage"
+                                        th:text="${module.progressPercentage + '% Complete'}">0% Complete</span>
                                 </div>
                                 <div class="progress module-progress-bar-container">
-                                    <div class="progress-bar module-progress-bar-fill" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar module-progress-bar-fill" role="progressbar"
+                                        th:style="'width: ' + ${module.progressPercentage} + '%;'"
+                                        th:aria-valuenow="${module.progressPercentage}" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
                                 </div>
-                                <p class="module-last-access">Start your journey today</p>
+                                <p class="module-last-access"
+                                    th:text="${module.progressPercentage == 100 ? 'Module Completed!' : (module.progressPercentage > 0 ? 'Continue where you left off' : 'Start your journey today')}">
+                                    Start your journey today</p>
                             </div>
 
                             <div class="mb-4">
                                 <h4 class="module-section-title">Description</h4>
-                                <p class="module-description-text" th:text="${module != null ? module.description : 'Module contents...'}">
-                                    This comprehensive module explores the nature of stress and provides practical strategies for managing it effectively. 
+                                <p class="module-description-text"
+                                    th:text="${module != null ? module.description : 'Module contents...'}">
+                                    This comprehensive module explores the nature of stress and provides practical
+                                    strategies for managing it effectively.
                                 </p>
                             </div>
 
@@ -123,10 +154,12 @@
                             </div>
 
                             <div class="pt-2">
-                                <a th:href="@{/lesson/{id}(id=${firstLessonId})}" th:if="${firstLessonId != null}" class="btn module-action-btn w-100 text-decoration-none">
+                                <a th:href="@{/lesson/{id}(id=${firstLessonId})}" th:if="${firstLessonId != null}"
+                                    class="btn module-action-btn w-100 text-decoration-none">
                                     <i class="fas fa-play me-2"></i>Start Learning
                                 </a>
-                                <button th:if="${firstLessonId == null}" class="btn module-action-btn w-100 text-decoration-none" disabled>
+                                <button th:if="${firstLessonId == null}"
+                                    class="btn module-action-btn w-100 text-decoration-none" disabled>
                                     <i class="fas fa-clock me-2"></i>Coming Soon
                                 </button>
                             </div>
@@ -139,18 +172,18 @@
                             <p class="text-blue-600 small mb-4">Complete lessons in order to progress</p>
 
                             <div class="accordion" id="lessonAccordion">
-                                
+
                                 <div th:if="${lessons == null or lessons.isEmpty()}" class="alert alert-info">
                                     No lessons are currently available for this module.
                                 </div>
 
                                 <div class="lesson-accordion-item" th:each="lesson, iterStat : ${lessons}">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button lesson-accordion-button collapsed" type="button" 
-                                                data-bs-toggle="collapse" 
-                                                th:data-bs-target="'#collapseLesson-' + ${lesson.lessonId}" 
-                                                aria-expanded="false" 
-                                                th:aria-controls="'collapseLesson-' + ${lesson.lessonId}">
+                                        <button class="accordion-button lesson-accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse"
+                                            th:data-bs-target="'#collapseLesson-' + ${lesson.lessonId}"
+                                            aria-expanded="false"
+                                            th:aria-controls="'collapseLesson-' + ${lesson.lessonId}">
                                             <div class="d-flex align-items-center gap-3 w-100">
                                                 <div class="lesson-status-badge current">
                                                     <span th:text="${iterStat.count}" class="text-white">1</span>
@@ -165,16 +198,20 @@
                                             </div>
                                         </button>
                                     </h2>
-                                    <div th:id="'collapseLesson-' + ${lesson.lessonId}" class="accordion-collapse collapse" data-bs-parent="#lessonAccordion">
+                                    <div th:id="'collapseLesson-' + ${lesson.lessonId}"
+                                        class="accordion-collapse collapse" data-bs-parent="#lessonAccordion">
                                         <div class="lesson-accordion-body">
-                                            <p class="lesson-description" th:text="${lesson.content != null ? #strings.abbreviate(lesson.content, 100) : 'Click below to start this lesson.'}">
+                                            <p class="lesson-description"
+                                                th:text="${lesson.content != null ? #strings.abbreviate(lesson.content, 100) : 'Click below to start this lesson.'}">
                                                 Lesson content preview...
                                             </p>
-                                            <a th:href="@{/lesson/{id}(id=${lesson.lessonId})}" class="btn btn-sm lesson-start-btn text-decoration-none">Start Lesson</a>
+                                            <a th:href="@{/lesson/{id}(id=${lesson.lessonId})}"
+                                                class="btn btn-sm lesson-start-btn text-decoration-none">Start
+                                                Lesson</a>
                                         </div>
                                     </div>
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -213,10 +250,14 @@
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="text-blue-900 fw-500">Overall Completion</span>
-                                    <span class="module-overall-completion">0%</span>
+                                    <span class="module-overall-completion"
+                                        th:text="${module.progressPercentage + '%'}">0%</span>
                                 </div>
                                 <div class="progress module-progress-bar-lg">
-                                    <div class="progress-bar module-progress-bar-fill" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar module-progress-bar-fill" role="progressbar"
+                                        th:style="'width: ' + ${module.progressPercentage} + '%;'"
+                                        th:aria-valuenow="${module.progressPercentage}" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
                                 </div>
                             </div>
 
@@ -231,8 +272,9 @@
                     </div>
                 </div>
             </div>
-            
-            </div>
+
+        </div>
     </div>
 </body>
+
 </html>
