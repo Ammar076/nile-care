@@ -33,6 +33,7 @@ public class SecurityConfig {
                 // API endpoints - role-based access
                 .antMatchers("/api/help-requests/admin/**").hasRole("ADMIN")
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/counselor/**").hasRole("COUNSELOR")
                 .antMatchers("/api/**").authenticated()
                 
                 // Role-based access

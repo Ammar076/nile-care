@@ -48,4 +48,23 @@ public class CounselingAPIController {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
         }
     }
+
+    // 3. Request Cancellation
+    @PutMapping("/appointments/{id}/cancel")
+    public ResponseEntity<?> requestCancellation(@PathVariable Long id, Principal principal) {
+        try {
+            User student = userService.findByEmail(principal.getName());
+            if (student == null) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "User not found"));
+            }
+
+            counselingService.requestCancellation(id, student.getUserId());
+
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Cancellation request submitted. Awaiting counselor approval."));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
+        }
+    }
 }

@@ -141,6 +141,35 @@
                     </a>
                 </div>
 
+                <!-- Counselor Menu -->
+                <div sec:authorize="hasRole('COUNSELOR')">
+                    <div class="menu-section-title">Counselor</div>
+                    <a th:href="@{/counselor/dashboard}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/counselor/dashboard') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-layout-dashboard w-5 h-5" aria-hidden="true">
+                            <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                            <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a th:href="@{/counselor/availability}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/counselor/availability') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-clock w-5 h-5" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>Availability</span>
+                    </a>
+                </div>
+
                 <!-- Admin Menu -->
                 <div sec:authorize="hasRole('ADMIN')">
                     <div class="menu-section-title">Admin</div>
@@ -247,6 +276,7 @@
                                 <div class="user-name" sec:authentication="principal.fullName">User</div>
                                 <div class="user-role">
                                     <span sec:authorize="hasRole('STUDENT')">Student</span>
+                                    <span sec:authorize="hasRole('COUNSELOR')">Counselor</span>
                                     <span sec:authorize="hasRole('ADMIN')">Administrator</span>
                                 </div>
                             </div>
