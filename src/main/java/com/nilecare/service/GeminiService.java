@@ -15,21 +15,13 @@ import java.util.Map;
 @Service
 public class GeminiService {
 
-    //@Value("${google.gemini.api.key}")
-    private String apiKey = "AIzaSyD8ZKa-cJuxB1jXQdq6AoUYvUEgPDXoHW4";
+    @Value("${google.gemini.api.key}")
+    private String apiKey;
 
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
 
     public String getAiResponse(String userMessage) {
         try {
-            // --- DEBUG PRINT START ---
-            System.out.println("========================================");
-            System.out.println("DEBUG: The code is running!");
-            System.out.println("DEBUG: API Key is: " + apiKey);
-            System.out.println("DEBUG: Target URL is: " + API_URL + apiKey);
-            System.out.println("========================================");
-            // --- DEBUG PRINT END ---
-
             // 1. Check if key is loaded
             if (apiKey == null || apiKey.isEmpty()) {
                 return "Error: API Key is missing";
@@ -37,8 +29,6 @@ public class GeminiService {
 
             RestTemplate restTemplate = new RestTemplate();
             String finalUrl = API_URL + apiKey;
-            
-            // ... rest of your code ...
 
             // 2. Construct the Request Body matching Gemini's requirements
             Map<String, Object> part = new HashMap<>();
