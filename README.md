@@ -7,7 +7,7 @@
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge\&logo=Thymeleaf\&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge\&logo=bootstrap\&logoColor=white)
 
-NileCare is a comprehensive, full-stack web application designed to bridge the gap between academic progress and student mental health. It provides a secure, centralized environment where students can access learning materials, schedule counseling sessions, and track their wellness — all overseen by a robust administrative backend.
+NileCare is a comprehensive, full-stack web application designed to bridge the gap between academic progress and student mental health. It provides a secure, centralized environment where students can access learning materials, schedule counseling sessions, and track their wellness - all overseen by a robust administrative backend.
 
 ---
 
