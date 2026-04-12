@@ -1,4 +1,4 @@
-# 🌊 NileCare: Learning & Wellness Platform
+# 🌊 NileCare: Wellness Education & Clinical Resources
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge\&logo=java\&logoColor=white)
 ![Spring Framework](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge\&logo=spring\&logoColor=white)
@@ -7,7 +7,7 @@
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge\&logo=Thymeleaf\&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge\&logo=bootstrap\&logoColor=white)
 
-NileCare is a full-stack mental health and wellness platform built with Java Spring and MySQL. It features a student-facing portal with gamified wellness resource tracking (like meditation, sleep hygiene), a psychologist dashboard for appointment and slot management, and an administrative panel for user role authorization and resource management. The platform's core innovation is a threshold-based assessment engine that identifies students in need and facilitates immediate booking with mental health professionals.
+NileCare is a full-stack mental health platform built with Java Spring (MVC) and MySQL to manage student wellness assessments and psychologist clinical workflows. The system implements standardized PHQ-9 and GAD-7 screenings to automate the identification of at-risk users and facilitate real-time appointment scheduling with mental health professionals.
 
 ---
 
@@ -15,13 +15,13 @@ NileCare is a full-stack mental health and wellness platform built with Java Spr
 
 ### 🛡️ Core Infrastructure & Security
 
-* **Strict Role-Based Access Control (RBAC):**
+* **Granular Role-Based Access Control:**
   Multi-tiered security architecture distinguishing between `STUDENT`, `COUNSELOR`, and `ADMIN` roles, utilizing **Spring Security** to protect endpoints and sensitive data.
 
-* **Admin Command Center:**
+* **Administrative Dashboard:**
   A real-time dashboard featuring system health statistics, pending user verifications, and quick-action management tools.
 
-* **Intelligent Error Handling:**
+* **Global Exception Handling & Secure Redirection:**
   Custom controller-based error routing that gracefully handles 404/500 errors while maintaining security contexts and safely redirecting users to their respective role-based dashboards.
 
 * **Robust User Management:**
