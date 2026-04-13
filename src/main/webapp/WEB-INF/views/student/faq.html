@@ -18,7 +18,8 @@
         <!-- Search Bar -->
         <div class="mb-4">
             <div class="position-relative" style="max-width: 600px;">
-                <i class="fas fa-search position-absolute" style="left: 16px; top: 50%; transform: translateY(-50%); color: #60a5fa;" aria-hidden="true"></i>
+                <i class="fas fa-search position-absolute"
+                    style="left: 16px; top: 50%; transform: translateY(-50%); color: #60a5fa;" aria-hidden="true"></i>
                 <input type="text" id="searchInput" class="form-control ps-5 faq-search-input"
                     placeholder="Search for help..." aria-label="Search FAQ articles">
             </div>
@@ -32,96 +33,114 @@
                     <div class="card-body p-3 p-lg-4">
                         <!-- Mobile: Collapsible Categories -->
                         <div class="d-lg-none mb-3">
-                            <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="false" aria-controls="categoryCollapse" aria-label="Toggle category filter menu">
+                            <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#categoryCollapse" aria-expanded="false"
+                                aria-controls="categoryCollapse" aria-label="Toggle category filter menu">
                                 <i class="fas fa-filter me-2" aria-hidden="true"></i>Filter by Category
                             </button>
                         </div>
-                        
+
                         <h5 class="text-blue-900 fw-semibold mb-3 d-none d-lg-block">Categories</h5>
-                        
+
                         <nav class="collapse d-lg-block" id="categoryCollapse">
                             <div class="d-flex flex-column gap-2" id="categoryNav">
-                            <button class="category-btn category-active" data-category="all" aria-label="View all FAQs, 16 articles">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-circle-question text-blue-600" aria-hidden="true"></i>
-                                        <span>All FAQs</span>
+                                <button class="category-btn category-active" data-category="all"
+                                    aria-label="View all FAQs, 16 articles">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-circle-question text-blue-600" aria-hidden="true"></i>
+                                            <span>All FAQs</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="all">16</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="all">16</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="getting-started" aria-label="View getting started articles, 2 items">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-book text-blue-600" aria-hidden="true"></i>
-                                        <span>Getting Started</span>
+                                </button>
+                                <button class="category-btn" data-category="getting-started"
+                                    aria-label="View getting started articles, 2 items">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-book text-blue-600" aria-hidden="true"></i>
+                                            <span>Getting Started</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="getting-started">2</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="getting-started">2</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="learning" aria-label="View learning modules articles, 3 items">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-book-open text-blue-600" aria-hidden="true"></i>
-                                        <span>Learning Modules</span>
+                                </button>
+                                <button class="category-btn" data-category="learning"
+                                    aria-label="View learning modules articles, 3 items">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-book-open text-blue-600" aria-hidden="true"></i>
+                                            <span>Learning Modules</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="learning">3</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="learning">3</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="progress" aria-label="View progress articles, 2 items">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-arrow-trend-up text-blue-600" aria-hidden="true"></i>
-                                        <span>Progress</span>
+                                </button>
+                                <button class="category-btn" data-category="progress"
+                                    aria-label="View progress articles, 2 items">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-arrow-trend-up text-blue-600" aria-hidden="true"></i>
+                                            <span>Progress</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="progress">2</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="progress">2</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="appointments" aria-label="View appointments articles, 3 items">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-calendar text-blue-600" aria-hidden="true"></i>
-                                        <span>Appointments</span>
+                                </button>
+                                <button class="category-btn" data-category="appointments"
+                                    aria-label="View appointments articles, 3 items">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-calendar text-blue-600" aria-hidden="true"></i>
+                                            <span>Appointments</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="appointments">3</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="appointments">3</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="account" aria-label="View account articles, 2 items">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-user text-blue-600" aria-hidden="true"></i>
-                                        <span>Account</span>
+                                </button>
+                                <button class="category-btn" data-category="account"
+                                    aria-label="View account articles, 2 items">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-user text-blue-600" aria-hidden="true"></i>
+                                            <span>Account</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="account">2</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="account">2</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="technical" aria-label="View technical articles, 2 items">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-sliders text-blue-600" aria-hidden="true"></i>
-                                        <span>Technical</span>
+                                </button>
+                                <button class="category-btn" data-category="technical"
+                                    aria-label="View technical articles, 2 items">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-sliders text-blue-600" aria-hidden="true"></i>
+                                            <span>Technical</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="technical">2</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="technical">2</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="privacy">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-shield text-blue-600"></i>
-                                        <span>Privacy</span>
+                                </button>
+                                <button class="category-btn" data-category="privacy">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-shield text-blue-600"></i>
+                                            <span>Privacy</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="privacy">2</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="privacy">2</span>
-                                </div>
-                            </button>
-                            <button class="category-btn" data-category="billing">
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-dollar-sign text-blue-600"></i>
-                                        <span>Billing</span>
+                                </button>
+                                <button class="category-btn" data-category="billing">
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-dollar-sign text-blue-600"></i>
+                                            <span>Billing</span>
+                                        </div>
+                                        <span class="badge bg-blue-100 text-blue-700 rounded-pill"
+                                            data-count="billing">0</span>
                                     </div>
-                                    <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="billing">0</span>
-                                </div>
-                            </button>
+                                </button>
                             </div>
                         </nav>
                     </div>
@@ -188,7 +207,7 @@
             'billing': 'Billing'
         };
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             renderFAQs();
             setupEventListeners();
         });
@@ -196,12 +215,12 @@
         function setupEventListeners() {
             // Category buttons
             document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('category-active'));
                     this.classList.add('category-active');
                     currentCategory = this.dataset.category;
                     renderFAQs();
-                    
+
                     // Auto-collapse on mobile after selection
                     if (window.innerWidth < 992) {
                         const collapse = document.getElementById('categoryCollapse');
@@ -214,7 +233,7 @@
             });
 
             // Search input
-            document.getElementById('searchInput').addEventListener('input', function(e) {
+            document.getElementById('searchInput').addEventListener('input', function (e) {
                 searchQuery = e.target.value.toLowerCase();
                 renderFAQs();
             });
@@ -230,7 +249,7 @@
 
             // Filter by search
             if (searchQuery) {
-                faqs = faqs.filter(faq => 
+                faqs = faqs.filter(faq =>
                     faq.question.toLowerCase().includes(searchQuery) ||
                     faq.answer.toLowerCase().includes(searchQuery)
                 );
@@ -299,12 +318,12 @@
 
             // Add event listeners to helpful buttons
             document.querySelectorAll('.helpful-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     const faqId = this.dataset.faq;
                     const isYes = this.classList.contains('helpful-yes');
-                    
+
                     helpfulFeedback[faqId] = isYes;
-                    
+
                     // Update button states
                     this.parentElement.querySelectorAll('.helpful-btn').forEach(b => {
                         b.classList.remove('active');
@@ -312,7 +331,7 @@
                         b.style.borderColor = '';
                         b.style.color = '';
                     });
-                    
+
                     this.classList.add('active');
                     if (isYes) {
                         this.style.background = '#dcfce7';
@@ -323,7 +342,7 @@
                         this.style.borderColor = '#fca5a5';
                         this.style.color = '#7f1d1d';
                     }
-                    
+
                     showToast(isYes ? 'Glad we could help!' : 'We\'ll work on improving this answer', 'success');
                 });
             });
@@ -344,4 +363,5 @@
         }
     </script>
 </th:block>
+
 </html>
